@@ -1,7 +1,8 @@
 package io.grasscutter.network.kcp;
 
-import io.grasscutter.Grasscutter;
 import io.grasscutter.utils.EncodingUtils;
+import io.grasscutter.utils.constants.Log;
+import io.grasscutter.utils.objects.lang.TextContainer;
 import io.jpower.kcp.netty.UkcpChannel;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -116,7 +117,7 @@ public abstract class KcpChannel extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // Log the exception to the server console.
-        Grasscutter.getLogger().warn("Exception caught during transit.", cause);
+        Log.warn(new TextContainer("network.exception"), cause);
         // Close the connection.
         this.close();
     }

@@ -8,6 +8,7 @@ import io.grasscutter.utils.interfaces.Serializable;
 public final class Configuration implements Serializable {
     public Server server = new Server(); // All server properties.
     public Database database = new Database(); // All database properties.
+    public Language language = new Language(); // All language properties.
 
     public static class Server {
         public RunMode runAs = RunMode.GAME; // What the server runs as. Default: Game.
@@ -22,6 +23,7 @@ public final class Configuration implements Serializable {
     }
 
     public static class Http {
+        public boolean useSsl = false; // Whether to use SSL/TLS. Default: false.
         public String bindAddress =
                 "0.0.0.0"; // What address the server binds to. Default: All interfaces. (0.0.0.0)
         public int bindPort = 22102; // What port the server binds to. Default: 22102.
@@ -39,6 +41,13 @@ public final class Configuration implements Serializable {
         public String password = "grasscutter"; // What password to use. Default: grasscutter.
 
         public String overrideUri = ""; // Override the connection URI. Default: "".
+    }
+
+    public static class Language {
+        public String preferred = "system"; // The language to use. Default: system.
+        public boolean force = false; // Whether to force the language. Default: false.
+        public boolean unknown =
+                true; // Allow using languages specified in `~/languages/`  Default: true.
     }
 
     public enum RunMode {
