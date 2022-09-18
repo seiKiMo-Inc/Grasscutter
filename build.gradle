@@ -1,0 +1,86 @@
+/*
+ * Plugin configuration.
+ */
+
+plugins {
+    id 'java' // Support for Java.
+    id 'application' // Apply the application plugin to add support for building a CLI application.
+    id 'com.google.protobuf' version "0.8.18" // Apply the Protocol Buffer compiler.
+    id 'com.diffplug.spotless' version "6.11.0" // Apply the Spotless linter plugin.
+
+    id 'eclipse' // Support for Eclipse.
+    id 'idea' // Support for IntelliJ IDEA.
+
+    id 'maven-publish' // Support for publishing to Maven.
+    id 'signing' // Support for signing artifacts.
+}
+
+spotless {
+    java {
+        importOrder('emu.grasscutter', '', 'java', 'javax', '\\#java', '\\#') // Configure import order.
+        googleJavaFormat("1.15.0") // Use Google's Java formatter.
+                .reflowLongStrings() // Reflow long strings.
+        formatAnnotations() // Reformat annotations.
+        endWithNewline() // Ensure files end with a newline.
+        indentWithTabs(2); indentWithSpaces(4) // Use 4 spaces for indentation.
+    }
+}
+
+/*
+ * Artifact information.
+ */
+
+group 'io.grasscutter'
+version '2.0.0-snapshot'
+targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_17
+
+/*
+ * Dependency configuration.
+ */
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Include any JAR-based libraries.
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+
+    // Configure Lombok.
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    // Testing dependencies.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+}
+
+/*
+ * Compilation configuration.
+ */
+
+configurations.all {
+    // Exclude SLF4J from any dependencies.
+    exclude group: 'org.slf4j', module: 'slf4j'
+}
+
+application {
+    // Set the main class for the application.
+    getMainClass().set('io.grasscutter.Grasscutter')
+}
+
+/*
+ * Platform configuration.
+ */
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+test {
+    useJUnitPlatform()
+}
