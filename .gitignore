@@ -43,3 +43,4 @@ bin/
 
 ### Grasscutter ###
 src/main/proto/
+logs/

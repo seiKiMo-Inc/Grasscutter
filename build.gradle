@@ -47,6 +47,14 @@ dependencies {
     // Include any JAR-based libraries.
     implementation fileTree(dir: 'lib', include: ['*.jar'])
 
+    // Software logging.
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
+
+    // Command line interface.
+    implementation group: 'org.jline', name: 'jline', version: '3.21.0'
+    implementation group: 'org.jline', name: 'jline-terminal-jna', version: '3.21.0'
+    implementation group: 'net.java.dev.jna', name: 'jna', version: '5.10.0'
+
     // Configure Lombok.
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
