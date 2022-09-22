@@ -1,3 +1,5 @@
+import org.gradle.plugins.ide.eclipse.model.SourceFolder
+
 /*
  * Plugin configuration.
  */
@@ -24,6 +26,15 @@ spotless {
         endWithNewline() // Ensure files end with a newline.
         indentWithTabs(2); indentWithSpaces(4) // Use 4 spaces for indentation.
     }
+}
+
+protobuf {
+    protoc {
+        // Specify the protobuf compiler artifact.
+        artifact = 'com.google.protobuf:protoc:3.18.1'
+    }
+
+    generatedFilesBaseDir = "$projectDir/src/generated/"
 }
 
 /*
@@ -55,6 +66,13 @@ dependencies {
     implementation group: 'org.jline', name: 'jline-terminal-jna', version: '3.21.0'
     implementation group: 'net.java.dev.jna', name: 'jna', version: '5.10.0'
 
+    // Server networking.
+    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.18.2'
+    implementation group: 'io.netty', name: 'netty-common', version: '4.1.79.Final'
+    implementation group: 'io.netty', name: 'netty-handler', version: '4.1.79.Final'
+    implementation group: 'io.netty', name: 'netty-transport-native-epoll', version: '4.1.79.Final'
+    implementation group: 'io.netty', name: 'netty-transport-native-kqueue', version: '4.1.79.Final'
+
     // Configure Lombok.
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -80,6 +98,64 @@ application {
     getMainClass().set('io.grasscutter.Grasscutter')
 }
 
+sourceSets {
+    // Configure the main source set.
+    main {
+        proto {
+            // Include any Protocol Buffer files.
+            srcDir 'src/generated'
+        }
+        java {
+            // Configure the Java source directory.
+            srcDir 'src/main/java'
+        }
+    }
+
+    // Configure the test source set.
+    test {
+        proto {
+            // Include any Protocol Buffer files.
+            srcDir 'src/generated'
+        }
+        java {
+            // Configure the source directory.
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+processResources {
+    dependsOn 'generateProto'
+}
+
+/*
+ * Scripts.
+ */
+
+clean {
+    // Delete the generated files.
+    delete protobuf.generatedFilesBaseDir
+}
+
+task injectGitHash {
+    def getHash = {
+        try {
+            return 'git rev-parse --verify --short HEAD'
+                    .execute().text.trim()
+        } catch (ignored) {
+            return 'GIT_NOT_FOUND'
+        }
+    }
+
+    new File(projectDir, "src/main/java/io/grasscutter/BuildConfig.java").text =
+            """package io.grasscutter;
+
+public final class BuildConfig {
+    public static final String VERSION = \"${version}\";
+    public static final String GIT_HASH = \"${getHash()}\";
+}"""
+}
+
 /*
  * Platform configuration.
  */
@@ -91,4 +167,24 @@ java {
 
 test {
     useJUnitPlatform()
+}
+
+/*
+ * IDE configuration.
+ */
+
+idea {
+    module {
+        // Configure the module.
+        sourceDirs += file('src/main/proto')
+        generatedSourceDirs += file('src/generated')
+    }
+}
+
+eclipse {
+    classpath {
+        file.whenMerged {
+            path -> path.entries.add(new SourceFolder('src/generated/main/java', null))
+        }
+    }
 }

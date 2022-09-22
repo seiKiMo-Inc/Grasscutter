@@ -42,5 +42,9 @@ bin/
 .DS_Store
 
 ### Grasscutter ###
+BuildConfig.java
 src/main/proto/
 logs/
+
+*.jar
+*.sh
