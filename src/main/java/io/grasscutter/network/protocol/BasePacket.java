@@ -1,6 +1,7 @@
 package io.grasscutter.network.protocol;
 
 import com.google.protobuf.GeneratedMessageV3;
+import io.grasscutter.network.session.NetworkSession;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.NetworkConstants;
@@ -33,7 +34,7 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
      * @param header The packet's header.
      * @param message The message to handle.
      */
-    public void handlePacket(Object session, PacketHead header, I message) { }
+    public void handlePacket(NetworkSession session, PacketHead header, I message) { }
 
     /*
      * Sending.

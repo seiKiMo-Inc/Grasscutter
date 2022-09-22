@@ -4,6 +4,8 @@ import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.network.protocol.PacketIds;
 import io.grasscutter.utils.enums.KeyType;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 
 import java.util.Arrays;
 
@@ -40,5 +42,25 @@ public interface NetworkUtils {
         for (int i = 0; i < buffer.length; i++) {
             buffer[i] ^= key[i % key.length];
         }
+    }
+
+    /**
+     * Converts a Netty {@link ByteBuf} into a plain byte array.
+     * @param buffer The buffer to convert.
+     * @return The converted buffer.
+     */
+    static byte[] toByteArray(ByteBuf buffer) {
+        var bytes = new byte[buffer.readableBytes()];
+        buffer.readBytes(bytes); return bytes;
+    }
+
+    /**
+     * Converts a byte array into a Netty {@link ByteBuf}.
+     * @param bytes The bytes to convert.
+     * @return The converted bytes.
+     */
+    static ByteBuf toBuffer(byte[] bytes) {
+        var buffer = ByteBufAllocator.DEFAULT.buffer();
+        buffer.writeBytes(bytes); return buffer;
     }
 }

@@ -2,6 +2,7 @@ package io.grasscutter.network.packets;
 
 import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.PacketIds;
+import io.grasscutter.network.session.NetworkSession;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.proto.PingReqOuterClass.PingReq;
 import io.grasscutter.proto.PingRspOuterClass.PingRsp;
@@ -22,7 +23,7 @@ public final class Ping extends BasePacket<PingReq, PingRsp> {
         this.time = time;
     }
 
-    @Override public void handlePacket(Object session, PacketHead header, PingReq message) {
+    @Override public void handlePacket(NetworkSession session, PacketHead header, PingReq message) {
         session.updateLastPingTime(message.getClientTime());
         session.send(new Ping(header.getClientSequenceId(), message.getClientTime()));
     }
