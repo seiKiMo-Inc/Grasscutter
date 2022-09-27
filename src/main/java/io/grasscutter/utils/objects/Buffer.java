@@ -4,9 +4,7 @@ import lombok.SneakyThrows;
 
 import java.io.ByteArrayOutputStream;
 
-/**
- * Represents an arrangement of bytes in a stream.
- */
+/** Represents an arrangement of bytes in a stream. */
 public final class Buffer {
     private final ByteArrayOutputStream stream;
 
@@ -34,7 +32,8 @@ public final class Buffer {
 
     @SneakyThrows
     public Buffer writeBytes(byte[] bytes) {
-        this.stream.write(bytes); return this;
+        this.stream.write(bytes);
+        return this;
     }
 
     public byte[] finish() {

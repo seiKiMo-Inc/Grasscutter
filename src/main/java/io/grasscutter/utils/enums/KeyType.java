@@ -4,10 +4,7 @@ import io.grasscutter.utils.FileUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * Types of encryption keys.
- * Varies in XOR, RSA, etc.
- */
+/** Types of encryption keys. Varies in XOR, RSA, etc. */
 @Getter
 @AllArgsConstructor
 public enum KeyType {
