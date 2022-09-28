@@ -7,5 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataSerializable {
     /* The name of the table to save to. */
-    String value();
+    String table();
+    /* The name of the ID field. */
+    String idField() default "id";
 }
