@@ -12,10 +12,7 @@ import lombok.Setter;
 
 import java.net.InetSocketAddress;
 
-/**
- * Acts as the network interface for KCP traffic.
- * Runs on a separate thread.
- */
+/** Acts as the network interface for KCP traffic. Runs on a separate thread. */
 public abstract class KcpServer extends Thread {
     private final EventLoopGroup loopGroup = new NioEventLoopGroup();
     @Setter private ChannelInitializer<?> serverInitializer;
@@ -36,13 +33,13 @@ public abstract class KcpServer extends Thread {
         try {
             // Create a server loop group & bootstrap.
             var bootstrap = new UkcpServerBootstrap();
-            bootstrap.group(this.loopGroup)
+            bootstrap
+                    .group(this.loopGroup)
                     .channel(UkcpServerChannel.class)
                     .childHandler(this.serverInitializer);
 
             // Set server options.
-            ChannelOptionHelper
-                    .nodelay(bootstrap, true, 20, 2, true)
+            ChannelOptionHelper.nodelay(bootstrap, true, 20, 2, true)
                     .childOption(UkcpChannelOption.UKCP_MTU, 1200);
 
             // Bind to the address and start the server.
@@ -57,9 +54,7 @@ public abstract class KcpServer extends Thread {
         }
     }
 
-    /**
-     * Invoked when the server thread is about to die.
-     */
+    /** Invoked when the server thread is about to die. */
     private void finish() {
         // Shutdown the loop group.
         this.loopGroup.shutdownGracefully();
