@@ -4,9 +4,7 @@ import io.grasscutter.network.packets.Ping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * A mapping of packet IDs to {@link BasePacket}s.
- */
+/** A mapping of packet IDs to {@link BasePacket}s. */
 @Getter
 @AllArgsConstructor
 public enum Packet {

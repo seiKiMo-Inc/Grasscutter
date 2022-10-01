@@ -2,7 +2,7 @@ package io.grasscutter.network.protocol;
 
 public final class PacketIds {
     // Empty.
-    public static final int  NONE = 0;
+    public static final int NONE = 0;
 
     // Packet IDs.
     public static final int AbilityChangeNotify = 1131;
