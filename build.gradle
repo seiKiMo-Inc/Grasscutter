@@ -19,12 +19,13 @@ plugins {
 
 spotless {
     java {
-        importOrder('emu.grasscutter', '', 'java', 'javax', '\\#java', '\\#') // Configure import order.
+        importOrder('io.grasscutter', '', 'java', 'javax', '\\#java', '\\#') // Configure import order.
         googleJavaFormat("1.15.0") // Use Google's Java formatter.
                 .reflowLongStrings() // Reflow long strings.
         formatAnnotations() // Reformat annotations.
         endWithNewline() // Ensure files end with a newline.
         indentWithTabs(2); indentWithSpaces(4) // Use 4 spaces for indentation.
+        toggleOffOn() // Toggle off/on.
     }
 }
 
@@ -56,7 +57,7 @@ repositories {
 
 dependencies {
     // Include any JAR-based libraries.
-    implementation fileTree(dir: 'lib', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Software logging.
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
@@ -67,11 +68,15 @@ dependencies {
     implementation group: 'net.java.dev.jna', name: 'jna', version: '5.10.0'
 
     // Server networking.
+    protobuf files('src/proto/')
     implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.18.2'
     implementation group: 'io.netty', name: 'netty-common', version: '4.1.79.Final'
     implementation group: 'io.netty', name: 'netty-handler', version: '4.1.79.Final'
     implementation group: 'io.netty', name: 'netty-transport-native-epoll', version: '4.1.79.Final'
     implementation group: 'io.netty', name: 'netty-transport-native-kqueue', version: '4.1.79.Final'
+
+    // Encoding.
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 
     // Configure Lombok.
     compileOnly 'org.projectlombok:lombok:1.18.24'
@@ -128,6 +133,29 @@ processResources {
     dependsOn 'generateProto'
 }
 
+jar {
+    // Exclude Protocol Buffer files.
+    exclude '*.proto'
+
+    // Configure JAR archive.
+    manifest {
+        attributes 'Main-Class': 'io.grasscutter.Grasscutter'
+    }
+
+    archiveBaseName = "grasscutter"
+    if(project.hasProperty('jarFilename'))
+        archiveFileName.set("${jarFilename}.${extension}")
+
+    // Configure bundling.
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    // Set the destination.
+    destinationDirectory.set(file("${project.rootDir}/dist"))
+}
+
 /*
  * Scripts.
  */
@@ -176,7 +204,7 @@ test {
 idea {
     module {
         // Configure the module.
-        sourceDirs += file('src/main/proto')
+        sourceDirs += file('src/proto')
         generatedSourceDirs += file('src/generated')
     }
 }
