@@ -1,5 +1,7 @@
 package io.grasscutter;
 
+import io.grasscutter.server.game.GameServer;
+import io.grasscutter.utils.objects.Configuration;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jline.reader.LineReader;
@@ -12,38 +14,62 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public final class Grasscutter {
-    @Getter private static final Logger logger =
-            LoggerFactory.getLogger(Grasscutter.class);
-    @Getter private static final LineReader console =
-            Grasscutter.createConsole();
+    private static final long startupTime = System.currentTimeMillis();
+
+    @Getter private static final Logger logger = LoggerFactory.getLogger(Grasscutter.class);
+    @Getter private static final LineReader console = Grasscutter.createConsole();
+    @Getter private static final Configuration config = new Configuration();
 
     static {
         // Declare logback configuration.
         System.setProperty("logback.configurationFile", "src/main/resources/logback.xml");
+
+        // Set shutdown hook for the application.
+        Runtime.getRuntime().addShutdownHook(new Thread(Grasscutter::shutdown));
     }
 
+    /**
+     * Entrypoint for the application.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
-        logger.info("hello grasscutters");
+        // Log a message to the console.
+        Grasscutter.getLogger().info("Starting Grasscutter...");
+
+        // Create server instances.
+        var gameServer = GameServer.create();
+
+        // Start the server instances.
+        gameServer.start();
+
+        // Log a message to the console.
+        var startupTime = System.currentTimeMillis() - Grasscutter.startupTime;
+        Grasscutter.getLogger().info("Grasscutter started in {}ms.", startupTime);
+    }
+
+    /** Shutdown hook for the application. */
+    public static void shutdown() {
+        // Log message to the console.
+        Grasscutter.getLogger().info("Shutting down Grasscutter...");
     }
 
     /**
      * Creates a {@link LineReader}, or "console" for the application.
-     * @return A {@link LineReader} instance.
      *
+     * @return A {@link LineReader} instance.
      * @throws RuntimeException if something impossible happened. (no dumb terminal created)
      */
     @SneakyThrows(IOException.class)
     private static LineReader createConsole() {
-        Terminal terminal; try {
-            terminal = TerminalBuilder.builder()
-                    .jna(true).build();
+        Terminal terminal;
+        try {
+            terminal = TerminalBuilder.builder().jna(true).build();
         } catch (IOException ignored) {
             // Try to get a dumb terminal.
-            terminal = TerminalBuilder.builder()
-                    .dumb(true).build();
+            terminal = TerminalBuilder.builder().dumb(true).build();
         }
 
-        return LineReaderBuilder.builder()
-                .terminal(terminal).build();
+        return LineReaderBuilder.builder().terminal(terminal).build();
     }
 }
