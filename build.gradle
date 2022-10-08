@@ -7,7 +7,7 @@ import org.gradle.plugins.ide.eclipse.model.SourceFolder
 plugins {
     id 'java' // Support for Java.
     id 'application' // Apply the application plugin to add support for building a CLI application.
-    id 'com.google.protobuf' version "0.8.18" // Apply the Protocol Buffer compiler.
+    id 'com.google.protobuf' version "0.8.18" // Support for Protocol Buffers.
     id 'com.diffplug.spotless' version "6.11.0" // Apply the Spotless linter plugin.
 
     id 'eclipse' // Support for Eclipse.
@@ -27,15 +27,6 @@ spotless {
         indentWithTabs(2); indentWithSpaces(4) // Use 4 spaces for indentation.
         toggleOffOn() // Toggle off/on.
     }
-}
-
-protobuf {
-    protoc {
-        // Specify the protobuf compiler artifact.
-        artifact = 'com.google.protobuf:protoc:3.18.1'
-    }
-
-    generatedFilesBaseDir = "$projectDir/src/generated/"
 }
 
 /*
@@ -74,6 +65,12 @@ dependencies {
     implementation group: 'io.netty', name: 'netty-handler', version: '4.1.79.Final'
     implementation group: 'io.netty', name: 'netty-transport-native-epoll', version: '4.1.79.Final'
     implementation group: 'io.netty', name: 'netty-transport-native-kqueue', version: '4.1.79.Final'
+
+    // HTTP implementation.
+    implementation group: 'io.helidon.webserver', name: 'helidon-webserver', version: '2.4.0'
+
+    // Data storage.
+    implementation group: 'org.mongodb', name: 'mongodb-driver-sync', version: '4.7.1'
 
     // Encoding.
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
