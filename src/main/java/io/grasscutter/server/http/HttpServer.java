@@ -24,7 +24,7 @@ public final class HttpServer {
         this.webServer =
                 WebServer.builder()
                         .config(Config.create())
-                        //                        .routing(HttpServer.configureRouting())
+                        // .routing(HttpServer.configureRouting())
                         .bindAddress(networkProperties.bindAddress)
                         .port(networkProperties.bindPort)
                         .build();
