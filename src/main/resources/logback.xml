@@ -3,7 +3,7 @@
 
   <appender name="STDOUT" class="io.grasscutter.utils.objects.JLineLogbackAppender">
     <encoder>
-      <pattern>%d{HH:mm:ss} &lt;%highlight(%level):%gray(%class{0})&gt; %msg%n</pattern>
+      <pattern>[%d{HH:mm:ss}] [%highlight(%level)] %msg%n</pattern>
     </encoder>
   </appender>
 
@@ -13,8 +13,9 @@
       <fileNamePattern>logs/log.%d{yyyy-MM-dd}_%d{HH}.log.gz</fileNamePattern>
       <maxHistory>24</maxHistory>
     </rollingPolicy>
+
     <encoder>
-      <pattern>%d{yyyy-MM-dd'T'HH:mm:ss'Z'} &lt;%level:%class&gt; %m%n</pattern>
+      <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss''}] &lt;%level:%class&gt; %m%n</pattern>
     </encoder>
   </appender>
 

@@ -11,8 +11,10 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.io.IOException;
+import java.util.logging.LogManager;
 
 public final class Grasscutter {
     private static final long startupTime = System.currentTimeMillis();
@@ -22,7 +24,10 @@ public final class Grasscutter {
     @Getter private static final Configuration config = new Configuration();
 
     static {
-        // Declare logback configuration.
+        // Configure application logger.
+        LogManager.getLogManager().reset();
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
         System.setProperty("logback.configurationFile", "src/main/resources/logback.xml");
 
         // Set shutdown hook for the application.
