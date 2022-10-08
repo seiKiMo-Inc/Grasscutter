@@ -4,14 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Base64;
 
-/* Utility methods seen when converting data. */
+/* Utility methods seen when handling data. */
 public interface EncodingUtils {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
