@@ -3,8 +3,9 @@ package io.grasscutter.server.game;
 import io.grasscutter.network.kcp.KcpServer;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.Properties;
-import java.net.InetSocketAddress;
 import lombok.Getter;
+
+import java.net.InetSocketAddress;
 
 /** Handles all network traffic. Acts as the primary server. */
 public final class GameServer extends KcpServer {
@@ -23,7 +24,7 @@ public final class GameServer extends KcpServer {
     /**
      * @param address The network address & port to bind to.
      */
-    public GameServer(InetSocketAddress address) {
+    private GameServer(InetSocketAddress address) {
         super(address);
     }
 }

@@ -1,6 +1,7 @@
 package io.grasscutter;
 
 import io.grasscutter.server.game.GameServer;
+import io.grasscutter.server.http.HttpServer;
 import io.grasscutter.utils.objects.Configuration;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -39,9 +40,11 @@ public final class Grasscutter {
 
         // Create server instances.
         var gameServer = GameServer.create();
+        var httpServer = HttpServer.create();
 
         // Start the server instances.
         gameServer.start();
+        httpServer.start();
 
         // Log a message to the console.
         var startupTime = System.currentTimeMillis() - Grasscutter.startupTime;
@@ -52,6 +55,10 @@ public final class Grasscutter {
     public static void shutdown() {
         // Log message to the console.
         Grasscutter.getLogger().info("Shutting down Grasscutter...");
+
+        // Stop server instances.
+        GameServer.getInstance().stop();
+        HttpServer.getInstance().stop();
     }
 
     /**
