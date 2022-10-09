@@ -1,8 +1,15 @@
 package io.grasscutter;
 
+import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
+import io.grasscutter.utils.LanguageUtils;
+import io.grasscutter.utils.constants.Log;
+import io.grasscutter.utils.constants.Properties;
+import io.grasscutter.utils.definitions.LanguageData;
 import io.grasscutter.utils.objects.Configuration;
+import io.grasscutter.utils.objects.lang.Language;
+import io.grasscutter.utils.objects.lang.TextContainer;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jline.reader.LineReader;
@@ -14,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.LogManager;
 
 public final class Grasscutter {
@@ -22,6 +30,9 @@ public final class Grasscutter {
     @Getter private static final Logger logger = LoggerFactory.getLogger(Grasscutter.class);
     @Getter private static final LineReader console = Grasscutter.createConsole();
     @Getter private static final Configuration config = new Configuration();
+
+    @Getter private static DedicatedServer dedicatedServer;
+    @Getter private static Language serverLanguage;
 
     static {
         // Configure application logger.
@@ -35,25 +46,31 @@ public final class Grasscutter {
     }
 
     /**
-     * Entrypoint for the application.
+     * Entrypoint for the application. Priority can be found below. (top to bottom)
      *
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
         // Log a message to the console.
-        Grasscutter.getLogger().info("Starting Grasscutter...");
+        Log.info(new TextContainer("system.startup.loading"));
+
+        // Load the server language data.
+        Grasscutter.serverLanguage = new Language(Grasscutter.loadLanguage());
 
         // Create server instances.
         var gameServer = GameServer.create();
         var httpServer = HttpServer.create();
+        Grasscutter.dedicatedServer = new DedicatedServer(Grasscutter.logger, gameServer, httpServer);
 
-        // Start the server instances.
-        gameServer.start();
-        httpServer.start();
+        // Start the dedicated server.
+        Grasscutter.dedicatedServer.start();
 
         // Log a message to the console.
         var startupTime = System.currentTimeMillis() - Grasscutter.startupTime;
-        Grasscutter.getLogger().info("Grasscutter started in {}ms.", startupTime);
+        Log.info(new TextContainer("system.startup.done", startupTime));
+
+        // Flatten language keys into memory.
+        Grasscutter.serverLanguage.loadAllKeys();
     }
 
     /** Shutdown hook for the application. */
@@ -61,9 +78,8 @@ public final class Grasscutter {
         // Log message to the console.
         Grasscutter.getLogger().info("Shutting down Grasscutter...");
 
-        // Stop server instances.
-        GameServer.getInstance().stop();
-        HttpServer.getInstance().stop();
+        // Stop the dedicated server.
+        Grasscutter.dedicatedServer.stop();
     }
 
     /**
@@ -83,5 +99,32 @@ public final class Grasscutter {
         }
 
         return LineReaderBuilder.builder().terminal(terminal).build();
+    }
+
+    /**
+     * Loads language data depending on: - the selected host system language - the preferred language
+     * in the configuration
+     *
+     * @return Loaded language data.
+     */
+    private static LanguageData loadLanguage() {
+        var language = Properties.LANGUAGE();
+        var langCode = Locale.getDefault().toString();
+
+        // Determine the language code to look for.
+        if (language.preferred.equals("system")) {
+            langCode = LanguageUtils.systemDefault();
+        } else {
+            langCode = language.preferred;
+        }
+
+        // Load the language data.
+        var data = LanguageUtils.findLanguage(langCode);
+        if (data == null) {
+            Grasscutter.getLogger()
+                    .warn("Could not find language data for language code '{}'.", langCode);
+        }
+
+        return data == null ? new LanguageData() : data;
     }
 }
