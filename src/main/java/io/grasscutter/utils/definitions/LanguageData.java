@@ -26,6 +26,24 @@ public final class LanguageData {
      */
 
     /**
+     * Checks if this language data object is valid.
+     *
+     * @return True if valid, false otherwise.
+     */
+    public boolean isValid() {
+        // Check details.
+        if (details.name.isEmpty()) return false;
+        if (details.authors.isEmpty()) return false;
+        if (details.locale.isEmpty()) return false;
+        if (details.version.isEmpty()) return false;
+
+        // Check system.
+        if (system.entrySet().isEmpty()) return false;
+
+        return true;
+    }
+
+    /**
      * Returns the data behind the specified key.
      *
      * @param accessor Key accessor.
@@ -69,7 +87,8 @@ public final class LanguageData {
             if (Modifier.isTransient(field.getModifiers())) continue;
 
             try {
-                list.add((JsonObject) field.get(this));
+                var value = field.get(this);
+                if (value instanceof JsonObject object) list.add(object);
             } catch (IllegalAccessException exception) {
                 Grasscutter.getLogger()
                         .error("Unable to load accessor %s.".formatted(field.getName()), exception);

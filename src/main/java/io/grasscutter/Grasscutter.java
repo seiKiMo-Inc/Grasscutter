@@ -34,6 +34,8 @@ public final class Grasscutter {
     @Getter private static DedicatedServer dedicatedServer;
     @Getter private static Language serverLanguage;
 
+    private static boolean hasStarted = false;
+
     static {
         // Configure application logger.
         LogManager.getLogManager().reset();
@@ -51,11 +53,16 @@ public final class Grasscutter {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
+        // Load the server language data.
+        var languageData = Grasscutter.loadLanguage();
+        if (!languageData.isValid()) {
+            Grasscutter.getLogger().error("Failed to load language data.");
+            return;
+        }
+        Grasscutter.serverLanguage = new Language(languageData);
+
         // Log a message to the console.
         Log.info(new TextContainer("system.startup.loading"));
-
-        // Load the server language data.
-        Grasscutter.serverLanguage = new Language(Grasscutter.loadLanguage());
 
         // Create server instances.
         var gameServer = GameServer.create();
@@ -71,12 +78,17 @@ public final class Grasscutter {
 
         // Flatten language keys into memory.
         Grasscutter.serverLanguage.loadAllKeys();
+
+        // Set the has started flag.
+        Grasscutter.hasStarted = true;
     }
 
     /** Shutdown hook for the application. */
     public static void shutdown() {
         // Log message to the console.
         Grasscutter.getLogger().info("Shutting down Grasscutter...");
+        // Check if the server successfully started.
+        if (!Grasscutter.hasStarted) return;
 
         // Stop the dedicated server.
         Grasscutter.dedicatedServer.stop();

@@ -21,7 +21,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param text      The text to log.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void info(String text, Throwable throwable) {
@@ -59,7 +59,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param text      The text to log.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void warn(String text, Throwable throwable) {
@@ -97,7 +97,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param text      The text to log.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void error(String text, Throwable throwable) {
@@ -135,7 +135,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param text      The text to log.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void debug(String text, Throwable throwable) {
@@ -165,7 +165,7 @@ public interface Log {
      * Logs a message to the console.
      *
      * @param logger The logger to use.
-     * @param text   The text to log.
+     * @param text The text to log.
      */
     static void info(Logger logger, String text) {
         logger.info(text);
@@ -174,8 +174,8 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
-     * @param text      The text to log.
+     * @param logger The logger to use.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void info(Logger logger, String text, Throwable throwable) {
@@ -185,7 +185,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      */
     static void info(Logger logger, TextContainer container) {
@@ -195,7 +195,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      * @param throwable Throwable to log.
      */
@@ -207,7 +207,7 @@ public interface Log {
      * Logs a message to the console.
      *
      * @param logger The logger to use.
-     * @param text   The text to log.
+     * @param text The text to log.
      */
     static void warn(Logger logger, String text) {
         logger.warn(text);
@@ -216,8 +216,8 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
-     * @param text      The text to log.
+     * @param logger The logger to use.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void warn(Logger logger, String text, Throwable throwable) {
@@ -227,7 +227,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      */
     static void warn(Logger logger, TextContainer container) {
@@ -237,7 +237,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      * @param throwable Throwable to log.
      */
@@ -249,7 +249,7 @@ public interface Log {
      * Logs a message to the console.
      *
      * @param logger The logger to use.
-     * @param text   The text to log.
+     * @param text The text to log.
      */
     static void error(Logger logger, String text) {
         logger.error(text);
@@ -258,8 +258,8 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
-     * @param text      The text to log.
+     * @param logger The logger to use.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void error(Logger logger, String text, Throwable throwable) {
@@ -269,7 +269,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      */
     static void error(Logger logger, TextContainer container) {
@@ -279,7 +279,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      * @param throwable Throwable to log.
      */
@@ -291,7 +291,7 @@ public interface Log {
      * Logs a message to the console.
      *
      * @param logger The logger to use.
-     * @param text   The text to log.
+     * @param text The text to log.
      */
     static void debug(Logger logger, String text) {
         logger.debug(text);
@@ -300,8 +300,8 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
-     * @param text      The text to log.
+     * @param logger The logger to use.
+     * @param text The text to log.
      * @param throwable The throwable to log.
      */
     static void debug(Logger logger, String text, Throwable throwable) {
@@ -311,7 +311,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      */
     static void debug(Logger logger, TextContainer container) {
@@ -321,7 +321,7 @@ public interface Log {
     /**
      * Logs a message to the console.
      *
-     * @param logger    The logger to use.
+     * @param logger The logger to use.
      * @param container Translatable text container.
      * @param throwable Throwable to log.
      */

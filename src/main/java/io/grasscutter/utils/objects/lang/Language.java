@@ -33,13 +33,13 @@ public final class Language {
                 key,
                 k -> {
                     // Find & validate keys.
-                    var keys = key.split("\\.");
+                    var keys = k.split("\\.");
                     if (keys.length < 2) return "";
 
                     // Find the data for the parent key.
                     var accessor = this.data.find(keys[0]);
 
-                    var index = 0;
+                    var index = 1;
                     var value = "";
                     var found = false;
 
@@ -99,8 +99,7 @@ public final class Language {
     }
 
     /**
-     * Gets the value of the specified key.
-     * Attempts to load the key if it is not already loaded.
+     * Gets the value of the specified key. Attempts to load the key if it is not already loaded.
      *
      * @param key Key to get. (e.g. "system.startup")
      * @return The string from the translation data.

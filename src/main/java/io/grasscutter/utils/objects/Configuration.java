@@ -26,7 +26,7 @@ public final class Configuration implements Serializable {
         public boolean useSsl = false; // Whether to use SSL/TLS. Default: false.
         public String bindAddress =
                 "0.0.0.0"; // What address the server binds to. Default: All interfaces. (0.0.0.0)
-        public int bindPort = 22102; // What port the server binds to. Default: 22102.
+        public int bindPort = 80; // What port the server binds to. Default: 80.
     }
 
     public static class Database {

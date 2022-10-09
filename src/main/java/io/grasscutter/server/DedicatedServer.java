@@ -33,9 +33,7 @@ public final class DedicatedServer {
     }
 
     /** Performs a global server tick. */
-    public void tick() {
-
-    }
+    public void tick() {}
 
     /** Starts both game & HTTP servers. */
     public void start() {
