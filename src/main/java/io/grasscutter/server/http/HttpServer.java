@@ -1,9 +1,12 @@
 package io.grasscutter.server.http;
 
 import io.grasscutter.utils.constants.Properties;
-import io.helidon.config.Config;
-import io.helidon.webserver.WebServer;
+import io.javalin.Javalin;
+import io.javalin.config.JavalinConfig;
 import lombok.Getter;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 /** Handles HTTP traffic. Primarily acts as the dispatch server. */
 public final class HttpServer {
@@ -16,27 +19,55 @@ public final class HttpServer {
         return instance = new HttpServer();
     }
 
-    private final WebServer webServer;
+    /**
+     * Configures Javalin.
+     *
+     * @param config Javalin configuration instance.
+     */
+    private static void javalinConfig(JavalinConfig config) {
+        // Set the Jetty HTTP(S) server to use.
+        config.jetty.server(HttpServer::createServer);
+    }
 
-    private HttpServer() {
+    /**
+     * Creates an HTTP(S) server.
+     *
+     * @return Server instance.
+     */
+    @SuppressWarnings("resource")
+    private static Server createServer() {
         var networkProperties = Properties.SERVER().httpServer;
 
-        this.webServer =
-                WebServer.builder()
-                        .config(Config.create())
-                        // .routing(HttpServer.configureRouting())
-                        .bindAddress(networkProperties.bindAddress)
-                        .port(networkProperties.bindPort)
-                        .build();
+        // Create a server & a connector.
+        var server = new Server();
+        var serverConnector = new ServerConnector(server);
+
+        // Check if SSL/TLS should be used.
+        if (networkProperties.useSsl) {
+            var sslContext = new SslContextFactory.Server();
+        }
+
+        // Finalize the connector.
+        serverConnector.setPort(networkProperties.bindPort);
+        serverConnector.setHost(networkProperties.bindAddress);
+        server.setConnectors(new ServerConnector[] {serverConnector});
+
+        return server;
+    }
+
+    private final Javalin javalin;
+
+    private HttpServer() {
+        this.javalin = Javalin.create(HttpServer::javalinConfig);
     }
 
     /** Starts the HTTP server. */
     public void start() {
-        this.webServer.start();
+        this.javalin.start();
     }
 
     /** Stops the HTTP server. */
     public void stop() {
-        this.webServer.shutdown();
+        this.javalin.stop();
     }
 }

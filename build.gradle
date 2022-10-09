@@ -47,6 +47,9 @@ repositories {
 }
 
 dependencies {
+    // Additional annotation packs.
+    implementation group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
+
     // Include any JAR-based libraries.
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -68,7 +71,9 @@ dependencies {
     implementation group: 'io.netty', name: 'netty-transport-native-kqueue', version: '4.1.79.Final'
 
     // HTTP implementation.
-    implementation group: 'io.helidon.webserver', name: 'helidon-webserver', version: '2.4.0'
+    implementation(group: 'io.javalin', name: 'javalin', version: '5.0.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 
     // Data storage.
     implementation group: 'org.mongodb', name: 'mongodb-driver-sync', version: '4.7.1'
@@ -90,11 +95,6 @@ dependencies {
 /*
  * Compilation configuration.
  */
-
-configurations.all {
-    // Exclude SLF4J from any dependencies.
-    exclude group: 'org.slf4j', module: 'slf4j'
-}
 
 application {
     // Set the main class for the application.
