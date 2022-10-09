@@ -38,4 +38,11 @@ public interface Properties {
     static Configuration.Database DATABASE() {
         return CONFIGURATION().database;
     }
+
+    /**
+     * @return Language properties.
+     */
+    static Configuration.Language LANGUAGE() {
+        return CONFIGURATION().language;
+    }
 }

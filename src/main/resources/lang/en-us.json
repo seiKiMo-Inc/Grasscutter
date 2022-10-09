@@ -1,0 +1,27 @@
+{
+  "details": {
+    "name": "English (United States)",
+    "authors": ["KingRainbow44"],
+    "locale": "en-us",
+    "version": "2.0.0-snapshot"
+  },
+  "exception": {
+    "error": "An error occurred."
+  },
+  "system": {
+    "startup": {
+      "loading": "Starting Grasscutter...",
+      "done": "Grasscutter started in {0}ms."
+    },
+    "shutdown": "Shutting down Grasscutter..."
+  },
+  "network": {
+    "exception": "Exception caught during transit."
+  },
+  "server": {
+    "dedicated": {
+      "tick_error": "Exception happened while ticking server.",
+      "interrupted": "Server thread interrupted."
+    }
+  }
+}
