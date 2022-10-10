@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Base64;
+import java.util.Map;
 
 /* Utility methods seen when converting data. */
 public interface EncodingUtils {
@@ -113,5 +113,28 @@ public interface EncodingUtils {
      */
     static <T> T fromJson(String data, Class<T> type) {
         return gson.fromJson(data, type);
+    }
+
+    /**
+     * De-serializes entries from a map into an object.
+     *
+     * @param object The object to deserialize into.
+     * @param serialized The serialized entries.
+     */
+    static void deserializeTo(Object object, Map<String, Object> serialized) {
+        serialized.forEach(
+                (key, value) -> {
+                    try {
+                        // Get field data.
+                        var field = object.getClass().getDeclaredField(key);
+                        var fieldType = field.getType();
+                        // De-serialize the value.
+                        var deserialized = gson.fromJson(gson.toJson(value), fieldType);
+
+                        // Write data to the field.
+                        field.setAccessible(true);
+                        field.set(object, fieldType.cast(deserialized));
+                    } catch (ReflectiveOperationException ignored) { }
+                });
     }
 }

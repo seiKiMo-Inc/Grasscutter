@@ -1,6 +1,7 @@
 package io.grasscutter.utils.interfaces;
 
 import com.google.gson.reflect.TypeToken;
+import io.grasscutter.utils.EncodingUtils;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ public interface Serializable {
      *
      * @param data The data to deserialize.
      */
+    @SuppressWarnings("unchecked")
     default void deserialize(Map<String, Object> data) {
         // Find fields and create data map.
         var fields = getClass().getFields();
@@ -78,9 +80,11 @@ public interface Serializable {
                     continue;
                 }
 
-                // Set field value.
-                field.set(this, value);
-            } catch (IllegalAccessException ignored) {
+                // De-serialize and set.
+                var instance = field.getType().getConstructor().newInstance();
+                EncodingUtils.deserializeTo(instance, (Map<String, Object>) value);
+                field.set(this, instance);
+            } catch (ReflectiveOperationException ignored) {
                 // Ignore.
             }
         }

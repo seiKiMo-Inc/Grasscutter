@@ -3,7 +3,6 @@ package io.grasscutter.utils.objects;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import io.grasscutter.Grasscutter;
-
 import java.util.Arrays;
 
 /**

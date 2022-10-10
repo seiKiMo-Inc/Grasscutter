@@ -11,7 +11,7 @@ public final class Configuration implements Serializable {
     public Language language = new Language(); // All language properties.
 
     public static class Server {
-        public RunMode runAs = RunMode.GAME; // What the server runs as. Default: Game.
+        public RunMode runAs = RunMode.HYBRID; // What the server runs as. Default: Hybrid.
         public Game gameServer = new Game(); // Game server properties.
         public Http httpServer = new Http(); // HTTP server properties.
     }

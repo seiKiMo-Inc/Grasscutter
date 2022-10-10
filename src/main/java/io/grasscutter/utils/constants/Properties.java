@@ -3,7 +3,6 @@ package io.grasscutter.utils.constants;
 import io.grasscutter.Grasscutter;
 import io.grasscutter.utils.FileUtils;
 import io.grasscutter.utils.objects.Configuration;
-
 import java.io.File;
 
 /* Utility for fetching config properties. */

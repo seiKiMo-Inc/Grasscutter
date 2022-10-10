@@ -16,7 +16,8 @@
     "shutdown": "Shutting down Grasscutter..."
   },
   "network": {
-    "exception": "Exception caught during transit."
+    "exception": "Exception caught during transit.",
+    "bind-failed": "Failed to bind to port {0}. Ensure that the port is not already in use."
   },
   "server": {
     "dedicated": {

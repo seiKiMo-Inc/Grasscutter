@@ -2,16 +2,19 @@ package io.grasscutter.utils.definitions;
 
 import com.google.gson.JsonObject;
 import io.grasscutter.Grasscutter;
-
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
 /* A class representing language data. */
+@SuppressWarnings("unused")
 public final class LanguageData {
     public Details details = new Details();
 
     public JsonObject system = new JsonObject();
+    public JsonObject network = new JsonObject();
+    public JsonObject server = new JsonObject();
+    public JsonObject exception = new JsonObject();
     public transient JsonObject injected = new JsonObject();
 
     public static class Details {

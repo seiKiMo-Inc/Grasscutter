@@ -3,10 +3,9 @@ package io.grasscutter.utils.objects.lang;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.grasscutter.utils.definitions.LanguageData;
-import lombok.Getter;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.Getter;
 
 /* Represents a language. */
 public final class Language {

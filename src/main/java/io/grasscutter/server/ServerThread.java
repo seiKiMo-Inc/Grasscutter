@@ -2,9 +2,9 @@ package io.grasscutter.server;
 
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.objects.lang.TextContainer;
-import org.slf4j.Logger;
-
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ServerThread extends Thread {
     private final DedicatedServer server;
@@ -22,7 +22,7 @@ public final class ServerThread extends Thread {
 
     public ServerThread(DedicatedServer server) {
         this.server = server;
-        this.logger = server.getLogger();
+        this.logger = LoggerFactory.getLogger("Server Thread");
     }
 
     /**

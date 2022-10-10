@@ -2,7 +2,6 @@ package io.grasscutter.data;
 
 import io.grasscutter.utils.interfaces.Serializable;
 import io.grasscutter.utils.objects.Pair;
-
 import java.util.Map;
 
 /* A database interface. */

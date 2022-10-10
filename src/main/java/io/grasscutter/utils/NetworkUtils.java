@@ -4,7 +4,6 @@ import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.network.protocol.PacketIds;
 import io.grasscutter.utils.enums.KeyType;
-
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 

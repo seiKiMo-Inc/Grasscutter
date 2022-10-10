@@ -2,12 +2,11 @@ package io.grasscutter.server;
 
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
-import lombok.Getter;
-import org.slf4j.Logger;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.util.Arrays;
+import lombok.Getter;
+import org.slf4j.Logger;
 
 /* Manages server-related aspects. */
 public final class DedicatedServer {

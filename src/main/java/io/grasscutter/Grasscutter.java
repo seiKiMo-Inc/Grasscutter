@@ -3,6 +3,7 @@ package io.grasscutter;
 import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
+import io.grasscutter.utils.FileUtils;
 import io.grasscutter.utils.LanguageUtils;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
@@ -10,6 +11,10 @@ import io.grasscutter.utils.definitions.LanguageData;
 import io.grasscutter.utils.objects.Configuration;
 import io.grasscutter.utils.objects.lang.Language;
 import io.grasscutter.utils.objects.lang.TextContainer;
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.logging.LogManager;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jline.reader.LineReader;
@@ -20,14 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import java.io.IOException;
-import java.util.Locale;
-import java.util.logging.LogManager;
-
 public final class Grasscutter {
     private static final long startupTime = System.currentTimeMillis();
 
-    @Getter private static final Logger logger = LoggerFactory.getLogger(Grasscutter.class);
+    @Getter private static final Logger logger = LoggerFactory.getLogger("Grasscutter");
     @Getter private static final LineReader console = Grasscutter.createConsole();
     @Getter private static final Configuration config = new Configuration();
 
@@ -42,6 +43,9 @@ public final class Grasscutter {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         System.setProperty("logback.configurationFile", "src/main/resources/logback.xml");
+
+        // Load the server configuration.
+        Grasscutter.loadConfig();
 
         // Set shutdown hook for the application.
         Runtime.getRuntime().addShutdownHook(new Thread(Grasscutter::shutdown));
@@ -86,7 +90,7 @@ public final class Grasscutter {
     /** Shutdown hook for the application. */
     public static void shutdown() {
         // Log message to the console.
-        Grasscutter.getLogger().info("Shutting down Grasscutter...");
+        Log.info(new TextContainer("system.shutdown"));
         // Check if the server successfully started.
         if (!Grasscutter.hasStarted) return;
 
@@ -138,5 +142,20 @@ public final class Grasscutter {
         }
 
         return data == null ? new LanguageData() : data;
+    }
+
+    /** Loads the server configuration file. */
+    private static void loadConfig() {
+        // Check if the configuration file exists.
+        var config = new File(System.getProperty("user.dir"), "config.json");
+        if (!config.exists()) {
+            // Save the default configuration.
+            Grasscutter.getLogger().warn("No configuration file found, creating a default one.");
+            FileUtils.saveToFile(Grasscutter.config, config);
+            return;
+        }
+
+        // Load the configuration file.
+        FileUtils.loadFromFile(Grasscutter.config, config);
     }
 }

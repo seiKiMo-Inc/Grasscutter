@@ -2,7 +2,6 @@ package io.grasscutter.utils;
 
 import io.grasscutter.Grasscutter;
 import io.grasscutter.utils.definitions.LanguageData;
-
 import java.io.File;
 import java.io.IOException;
 

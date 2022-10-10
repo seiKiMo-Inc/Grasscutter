@@ -3,7 +3,7 @@
 
   <appender name="STDOUT" class="io.grasscutter.utils.objects.JLineLogbackAppender">
     <encoder>
-      <pattern>[%d{HH:mm:ss}] [%highlight(%level)] %msg%n</pattern>
+      <pattern>[%d{HH:mm:ss}] [%highlight(%level)] [%logger] %msg%n</pattern>
     </encoder>
   </appender>
 
@@ -19,12 +19,6 @@
     </encoder>
   </appender>
 
-<!--  <appender name="SERVEREVENT" class="emu.grasscutter.utils.ServerLogEventAppender">-->
-<!--    <encoder>-->
-<!--      <pattern>%d{HH:mm:ss} &lt;%highlight(%level):%gray(%class{0})&gt; %msg%n</pattern>-->
-<!--    </encoder>-->
-<!--  </appender>-->
-
   <logger name="io.javalin" level="OFF" />
   <logger name="org.quartz" level="OFF" />
   <logger name="org.reflections" level="OFF" />
@@ -35,6 +29,5 @@
   <root level="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
-<!--    <appender-ref ref="SERVEREVENT" />-->
   </root>
 </Configuration>

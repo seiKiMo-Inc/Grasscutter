@@ -7,10 +7,9 @@ import io.netty.bootstrap.UkcpServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import java.net.InetSocketAddress;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.net.InetSocketAddress;
 
 /** Acts as the network interface for KCP traffic. Runs on a separate thread. */
 public abstract class KcpServer extends Thread {

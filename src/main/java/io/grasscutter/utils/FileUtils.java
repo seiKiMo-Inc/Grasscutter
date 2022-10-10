@@ -2,11 +2,10 @@ package io.grasscutter.utils;
 
 import io.grasscutter.Grasscutter;
 import io.grasscutter.utils.interfaces.Serializable;
-import lombok.SneakyThrows;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Map;
+import lombok.SneakyThrows;
 
 /* Utility methods for accessing the file system. */
 public interface FileUtils {

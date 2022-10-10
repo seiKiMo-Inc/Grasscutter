@@ -1,8 +1,7 @@
 package io.grasscutter.utils.objects;
 
-import lombok.SneakyThrows;
-
 import java.io.ByteArrayOutputStream;
+import lombok.SneakyThrows;
 
 /** Represents an arrangement of bytes in a stream. */
 public final class Buffer {

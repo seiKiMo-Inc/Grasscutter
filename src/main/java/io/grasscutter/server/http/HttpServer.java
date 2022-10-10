@@ -1,12 +1,17 @@
 package io.grasscutter.server.http;
 
+import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
+import io.grasscutter.utils.objects.lang.TextContainer;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
+import io.javalin.util.JavalinBindException;
 import lombok.Getter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Handles HTTP traffic. Primarily acts as the dispatch server. */
 public final class HttpServer {
@@ -56,14 +61,21 @@ public final class HttpServer {
     }
 
     private final Javalin javalin;
+    private final Logger logger;
 
     private HttpServer() {
         this.javalin = Javalin.create(HttpServer::javalinConfig);
+        this.logger = LoggerFactory.getLogger("HTTP");
     }
 
     /** Starts the HTTP server. */
     public void start() {
-        this.javalin.start();
+        try {
+            this.javalin.start();
+        } catch (JavalinBindException ignored) {
+            var port = Properties.SERVER().httpServer.bindPort;
+            Log.warn(this.logger, new TextContainer("network.bind-failed", port));
+        }
     }
 
     /** Stops the HTTP server. */
