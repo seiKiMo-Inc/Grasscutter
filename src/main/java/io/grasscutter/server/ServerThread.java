@@ -122,6 +122,7 @@ public final class ServerThread extends Thread {
             }
         } catch (Throwable exception) {
             Log.error(this.logger, new TextContainer("server.dedicated.tick_error"), exception);
+            Log.error(this.logger, this.server.dumpThreads());
         }
     }
 }
