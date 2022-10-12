@@ -8,7 +8,7 @@ import io.grasscutter.utils.LanguageUtils;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.definitions.LanguageData;
-import io.grasscutter.utils.objects.Configuration;
+import io.grasscutter.utils.definitions.Configuration;
 import io.grasscutter.utils.objects.lang.Language;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import java.io.File;

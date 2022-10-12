@@ -1,4 +1,4 @@
-package io.grasscutter.utils.objects;
+package io.grasscutter.utils.definitions;
 
 import com.google.gson.annotations.SerializedName;
 import io.grasscutter.utils.enums.DataInterface;
