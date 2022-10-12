@@ -56,4 +56,14 @@ public interface NetworkUtils {
     static InetSocketAddress createFrom(String address, int port) {
         return new InetSocketAddress(address, port);
     }
+
+    /**
+     * Validates a given host and port.
+     * @param address The address to validate.
+     * @param port The port to validate.
+     * @return Whether the address and port are valid.
+     */
+    static boolean validate(String address, int port) {
+        return address != null && !address.isEmpty() && port > 0 && port < 65536;
+    }
 }

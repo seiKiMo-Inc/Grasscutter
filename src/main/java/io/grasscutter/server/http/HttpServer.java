@@ -1,5 +1,6 @@
 package io.grasscutter.server.http;
 
+import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.objects.lang.TextContainer;
@@ -92,10 +93,19 @@ public final class HttpServer {
 
     /** Starts the HTTP server. */
     public void start() {
+        var networkProperties = Properties.SERVER().httpServer;
+        var host = networkProperties.bindAddress;
+        var port = networkProperties.bindPort;
+        if (!NetworkUtils.validate(host, port)) {
+            Log.warn(new TextContainer("network.invalid_address", host, port));
+            System.exit(1);
+            return;
+        }
+
         try {
+            // Start the server.
             this.javalin.start();
         } catch (JavalinBindException ignored) {
-            var port = Properties.SERVER().httpServer.bindPort;
             Log.warn(this.logger, new TextContainer("network.bind-failed", port));
         }
     }
