@@ -1,4 +1,4 @@
-package io.grasscutter.network.session;
+package io.grasscutter.network;
 
 import io.grasscutter.network.kcp.KcpChannel;
 import io.grasscutter.network.protocol.BasePacket;

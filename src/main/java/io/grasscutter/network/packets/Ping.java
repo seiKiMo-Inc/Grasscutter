@@ -2,7 +2,7 @@ package io.grasscutter.network.packets;
 
 import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.PacketIds;
-import io.grasscutter.network.session.NetworkSession;
+import io.grasscutter.network.NetworkSession;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.proto.PingReqOuterClass.PingReq;
 import io.grasscutter.proto.PingRspOuterClass.PingRsp;

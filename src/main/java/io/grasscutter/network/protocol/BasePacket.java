@@ -1,7 +1,7 @@
 package io.grasscutter.network.protocol;
 
 import com.google.protobuf.GeneratedMessageV3;
-import io.grasscutter.network.session.NetworkSession;
+import io.grasscutter.network.NetworkSession;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.NetworkConstants;

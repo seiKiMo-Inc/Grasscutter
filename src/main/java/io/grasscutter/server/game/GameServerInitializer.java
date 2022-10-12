@@ -1,6 +1,6 @@
 package io.grasscutter.server.game;
 
-import io.grasscutter.network.session.NetworkSession;
+import io.grasscutter.network.NetworkSession;
 import io.jpower.kcp.netty.UkcpChannel;
 import io.netty.channel.ChannelInitializer;
 import org.jetbrains.annotations.NotNull;
