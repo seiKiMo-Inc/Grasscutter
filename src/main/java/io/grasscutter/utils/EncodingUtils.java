@@ -133,8 +133,19 @@ public interface EncodingUtils {
 
                         // Write data to the field.
                         field.setAccessible(true);
-                        field.set(object, fieldType.cast(deserialized));
-                    } catch (ReflectiveOperationException ignored) { }
+                        field.set(object, deserialized);
+                    } catch (ReflectiveOperationException ignored) {
+                    }
                 });
+    }
+
+    /**
+     * Converts milliseconds into seconds.
+     *
+     * @param millis The milliseconds to convert.
+     * @return The converted milliseconds.
+     */
+    static String toSeconds(long millis) {
+        return String.format("%.3f", millis / 1000.0);
     }
 }

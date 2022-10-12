@@ -59,6 +59,7 @@ public interface NetworkUtils {
 
     /**
      * Validates a given host and port.
+     *
      * @param address The address to validate.
      * @param port The port to validate.
      * @return Whether the address and port are valid.

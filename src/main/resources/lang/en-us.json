@@ -11,7 +11,7 @@
   "system": {
     "startup": {
       "loading": "Starting Grasscutter...",
-      "done": "Grasscutter started in {0}ms."
+      "done": "Grasscutter started in {0}s."
     },
     "shutdown": "Shutting down Grasscutter..."
   },
@@ -26,6 +26,13 @@
     "dedicated": {
       "tick_error": "Exception happened while ticking server.",
       "interrupted": "Server thread interrupted."
+    },
+    "http": {
+      "done": "HTTP server started on port {0}. Accessible at {1}://{2}:{0}",
+      "router_error": "Unable to setup router {0}."
+    },
+    "game": {
+      "done": "Game server started on port {0}. Accessible at {1}:{0}."
     }
   }
 }

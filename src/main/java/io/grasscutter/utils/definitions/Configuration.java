@@ -31,7 +31,8 @@ public final class Configuration implements Serializable {
 
     public static class Encryption {
         public boolean useSsl = false; // Whether to use SSL/TLS. Default: false.
-        public boolean inRouting = false; // Whether 'https' should be included in routes. Default: false.
+        public boolean inRouting =
+                false; // Whether 'https' should be included in routes. Default: false.
         public String keyStore = ""; // The path to the key store. Default: "".
         public String keyStorePassword = "123456"; // The password to the key store. Default: "".
     }

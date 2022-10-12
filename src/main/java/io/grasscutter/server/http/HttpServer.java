@@ -7,14 +7,13 @@ import io.grasscutter.utils.objects.lang.TextContainer;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.util.JavalinBindException;
+import java.io.File;
 import lombok.Getter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 
 /** Handles HTTP traffic. Primarily acts as the dispatch server. */
 public final class HttpServer {
@@ -91,13 +90,34 @@ public final class HttpServer {
         this.logger = LoggerFactory.getLogger("HTTP");
     }
 
+    /**
+     * Invokes {@link Router#setup(Javalin)}.
+     *
+     * @param router The router class.
+     * @param args Arguments to pass to the router.
+     */
+    public void use(Class<? extends Router> router, Object... args) {
+        // Get all constructor parameters.
+        Class<?>[] types = new Class<?>[args.length];
+        for (var argument : args) types[args.length - 1] = argument.getClass();
+
+        try {
+            // Create a router instance & apply routes.
+            var constructor = router.getDeclaredConstructor(types); // Get the constructor.
+            var routerInstance = constructor.newInstance(args); // Create instance.
+            routerInstance.setup(this.javalin); // Apply routes.
+        } catch (Exception exception) {
+            Log.warn(new TextContainer("http.router_error", router.getName()));
+        }
+    }
+
     /** Starts the HTTP server. */
     public void start() {
         var networkProperties = Properties.SERVER().httpServer;
         var host = networkProperties.bindAddress;
         var port = networkProperties.bindPort;
         if (!NetworkUtils.validate(host, port)) {
-            Log.warn(new TextContainer("network.invalid_address", host, port));
+            Log.warn(this.logger, new TextContainer("network.invalid_address", host, port));
             System.exit(1);
             return;
         }
@@ -105,6 +125,9 @@ public final class HttpServer {
         try {
             // Start the server.
             this.javalin.start();
+            // Log the startup & accessible endpoint.
+            var protocol = networkProperties.encryption.inRouting ? "https" : "http";
+            Log.info(this.logger, new TextContainer("server.http.done", port, protocol, host));
         } catch (JavalinBindException ignored) {
             Log.warn(this.logger, new TextContainer("network.bind-failed", port));
         }

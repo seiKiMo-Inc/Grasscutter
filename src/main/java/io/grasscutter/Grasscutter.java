@@ -3,12 +3,14 @@ package io.grasscutter;
 import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
+import io.grasscutter.server.http.Router;
+import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.FileUtils;
 import io.grasscutter.utils.LanguageUtils;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
-import io.grasscutter.utils.definitions.LanguageData;
 import io.grasscutter.utils.definitions.Configuration;
+import io.grasscutter.utils.definitions.LanguageData;
 import io.grasscutter.utils.objects.lang.Language;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import java.io.File;
@@ -78,13 +80,16 @@ public final class Grasscutter {
 
         // Log a message to the console.
         var startupTime = System.currentTimeMillis() - Grasscutter.startupTime;
-        Log.info(new TextContainer("system.startup.done", startupTime));
+        var formattedTime = EncodingUtils.toSeconds(startupTime);
+        Log.info(new TextContainer("system.startup.done", formattedTime));
 
         // Flatten language keys into memory.
         Grasscutter.serverLanguage.loadAllKeys();
 
         // Set the has started flag.
         Grasscutter.hasStarted = true;
+        // Call for additional setup.
+        Grasscutter.additionalSetup();
     }
 
     /** Shutdown hook for the application. */
@@ -157,5 +162,11 @@ public final class Grasscutter {
 
         // Load the configuration file.
         FileUtils.loadFromFile(Grasscutter.config, config);
+    }
+
+    /** Performs additional setup for the application. This is called after the server has started. */
+    private static void additionalSetup() {
+        // Register default HTTP routes.
+        Router.defaultSetup(DedicatedServer.getHttpServer());
     }
 }
