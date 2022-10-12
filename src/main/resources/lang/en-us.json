@@ -17,7 +17,9 @@
   },
   "network": {
     "exception": "Exception caught during transit.",
-    "bind-failed": "Failed to bind to port {0}. Ensure that the port is not already in use."
+    "bind-failed": "Failed to bind to port {0}. Ensure that the port is not already in use.",
+    "no_keystore": "Unable to access keystore {0}. Ensure that the file exists and is readable.",
+    "bad_password": "Unable to access keystore {0}. Ensure the specified password is correct."
   },
   "server": {
     "dedicated": {

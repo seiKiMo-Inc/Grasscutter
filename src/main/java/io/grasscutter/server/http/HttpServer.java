@@ -13,6 +13,8 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 /** Handles HTTP traffic. Primarily acts as the dispatch server. */
 public final class HttpServer {
     @Getter private static HttpServer instance;
@@ -31,7 +33,7 @@ public final class HttpServer {
      */
     private static void javalinConfig(JavalinConfig config) {
         // Set the Jetty HTTP(S) server to use.
-        config.jetty.server(HttpServer::createServer);
+        config.jetty.server(() -> HttpServer.createServer(true));
     }
 
     /**
@@ -40,7 +42,7 @@ public final class HttpServer {
      * @return Server instance.
      */
     @SuppressWarnings("resource")
-    private static Server createServer() {
+    private static Server createServer(boolean tryEncryption) {
         var networkProperties = Properties.SERVER().httpServer;
 
         // Create a server & a connector.
@@ -48,8 +50,28 @@ public final class HttpServer {
         var serverConnector = new ServerConnector(server);
 
         // Check if SSL/TLS should be used.
-        if (networkProperties.useSsl) {
+        var encryption = networkProperties.encryption;
+        if (encryption.useSsl && tryEncryption) {
             var sslContext = new SslContextFactory.Server();
+            var keystoreFile = new File(encryption.keyStore);
+
+            // Perform keystore validation.
+            if (!keystoreFile.exists() || !keystoreFile.canRead()) {
+                Log.warn(new TextContainer("network.no_keystore", keystoreFile.getPath()));
+                return HttpServer.createServer(false); // Try again without encryption.
+            }
+
+            try {
+                // Set the keystore and password.
+                sslContext.setKeyStorePath(keystoreFile.getPath());
+                sslContext.setKeyStorePassword(encryption.keyStorePassword);
+            } catch (Exception ignored) {
+                Log.warn(new TextContainer("network.bad_password", keystoreFile.getPath()));
+                return HttpServer.createServer(false); // Try again without encryption.
+            }
+
+            // Create a new server connector with an SSL/TLS context.
+            serverConnector = new ServerConnector(server, sslContext);
         }
 
         // Finalize the connector.

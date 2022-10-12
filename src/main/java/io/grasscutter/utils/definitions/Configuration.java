@@ -23,10 +23,17 @@ public final class Configuration implements Serializable {
     }
 
     public static class Http {
-        public boolean useSsl = false; // Whether to use SSL/TLS. Default: false.
+        public Encryption encryption = new Encryption(); // All encryption properties.
         public String bindAddress =
                 "0.0.0.0"; // What address the server binds to. Default: All interfaces. (0.0.0.0)
         public int bindPort = 80; // What port the server binds to. Default: 80.
+    }
+
+    public static class Encryption {
+        public boolean useSsl = false; // Whether to use SSL/TLS. Default: false.
+        public boolean inRouting = false; // Whether 'https' should be included in routes. Default: false.
+        public String keyStore = ""; // The path to the key store. Default: "".
+        public String keyStorePassword = "123456"; // The password to the key store. Default: "".
     }
 
     public static class Database {
