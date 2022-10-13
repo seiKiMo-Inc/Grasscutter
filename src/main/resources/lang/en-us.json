@@ -25,7 +25,11 @@
   "server": {
     "dedicated": {
       "tick_error": "Exception happened while ticking server.",
-      "interrupted": "Server thread interrupted."
+      "interrupted": "Server thread interrupted.",
+      "reload": {
+        "start": "Reloading server...",
+        "done": "Reload complete. ({0}s)"
+      }
     },
     "http": {
       "done": "HTTP server started on port {0}. Accessible at {1}://{2}:{0}",

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.LogManager;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -35,7 +36,7 @@ public final class Grasscutter {
     @Getter private static final Configuration config = new Configuration();
 
     @Getter private static DedicatedServer dedicatedServer;
-    @Getter private static Language serverLanguage;
+    @Getter @Setter private static Language serverLanguage;
 
     private static boolean hasStarted = false;
 
@@ -128,7 +129,7 @@ public final class Grasscutter {
      *
      * @return Loaded language data.
      */
-    private static LanguageData loadLanguage() {
+    public static LanguageData loadLanguage() {
         var language = Properties.LANGUAGE();
         var langCode = Locale.getDefault().toString();
 
@@ -150,7 +151,7 @@ public final class Grasscutter {
     }
 
     /** Loads the server configuration file. */
-    private static void loadConfig() {
+    public static void loadConfig() {
         // Check if the configuration file exists.
         var config = new File(System.getProperty("user.dir"), "config.json");
         if (!config.exists()) {
@@ -165,7 +166,7 @@ public final class Grasscutter {
     }
 
     /** Performs additional setup for the application. This is called after the server has started. */
-    private static void additionalSetup() {
+    public static void additionalSetup() {
         // Register default HTTP routes.
         Router.defaultSetup(DedicatedServer.getHttpServer());
     }

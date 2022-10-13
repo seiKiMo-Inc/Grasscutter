@@ -137,4 +137,7 @@ public final class HttpServer {
     public void stop() {
         this.javalin.stop();
     }
+
+    /** Invoked when a server reload occurs. */
+    public void reload() {}
 }

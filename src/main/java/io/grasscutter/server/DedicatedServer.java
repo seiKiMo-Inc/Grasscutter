@@ -1,7 +1,12 @@
 package io.grasscutter.server;
 
+import io.grasscutter.Grasscutter;
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
+import io.grasscutter.utils.EncodingUtils;
+import io.grasscutter.utils.constants.Log;
+import io.grasscutter.utils.objects.lang.Language;
+import io.grasscutter.utils.objects.lang.TextContainer;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.util.Arrays;
@@ -52,6 +57,30 @@ public final class DedicatedServer {
 
         // Stop the dedicated server thread.
         this.thread.end();
+    }
+
+    /** Performs a server reload. */
+    public void reload() {
+        Log.info(this.logger, new TextContainer("server.dedicated.reload.start"));
+        var startupTime = System.currentTimeMillis();
+
+        // Reload the server internals.
+        Grasscutter.loadConfig();
+
+        var languageData = Grasscutter.loadLanguage();
+        if (!languageData.isValid()) {
+            Grasscutter.getLogger().error("Failed to load language data.");
+            return;
+        }
+        Grasscutter.setServerLanguage(new Language(languageData));
+
+        // Reload the dedicated servers.
+        DedicatedServer.gameServer.reload();
+        DedicatedServer.httpServer.reload();
+
+        // Log the time it took to reload.
+        var time = EncodingUtils.toSeconds(System.currentTimeMillis() - startupTime);
+        Log.info(this.logger, new TextContainer("server.dedicated.reload.done", time));
     }
 
     /**

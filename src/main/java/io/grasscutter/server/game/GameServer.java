@@ -42,4 +42,7 @@ public final class GameServer extends KcpServer {
         // Log the server start.
         Log.info(this.logger, new TextContainer("server.game.done", port, host));
     }
+
+    /** Invoked when a server reload occurs. */
+    public void reload() {}
 }
