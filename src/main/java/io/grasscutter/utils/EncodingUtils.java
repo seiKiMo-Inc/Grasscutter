@@ -2,6 +2,7 @@ package io.grasscutter.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.protobuf.ByteString;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import java.io.File;
@@ -147,5 +148,15 @@ public interface EncodingUtils {
      */
     static String toSeconds(long millis) {
         return String.format("%.3f", millis / 1000.0);
+    }
+
+    /**
+     * Converts a byte array into a byte string.
+     *
+     * @param bytes The bytes to convert.
+     * @return The converted bytes.
+     */
+    static ByteString toByteString(byte[] bytes) {
+        return ByteString.copyFrom(bytes);
     }
 }

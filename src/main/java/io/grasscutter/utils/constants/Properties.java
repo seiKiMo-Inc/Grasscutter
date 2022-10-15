@@ -44,4 +44,11 @@ public interface Properties {
     static Configuration.Language LANGUAGE() {
         return CONFIGURATION().language;
     }
+
+    /**
+     * @return Dispatch properties.
+     */
+    static Configuration.Dispatch DISPATCH() {
+        return CONFIGURATION().dispatch;
+    }
 }

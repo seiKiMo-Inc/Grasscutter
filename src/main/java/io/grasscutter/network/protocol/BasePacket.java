@@ -3,6 +3,7 @@ package io.grasscutter.network.protocol;
 import com.google.protobuf.GeneratedMessageV3;
 import io.grasscutter.network.NetworkSession;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
+import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.enums.KeyType;
@@ -100,7 +101,7 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
                         .finish();
 
         // Encrypt packet with XOR if needed.
-        if (this.shouldEncrypt) NetworkUtils.encryptBuffer(buffer, this.keyType);
+        if (this.shouldEncrypt) CryptoUtils.performXor(buffer, this.keyType);
 
         return buffer;
     }

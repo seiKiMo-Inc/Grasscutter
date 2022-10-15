@@ -3,9 +3,11 @@ package io.grasscutter.utils;
 import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.network.protocol.PacketIds;
-import io.grasscutter.utils.enums.KeyType;
+import io.grasscutter.utils.definitions.Configuration;
+import io.grasscutter.utils.objects.Triplet;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /* Utility methods seen in server networking. */
 public interface NetworkUtils {
@@ -21,29 +23,6 @@ public interface NetworkUtils {
                 .findFirst()
                 .orElse(Packet.NONE)
                 .getSendId();
-    }
-
-    /**
-     * Performs an XOR bitwise operation using the provided key.
-     *
-     * @param buffer The buffer to encrypt.
-     * @param keyType The key type to use.
-     */
-    static void encryptBuffer(byte[] buffer, KeyType keyType) {
-        var key = keyType.getKey();
-        NetworkUtils.encryptBuffer(buffer, key);
-    }
-
-    /**
-     * Performs an XOR bitwise operation on the given byte array.
-     *
-     * @param buffer The buffer to XOR.
-     * @param key The key to XOR with.
-     */
-    static void encryptBuffer(byte[] buffer, byte[] key) {
-        for (int i = 0; i < buffer.length; i++) {
-            buffer[i] ^= key[i % key.length];
-        }
     }
 
     /**
@@ -66,5 +45,62 @@ public interface NetworkUtils {
      */
     static boolean validate(String address, int port) {
         return address != null && !address.isEmpty() && port > 0 && port < 65536;
+    }
+
+    /**
+     * Formulates a valid URL based on the dispatch configuration.
+     *
+     * @param dispatchData The dispatch configuration.
+     * @param httpData The HTTP configuration.
+     * @return A URL.
+     */
+    static String formulateUrl(Configuration.Dispatch dispatchData, Configuration.Http httpData) {
+        var address = dispatchData.routingAddress;
+        var port = dispatchData.routingPort;
+
+        if (!NetworkUtils.validate(address, port)) {
+            // Set fallbacks.
+            address = "127.0.0.1";
+            port = httpData.bindPort;
+        }
+
+        return String.format(
+                "%s://%s:%d",
+                dispatchData.routingEncryption ? "https" : "http",
+                address.isEmpty() ? "127.0.0.1" : address, // Fallback to localhost.
+                dispatchData.routingPort == -1 ? httpData.bindPort : port);
+    }
+
+    /**
+     * Extracts the protocol version from a version number.
+     *
+     * @param versionName The version code.
+     * @return The protocol version.
+     */
+    static Triplet<Short, Short, Short> getProtocolVersion(String versionName) {
+        var versionCode =
+                versionName.replaceAll(Pattern.compile("[a-zA-Z]").pattern(), "").split("\\.");
+        var versionMajor = Integer.parseInt(versionCode[0]);
+        var versionMinor = Integer.parseInt(versionCode[1]);
+        var versionFix = Integer.parseInt(versionCode[2]);
+
+        return new Triplet<>((short) versionMajor, (short) versionMinor, (short) versionFix);
+    }
+
+    /**
+     * Checks if the version requires RSA signing.
+     *
+     * @param version The version to check.
+     * @return Whether the version requires RSA signing.
+     */
+    static boolean requiresSigning(Triplet<Short, Short, Short> version) {
+        // Get the version numbers.
+        var versionMajor = version.a();
+        var versionMinor = version.b();
+        var versionFix = version.c();
+
+        return versionMajor >= 3
+                || (versionMajor == 2 && versionMinor == 7 && versionFix >= 50)
+                || (versionMajor == 2 && versionMinor == 8);
     }
 }

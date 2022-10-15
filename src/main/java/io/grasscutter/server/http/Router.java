@@ -20,5 +20,7 @@ public interface Router {
     static void defaultSetup(HttpServer app) {
         // Register static routes.
         app.use(StaticRequestRouter.class);
+        // Register internal game routes.
+        app.use(DispatchRouter.class);
     }
 }

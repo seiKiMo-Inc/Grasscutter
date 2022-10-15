@@ -3,12 +3,16 @@ package io.grasscutter.utils.definitions;
 import com.google.gson.annotations.SerializedName;
 import io.grasscutter.utils.enums.DataInterface;
 import io.grasscutter.utils.interfaces.Serializable;
+import java.util.List;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /* Container for server properties. */
 public final class Configuration implements Serializable {
     public Server server = new Server(); // All server properties.
     public Database database = new Database(); // All database properties.
     public Language language = new Language(); // All language properties.
+    public Dispatch dispatch = new Dispatch(); // All dispatch properties.
 
     public static class Server {
         public RunMode runAs = RunMode.HYBRID; // What the server runs as. Default: Hybrid.
@@ -20,6 +24,9 @@ public final class Configuration implements Serializable {
         public String bindAddress =
                 "0.0.0.0"; // What address the server binds to. Default: All interfaces. (0.0.0.0)
         public int bindPort = 22102; // What port the server binds to. Default: 22102.
+        public String routingAddress =
+                "127.0.0.1"; // What address the client connects to. Default: Localhost. (127.0.0.1)
+        public int routingPort = 22102; // What port the client connects to. Default: 22102.
     }
 
     public static class Http {
@@ -56,6 +63,27 @@ public final class Configuration implements Serializable {
         public boolean force = false; // Whether to force the language. Default: false.
         public boolean unknown =
                 true; // Allow using languages specified in `~/languages/`  Default: true.
+    }
+
+    public static class Dispatch {
+        public boolean routingEncryption =
+                false; // Whether to specify HTTPS in routing. Default: false.
+        public String routingAddress = "localhost"; // The address to use in URLs. Default: "localhost".
+        public int routingPort = 80; // The port to use in URLs. Default: 80.
+
+        public String defaultRegionDisplay =
+                "Grasscutter"; // The default region display name. Default: "Grasscutter".
+        public List<Region> regions =
+                List.of(new Region()); // The regions to display in the region list. Default: [default].
+    }
+
+    @Accessors(chain = true)
+    @Setter
+    public static class Region {
+        public String name = "default"; // The name of the region. Default: default.
+        public String display = "Grasscutter"; // The region's display name. Default: Grasscutter.
+        public String address = "localhost"; // The address of the region. Default: localhost.
+        public int port = 22102; // The port of the region. Default: 22102.
     }
 
     public enum RunMode {
