@@ -107,7 +107,7 @@ public final class HttpServer {
             var routerInstance = constructor.newInstance(args); // Create instance.
             routerInstance.setup(this.javalin); // Apply routes.
         } catch (Exception exception) {
-            Log.warn(new TextContainer("http.router_error", router.getName()));
+            Log.warn(new TextContainer("server.http.router_error", router.getSimpleName()));
         }
     }
 
