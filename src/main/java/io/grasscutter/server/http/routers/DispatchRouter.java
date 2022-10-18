@@ -9,6 +9,7 @@ import io.grasscutter.proto.RegionSimpleInfoOuterClass.RegionSimpleInfo;
 import io.grasscutter.server.http.Router;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.NetworkUtils;
+import io.grasscutter.utils.constants.CryptoConstants;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.constants.Properties;
@@ -150,7 +151,7 @@ public final class DispatchRouter implements Router {
                 // Create a cipher.
                 var keyId = lr(ctx.queryParam("key_id"), "3");
                 var keyType = keyId.equals("3") ? KeyType.OS : KeyType.CN;
-                var cipher = keyType.cipher(NetworkConstants.ENCRYPTION_TYPE);
+                var cipher = keyType.encrypt(CryptoConstants.ENCRYPTION_TYPE);
                 if (cipher == null) {
                     throw new IllegalStateException("Invalid key.");
                 }
@@ -171,7 +172,7 @@ public final class DispatchRouter implements Router {
                 }
 
                 // Create a signature.
-                var signature = KeyType.SIGNING.signature(NetworkConstants.SIGNATURE_TYPE);
+                var signature = KeyType.SIGNING.signature(CryptoConstants.SIGNATURE_TYPE);
                 if (signature == null) {
                     throw new IllegalStateException("Invalid key.");
                 }

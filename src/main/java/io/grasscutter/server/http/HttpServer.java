@@ -129,7 +129,7 @@ public final class HttpServer {
             var protocol = networkProperties.encryption.inRouting ? "https" : "http";
             Log.info(this.logger, new TextContainer("server.http.done", port, protocol, host));
         } catch (JavalinBindException ignored) {
-            Log.warn(this.logger, new TextContainer("network.bind-failed", port));
+            Log.warn(this.logger, new TextContainer("network.bind_failed", port));
         }
     }
 
