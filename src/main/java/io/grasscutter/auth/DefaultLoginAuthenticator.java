@@ -8,17 +8,14 @@ import io.grasscutter.utils.definitions.auth.LoginResultResponse;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
 import io.grasscutter.utils.enums.KeyType;
 import io.grasscutter.utils.objects.lang.TextContainer;
+import java.nio.charset.StandardCharsets;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.charset.StandardCharsets;
-
-/**
- * The default login authenticator.
- */
-public final class DefaultLoginAuthenticator implements Authenticator<ShieldLoginRequest, LoginResultResponse> {
+/** The default login authenticator. */
+public final class DefaultLoginAuthenticator
+        implements Authenticator<ShieldLoginRequest, LoginResultResponse> {
     @Override
-    @NotNull
-    public LoginResultResponse authenticate(ShieldLoginRequest request) {
+    @NotNull public LoginResultResponse authenticate(ShieldLoginRequest request) {
         var response = new LoginResultResponse();
 
         // Decode the password.
@@ -28,12 +25,13 @@ public final class DefaultLoginAuthenticator implements Authenticator<ShieldLogi
             var cipher = KeyType.AUTH.decrypt(CryptoConstants.ENCRYPTION_TYPE);
             if (cipher == null) {
                 password = null;
-            } else try {
-                var decoded = EncodingUtils.fromBase64(password.getBytes());
-                password = new String(cipher.doFinal(decoded), StandardCharsets.UTF_8);
-            } catch (Exception ignored) {
-                password = null;
-            }
+            } else
+                try {
+                    var decoded = EncodingUtils.fromBase64(password.getBytes());
+                    password = new String(cipher.doFinal(decoded), StandardCharsets.UTF_8);
+                } catch (Exception ignored) {
+                    password = null;
+                }
         }
 
         // Check the password.

@@ -1,4 +1,3 @@
 package io.grasscutter.auth;
 
-public class DefaultAuthenticators {
-}
+public class DefaultAuthenticators {}

@@ -9,7 +9,9 @@ import io.grasscutter.utils.interfaces.Serializable;
 
 @DataSerializable(table = "accounts")
 public final class Account implements Serializable {
-    @Special(FieldType.ID) public long id = Long.MAX_VALUE; // The account's ID.
+    @Special(FieldType.ID)
+    public long id = Long.MAX_VALUE; // The account's ID.
+
     public long gameUserID = Long.MAX_VALUE; // The ID shown as "UID" in-game.
 
     public String email = ""; // The account's email.
@@ -21,6 +23,7 @@ public final class Account implements Serializable {
 
     /**
      * Generates a login token for the account.
+     *
      * @return A randomly generated hex string.
      */
     public String generateSessionKey() {

@@ -6,7 +6,9 @@ import com.google.gson.annotations.SerializedName;
 public final class ShieldLoginRequest {
     @SerializedName("account")
     public String username;
+
     public String password;
+
     @SerializedName("is_crypto")
     public boolean crypto;
 }

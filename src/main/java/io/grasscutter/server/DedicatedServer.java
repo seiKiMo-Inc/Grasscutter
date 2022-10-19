@@ -114,9 +114,7 @@ public final class DedicatedServer {
         return builder.toString();
     }
 
-    /**
-     * Establishes a connection to the configured database.
-     */
+    /** Establishes a connection to the configured database. */
     public void initializeDatabase() {
         // Get the database configuration.
         var database = Properties.DATABASE();

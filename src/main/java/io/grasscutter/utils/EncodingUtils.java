@@ -18,6 +18,7 @@ public interface EncodingUtils {
 
     /**
      * Encodes the given string into a Base64 string.
+     *
      * @param string The string to encode.
      * @return The encoded string.
      */
@@ -37,6 +38,7 @@ public interface EncodingUtils {
 
     /**
      * Decodes the given Base64 string into a string.
+     *
      * @param string The string to decode.
      * @return The decoded string.
      */
@@ -56,6 +58,7 @@ public interface EncodingUtils {
 
     /**
      * Converts a Netty {@link ByteBuf} into a hex string.
+     *
      * @param buffer The buffer to convert.
      * @return The hex string.
      */
@@ -65,6 +68,7 @@ public interface EncodingUtils {
 
     /**
      * Converts a byte array into a hex string.
+     *
      * @param buffer The bytes to convert.
      * @return The hex string.
      */

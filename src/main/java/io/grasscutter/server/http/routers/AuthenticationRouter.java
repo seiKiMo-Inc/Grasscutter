@@ -18,8 +18,7 @@ public final class AuthenticationRouter implements Router {
     }
 
     /**
-     * Handles a shield login request.
-     * Involves a username & password.
+     * Handles a shield login request. Involves a username & password.
      *
      * @param ctx The request context.
      * @route /hk4e_global/mdk/shield/api/login
@@ -34,24 +33,18 @@ public final class AuthenticationRouter implements Router {
     }
 
     /**
-     * Handles a shield verify request.
-     * Involves a cached token.
+     * Handles a shield verify request. Involves a cached token.
      *
      * @param ctx The request context.
      * @route /hk4e_global/mdk/shield/api/verify
      */
-    private static void shieldVerify(Context ctx) {
-
-    }
+    private static void shieldVerify(Context ctx) {}
 
     /**
-     * Handles a combo login request.
-     * Involves a session key.
+     * Handles a combo login request. Involves a session key.
      *
      * @param ctx The request context.
      * @route /hk4e_global/combo/granter/login/v2/login
      */
-    private static void comboLogin(Context ctx) {
-
-    }
+    private static void comboLogin(Context ctx) {}
 }

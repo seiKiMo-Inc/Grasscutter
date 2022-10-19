@@ -6,13 +6,11 @@ import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Login authenticator through only a username.
- */
-public final class UsernameAuthenticator implements Authenticator<ShieldLoginRequest, LoginResultResponse> {
+/** Login authenticator through only a username. */
+public final class UsernameAuthenticator
+        implements Authenticator<ShieldLoginRequest, LoginResultResponse> {
     @Override
-    @NotNull
-    public LoginResultResponse authenticate(ShieldLoginRequest request) {
+    @NotNull public LoginResultResponse authenticate(ShieldLoginRequest request) {
         var response = new LoginResultResponse();
 
         // Check for account.

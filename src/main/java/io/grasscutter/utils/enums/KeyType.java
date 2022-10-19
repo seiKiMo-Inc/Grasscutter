@@ -79,6 +79,7 @@ public enum KeyType {
 
     /**
      * Creates a cipher from the mode and type.
+     *
      * @param mode The mode of the cipher.
      * @param type The type of cipher.
      * @return The cipher.
@@ -87,11 +88,13 @@ public enum KeyType {
         try {
             // Create, initialize, and return the cipher.
             var cipher = Cipher.getInstance(type);
-            cipher.init(mode, switch(mode) {
-                default -> throw new IllegalStateException("Unexpected value: " + mode);
-                case Cipher.ENCRYPT_MODE -> this.getPublicKey();
-                case Cipher.DECRYPT_MODE -> this.getPrivateKey();
-            });
+            cipher.init(
+                    mode,
+                    switch (mode) {
+                        default -> throw new IllegalStateException("Unexpected value: " + mode);
+                        case Cipher.ENCRYPT_MODE -> this.getPublicKey();
+                        case Cipher.DECRYPT_MODE -> this.getPrivateKey();
+                    });
             return cipher;
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException ignored) {
             return null;
