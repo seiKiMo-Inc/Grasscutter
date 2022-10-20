@@ -1,10 +1,13 @@
 package io.grasscutter.server;
 
 import io.grasscutter.Grasscutter;
+import io.grasscutter.auth.AuthenticationHolder;
+import io.grasscutter.data.DataInterface;
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.constants.Log;
+import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.objects.lang.Language;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import java.lang.management.ManagementFactory;
@@ -18,9 +21,12 @@ public final class DedicatedServer {
     @Getter private static DedicatedServer instance;
     @Getter private static GameServer gameServer;
     @Getter private static HttpServer httpServer;
-    @Getter private final Logger logger;
 
+    @Getter private final Logger logger;
+    @Getter private final AuthenticationHolder authHolder;
     private final ServerThread thread;
+
+    @Getter private DataInterface dataInterface;
 
     public DedicatedServer(Logger logger, GameServer gameServer, HttpServer httpServer) {
         // Set the dedicated servers.
@@ -34,6 +40,11 @@ public final class DedicatedServer {
 
         // Create the server thread.
         this.thread = new ServerThread(this);
+        // Initialize the database.
+        this.initializeDatabase();
+
+        // Create server objects.
+        this.authHolder = new AuthenticationHolder();
     }
 
     /** Performs a global server tick. */
@@ -57,6 +68,9 @@ public final class DedicatedServer {
 
         // Stop the dedicated server thread.
         this.thread.end();
+        // Perform database operations.
+        this.dataInterface.save();
+        this.dataInterface.disconnect();
     }
 
     /** Performs a server reload. */
@@ -77,6 +91,9 @@ public final class DedicatedServer {
         // Reload the dedicated servers.
         DedicatedServer.gameServer.reload();
         DedicatedServer.httpServer.reload();
+        // Reload the database.
+        this.dataInterface.save();
+        this.dataInterface.initialize();
 
         // Log the time it took to reload.
         var time = EncodingUtils.toSeconds(System.currentTimeMillis() - startupTime);
@@ -95,5 +112,27 @@ public final class DedicatedServer {
         Arrays.stream(threads).forEach(thread -> builder.append('\n').append(thread));
 
         return builder.toString();
+    }
+
+    /**
+     * Establishes a connection to the configured database.
+     */
+    public void initializeDatabase() {
+        // Get the database configuration.
+        var database = Properties.DATABASE();
+
+        try {
+            // Get the interface class.
+            var interfaceClass = database.interfaceType.getInterfaceClass();
+            // Create a new instance of the interface class.
+            this.dataInterface = interfaceClass.getDeclaredConstructor().newInstance();
+
+            // Connect to the database.
+            this.dataInterface.connect();
+            // Initialize the database.
+            this.dataInterface.initialize();
+        } catch (Exception exception) {
+            Log.error(this.logger, new TextContainer("database.initialize_error"), exception);
+        }
     }
 }
