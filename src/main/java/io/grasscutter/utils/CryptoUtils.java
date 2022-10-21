@@ -2,8 +2,14 @@ package io.grasscutter.utils;
 
 import io.grasscutter.utils.enums.KeyType;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 /* Utility methods for cryptography. */
 public interface CryptoUtils {
+    /* Secure random instance. */
+    Random random = new SecureRandom();
+    
     /**
      * Performs an XOR bitwise operation using the provided key.
      *
@@ -25,5 +31,16 @@ public interface CryptoUtils {
         for (int i = 0; i < buffer.length; i++) {
             buffer[i] ^= key[i % key.length];
         }
+    }
+
+    /**
+     * Generates a random byte array of the given length.
+     * @param length The length of the array.
+     * @return The random byte array.
+     */
+    static byte[] generateBytes(int length) {
+        var bytes = new byte[length];
+        random.nextBytes(bytes);
+        return bytes;
     }
 }

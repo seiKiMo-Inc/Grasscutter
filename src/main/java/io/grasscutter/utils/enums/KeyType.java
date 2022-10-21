@@ -16,7 +16,8 @@ public enum KeyType {
 
     OS(FileUtils.resource("keys/public/OS.der"), false),
     CN(FileUtils.resource("keys/public/CN.der"), false),
-    SIGNING(FileUtils.resource("keys/private/SigningKey.der"), false);
+    SIGNING(FileUtils.resource("keys/private/SigningKey.der"), false),
+    AUTH(FileUtils.resource("keys/private/AuthKey.der"), false);
 
     private final Object key;
     private final boolean isByte;
@@ -68,11 +69,29 @@ public enum KeyType {
      * @param type The type of cipher.
      * @return The cipher.
      */
-    public Cipher cipher(String type) {
+    public Cipher encrypt(String type) {
+        return this.cipher(Cipher.ENCRYPT_MODE, type);
+    }
+
+    public Cipher decrypt(String type) {
+        return this.cipher(Cipher.DECRYPT_MODE, type);
+    }
+
+    /**
+     * Creates a cipher from the mode and type.
+     * @param mode The mode of the cipher.
+     * @param type The type of cipher.
+     * @return The cipher.
+     */
+    public Cipher cipher(int mode, String type) {
         try {
             // Create, initialize, and return the cipher.
             var cipher = Cipher.getInstance(type);
-            cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey());
+            cipher.init(mode, switch(mode) {
+                default -> throw new IllegalStateException("Unexpected value: " + mode);
+                case Cipher.ENCRYPT_MODE -> this.getPublicKey();
+                case Cipher.DECRYPT_MODE -> this.getPrivateKey();
+            });
             return cipher;
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException ignored) {
             return null;

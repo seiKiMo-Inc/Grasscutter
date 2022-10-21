@@ -4,10 +4,6 @@ import io.grasscutter.utils.enums.KeyType;
 
 /* Constants seen in server networking. */
 public interface NetworkConstants {
-    // The RSA encryption type.
-    String ENCRYPTION_TYPE = "RSA/ECB/PKCS1Padding";
-    String SIGNATURE_TYPE = "SHA256withRSA";
-
     // Magic bytes for the start and end of a packet.
     int MAGIC_1 = 0x4567;
     int MAGIC_2 = 0x89ab;

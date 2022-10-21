@@ -17,7 +17,16 @@ public interface EncodingUtils {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /**
-     * Encodes the given byte array into a Base64 string.
+     * Encodes the given string into a Base64 string.
+     * @param string The string to encode.
+     * @return The encoded string.
+     */
+    static String toBase64(String string) {
+        return new String(EncodingUtils.toBase64(string.getBytes()));
+    }
+
+    /**
+     * Encodes the given byte array into a Base64 buffer.
      *
      * @param bytes The bytes to encode.
      * @return The encoded string.
@@ -27,13 +36,44 @@ public interface EncodingUtils {
     }
 
     /**
-     * Decodes the given Base64 string into a byte array.
+     * Decodes the given Base64 string into a string.
+     * @param string The string to decode.
+     * @return The decoded string.
+     */
+    static String fromBase64(String string) {
+        return new String(EncodingUtils.fromBase64(string.getBytes()));
+    }
+
+    /**
+     * Decodes the given Base64 buffer into a byte array.
      *
      * @param bytes The bytes to decode.
      * @return The decoded byte array.
      */
     static byte[] fromBase64(byte[] bytes) {
         return Base64.getDecoder().decode(bytes);
+    }
+
+    /**
+     * Converts a Netty {@link ByteBuf} into a hex string.
+     * @param buffer The buffer to convert.
+     * @return The hex string.
+     */
+    static String toHex(ByteBuf buffer) {
+        return EncodingUtils.toHex(EncodingUtils.toByteArray(buffer));
+    }
+
+    /**
+     * Converts a byte array into a hex string.
+     * @param buffer The bytes to convert.
+     * @return The hex string.
+     */
+    static String toHex(byte[] buffer) {
+        var builder = new StringBuilder();
+        for (var b : buffer) {
+            builder.append(String.format("%02x", b));
+        }
+        return builder.toString();
     }
 
     /**
