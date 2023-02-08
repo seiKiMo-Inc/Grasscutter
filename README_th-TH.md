@@ -1,7 +1,7 @@
 [EN](README.md) | [RU](README_ru-RU.md) | [简中](README_zh-CN.md) | [繁中](README_zh-TW.md) | ไทย
 
 # NOTE
-นี้คือเวอร์ชั่นที่เขียนขึ้นใหม่ของ Grasscutter.\
+นี่คือเวอร์ชั่นที่เขียนขึ้นใหม่ของ Grasscutter.\
 ค้นหา Project ต้นฉบับได้ที่ [Grasscutters/Grasscutter](https://github.com/Grasscutters/Grasscutter).
 
 # Grasscutter
