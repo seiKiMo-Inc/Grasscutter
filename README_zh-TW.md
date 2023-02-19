@@ -1,4 +1,4 @@
-[EN](README.md) | [RU](README_ru-RU.md) | [简中](README_zh-CN.md) | 繁中
+[EN](README.md) | [RU](README_ru-RU.md) | [简中](README_zh-CN.md) | 繁中 | [ไทย](README_th-TH.md)
 
 # NOTE
 這是 Grasscutter 的*重寫*版本。\

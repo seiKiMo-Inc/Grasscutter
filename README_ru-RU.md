@@ -1,4 +1,4 @@
-[EN](README.md) | RU | [简中](README_zh-CN.md) | [繁中](README_zh-TW.md)
+[EN](README.md) | RU | [简中](README_zh-CN.md) | [繁中](README_zh-TW.md) | [ไทย](README_th-TH.md)
 
 # NOTE
 Это *переписанная* версия Grasscutter.\
