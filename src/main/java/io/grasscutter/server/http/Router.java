@@ -21,6 +21,7 @@ public interface Router {
         // Register static routes.
         app.use(StaticRequestRouter.class);
         // Register internal game routes.
+        app.use(SDKRouter.class);
         app.use(DispatchRouter.class);
         app.use(AuthenticationRouter.class);
     }
