@@ -8,8 +8,10 @@ import io.netty.buffer.ByteBufAllocator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 
 /* Utility methods seen when converting data. */
@@ -175,6 +177,13 @@ public interface EncodingUtils {
                         var fieldType = field.getType();
                         // De-serialize the value.
                         var deserialized = gson.fromJson(gson.toJson(value), fieldType);
+
+                        // Check if the field type is a list.
+                        if (fieldType == List.class) {
+                            // Get the list type.
+                            var listType = (ParameterizedType) field.getGenericType();
+                            deserialized = gson.fromJson(gson.toJson(value), listType);
+                        }
 
                         // Write data to the field.
                         field.setAccessible(true);
