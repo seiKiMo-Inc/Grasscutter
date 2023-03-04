@@ -9,6 +9,8 @@ import io.javalin.config.JavalinConfig;
 import io.javalin.util.JavalinBindException;
 import java.io.File;
 import lombok.Getter;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -45,9 +47,15 @@ public final class HttpServer {
     private static Server createServer(boolean tryEncryption) {
         var networkProperties = Properties.SERVER().httpServer;
 
+        // Create an HTTP configuration.
+        var config = new HttpConfiguration();
+        config.setSendServerVersion(false);
+        // Create an HTTP connection factory.
+        var connectionFactory = new HttpConnectionFactory(config);
+
         // Create a server & a connector.
         var server = new Server();
-        var serverConnector = new ServerConnector(server);
+        var serverConnector = new ServerConnector(server, connectionFactory);
 
         // Check if SSL/TLS should be used.
         var encryption = networkProperties.encryption;
@@ -71,13 +79,13 @@ public final class HttpServer {
             }
 
             // Create a new server connector with an SSL/TLS context.
-            serverConnector = new ServerConnector(server, sslContext);
+            serverConnector = new ServerConnector(server, sslContext, connectionFactory);
         }
 
         // Finalize the connector.
         serverConnector.setPort(networkProperties.bindPort);
         serverConnector.setHost(networkProperties.bindAddress);
-        server.setConnectors(new ServerConnector[] {serverConnector});
+        server.setConnectors(new ServerConnector[] { serverConnector });
 
         return server;
     }
