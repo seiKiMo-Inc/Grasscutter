@@ -139,5 +139,10 @@ public final class HttpServer {
     }
 
     /** Invoked when a server reload occurs. */
-    public void reload() {}
+    public void reload() {
+        this.stop(); // Stop the server.
+        this.start(); // Start the server.
+
+        Router.defaultSetup(this); // Re-apply default routes.
+    }
 }
