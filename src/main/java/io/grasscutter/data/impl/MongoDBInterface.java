@@ -1,5 +1,6 @@
 package io.grasscutter.data.impl;
 
+import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -8,6 +9,7 @@ import io.grasscutter.data.DataSerializable;
 import io.grasscutter.utils.constants.DataConstants;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.interfaces.Serializable;
+
 import java.util.Map;
 import org.bson.Document;
 
@@ -47,10 +49,16 @@ public final class MongoDBInterface implements DataInterface {
 
     @Override
     public void initialize() {
-        // Create collections for all data serializable classes.
-        for (var classType : DataConstants.SERIALIZABLE_DATA) {
-            var collectionName = classType.getAnnotation(DataSerializable.class).table();
-            this.mongoDatabase.createCollection(collectionName);
+        try {
+            // Create collections for all data serializable classes.
+            for (var classType : DataConstants.SERIALIZABLE_DATA) {
+                var collectionName = classType.getAnnotation(DataSerializable.class).table();
+                if (!this.collectionExists(collectionName))
+                    this.mongoDatabase.createCollection(collectionName);
+            }
+        } catch (MongoCommandException exception) {
+            // Unable to create collections on the database.
+            throw new RuntimeException("Unable to create collections.", exception);
         }
     }
 
@@ -116,4 +124,17 @@ public final class MongoDBInterface implements DataInterface {
 
     @Override
     public void purge(Object object) {}
+
+    /**
+     * Checks if a collection exists.
+     * @param collectionName The name of the collection.
+     * @return True if the collection exists, false otherwise.
+     */
+    private boolean collectionExists(String collectionName) {
+        var existing = this.mongoDatabase.listCollectionNames();
+        for (var name : existing) {
+            if (name.equals(collectionName)) return true;
+        }
+        return false;
+    }
 }
