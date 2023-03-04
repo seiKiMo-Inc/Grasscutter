@@ -42,6 +42,9 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+### Java ###
+src/main/resources/hotswap-agent.properties
+
 ### Grasscutter ###
 BuildConfig.java
 src/proto/
