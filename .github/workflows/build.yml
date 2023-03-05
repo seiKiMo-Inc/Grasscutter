@@ -24,7 +24,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Cache gradle files
+      - name: Cache Gradle files
         uses: actions/cache@v2
         with:
           path: |
@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Run Gradle
         run: chmod +x ./gradlew && ./gradlew && ./gradlew jar
-      - name: Upload build
+      - name: Upload Build
         uses: actions/upload-artifact@v3
         with:
           name: Grasscutter
