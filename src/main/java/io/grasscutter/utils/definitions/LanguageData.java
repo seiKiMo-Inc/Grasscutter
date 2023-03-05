@@ -14,6 +14,9 @@ public final class LanguageData {
     public JsonObject system = new JsonObject();
     public JsonObject network = new JsonObject();
     public JsonObject server = new JsonObject();
+    public JsonObject database = new JsonObject();
+    public JsonObject account = new JsonObject();
+    public JsonObject command = new JsonObject();
     public JsonObject exception = new JsonObject();
     public transient JsonObject injected = new JsonObject();
 
