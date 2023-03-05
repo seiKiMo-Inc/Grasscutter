@@ -1,0 +1,48 @@
+{
+  "details": {
+    "name": "Simplified Chinese",
+    "authors": ["360NENZ"],
+    "locale": "zh-cn",
+    "version": "1.0.0-snapshot"
+  },
+  "exception": {
+    "error": "发生错误。"
+  },
+  "system": {
+    "startup": {
+      "loading": "正在启动 Grasscutter...",
+      "done": "Grasscutter 在 {0} 秒内启动。"
+    },
+    "shutdown": "正在关闭 Grasscutter..."
+  },
+  "network": {
+    "exception": "传输过程中捕获到异常。",
+    "invalid_address": "提供的地址 {0}:{1} 无效。",
+    "bind_failed": "绑定到端口 {0} 失败。确保该端口未被使用。",
+    "no_keystore": "无法访问密钥库 {0}。确保该文件存在并且可读。",
+    "bad_password": "无法访问密钥库 {0}。确保指定的密码是正确的。"
+  },
+  "server": {
+    "dedicated": {
+      "tick_error": "勾选服务器时发生异常。",
+      "interrupted": "服务器线程中断。",
+      "reload": {
+        "start": "正在重新加载服务器...",
+        "done": "重新加载完成。 ({0}s)"
+      }
+    },
+    "http": {
+      "done": "HTTP 服务器在端口 {0} 上启动。可通过 {1}://{2}:{0} 访问",
+      "router_error": "无法设置路由 {0}."
+    },
+    "game": {
+      "done": "游戏服务器在端口 {0} 上启动。可在 {1}:{0} 访问。"
+    }
+  },
+  "database": {
+    "initialize_error": "无法初始化数据库。 {0}"
+  },
+  "account": {
+    "not_found": "找不到账户"
+  }
+}
