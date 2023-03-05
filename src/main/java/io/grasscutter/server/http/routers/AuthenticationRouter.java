@@ -2,7 +2,9 @@ package io.grasscutter.server.http.routers;
 
 import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.server.http.Router;
+import io.grasscutter.utils.definitions.auth.GranterLoginRequest;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
+import io.grasscutter.utils.definitions.auth.ShieldVerifyRequest;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -43,7 +45,18 @@ public final class AuthenticationRouter implements Router {
      * @param ctx The request context.
      * @route /hk4e_global/mdk/shield/api/verify
      */
-    private static void shieldVerify(Context ctx) {}
+    private static void shieldVerify(Context ctx) {
+        // De-serialize the request body.
+        var request = ctx.bodyAsClass(ShieldVerifyRequest.class);
+        if (request == null) return;
+
+        // Perform a login.
+        var response = DedicatedServer.getInstance()
+                .getAuthHolder().login(request);
+
+        // Send the response.
+        ctx.json(response);
+    }
 
     /**
      * Handles a combo login request. Involves a session key.
@@ -51,5 +64,16 @@ public final class AuthenticationRouter implements Router {
      * @param ctx The request context.
      * @route /hk4e_global/combo/granter/login/v2/login
      */
-    private static void comboLogin(Context ctx) {}
+    private static void comboLogin(Context ctx) {
+        // De-serialize the request body.
+        var request = ctx.bodyAsClass(GranterLoginRequest.class);
+        if (request == null) return;
+
+        // Perform a login.
+        var response = DedicatedServer.getInstance()
+                .getAuthHolder().login(request);
+
+        // Send the response.
+        ctx.json(response);
+    }
 }

@@ -39,13 +39,33 @@ public final class AuthenticationHolder {
     }
 
     /**
-     * Attempt to authenticate to the account using a login token.
+     * Attempt to authenticate to an account using a login token.
      *
      * @param request The request object.
      * @return The account, or null if authentication failed.
      */
     public SDKResponse login(ShieldLoginRequest request) {
         return this.loginAuth.authenticate(request);
+    }
+
+    /**
+     * Attempt to re-authenticate to an account using a login token.
+     *
+     * @param request The request object.
+     * @return The account, or null if authentication failed.
+     */
+    public SDKResponse login(ShieldVerifyRequest request) {
+        return this.tokenAuth.authenticate(request);
+    }
+
+    /**
+     * Attempt to authenticate to an account using a session key.
+     *
+     * @param request The request object.
+     * @return The account, or null if authentication failed.
+     */
+    public SDKResponse login(GranterLoginRequest request) {
+        return this.comboAuth.authenticate(request);
     }
 
     /**
