@@ -13,7 +13,8 @@
       "loading": "Starting Grasscutter...",
       "done": "Grasscutter started in {0}s."
     },
-    "shutdown": "Shutting down Grasscutter..."
+    "shutdown": "Shutting down Grasscutter...",
+    "console_error": "An error occurred while reading the console."
   },
   "network": {
     "exception": "Exception caught during transit.",
@@ -44,5 +45,10 @@
   },
   "account": {
     "not_found": "Account not found"
+  },
+  "command": {
+    "exception": {
+      "not_found": "Command not found."
+    }
   }
 }

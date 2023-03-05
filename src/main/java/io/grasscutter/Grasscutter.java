@@ -11,17 +11,23 @@ import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.definitions.Configuration;
 import io.grasscutter.utils.definitions.LanguageData;
+import io.grasscutter.utils.exceptions.CommandException;
 import io.grasscutter.utils.objects.lang.Language;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import java.io.File;
+import java.io.IOError;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.logging.LogManager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.slf4j.Logger;
@@ -124,6 +130,39 @@ public final class Grasscutter {
     }
 
     /**
+     * Sets up the console for input.
+     */
+    private static void setupConsole() {
+        while (true) {
+            try {
+                var line = Grasscutter.console.readLine("> ");
+                if (line == null) continue;
+
+                // Check if the line is empty.
+                if (line.isEmpty()) continue;
+                var content = line.trim().split(" ");
+
+                // Handle the line as a command.
+                var label = content[0];
+                var args = new ArrayList<>(Arrays.asList(
+                        content).subList(1, content.length));
+                DedicatedServer.getInstance().getCommandMap().execute(label, args);
+            } catch (UserInterruptException ignored) {
+                // Ignore this exception.
+            } catch (EndOfFileException ignored) {
+                // Ignore this exception.
+            } catch (CommandException commandException) {
+                Log.error(commandException.getMessage());
+            } catch (IOError ioException) {
+                Log.error(new TextContainer("system.console_error"), ioException);
+                return;
+            } catch (Exception exception) {
+                Log.error(new TextContainer("system.console_error"), exception);
+            }
+        }
+    }
+
+    /**
      * Loads language data depending on: - the selected host system language - the preferred language
      * in the configuration
      *
@@ -169,5 +208,8 @@ public final class Grasscutter {
     public static void additionalSetup() {
         // Register default HTTP routes.
         Router.defaultSetup(DedicatedServer.getHttpServer());
+
+        // Start the console.
+        Grasscutter.setupConsole();
     }
 }

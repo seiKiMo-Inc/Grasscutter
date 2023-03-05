@@ -2,6 +2,7 @@ package io.grasscutter.server;
 
 import io.grasscutter.Grasscutter;
 import io.grasscutter.auth.AuthenticationHolder;
+import io.grasscutter.commands.CommandMap;
 import io.grasscutter.data.DataInterface;
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
@@ -24,6 +25,7 @@ public final class DedicatedServer {
 
     @Getter private final Logger logger;
     @Getter private final AuthenticationHolder authHolder;
+    @Getter private final CommandMap commandMap;
     private final ServerThread thread;
 
     @Getter private DataInterface dataInterface;
@@ -45,6 +47,7 @@ public final class DedicatedServer {
 
         // Create server objects.
         this.authHolder = new AuthenticationHolder();
+        this.commandMap = new CommandMap();
     }
 
     /** Performs a global server tick. */
