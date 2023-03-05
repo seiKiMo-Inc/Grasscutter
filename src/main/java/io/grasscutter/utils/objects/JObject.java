@@ -81,4 +81,13 @@ public final class JObject extends JsonElement {
     public JObject add(String name, Character value) {
         return this.add(name, value == null ? JsonNull.INSTANCE : new JsonPrimitive(value));
     }
+
+    /**
+     * Returns the property holder.
+     *
+     * @return The property holder.
+     */
+    public Object json() {
+        return this.members;
+    }
 }

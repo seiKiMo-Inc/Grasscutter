@@ -1,5 +1,6 @@
 package io.grasscutter.server.http.routers;
 
+import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.server.http.Router;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
 import io.javalin.Javalin;
@@ -28,8 +29,12 @@ public final class AuthenticationRouter implements Router {
         var request = ctx.bodyAsClass(ShieldLoginRequest.class);
         if (request == null) return;
 
-        // TODO: Handle login request.
-        ctx.json(new Object());
+        // Perform a login.
+        var response = DedicatedServer.getInstance()
+                .getAuthHolder().login(request);
+
+        // Send the response.
+        ctx.json(response);
     }
 
     /**

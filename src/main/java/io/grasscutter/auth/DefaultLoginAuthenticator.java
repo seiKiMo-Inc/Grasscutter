@@ -4,7 +4,7 @@ import io.grasscutter.proto.RetcodeOuterClass.Retcode;
 import io.grasscutter.utils.DatabaseUtils;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.constants.CryptoConstants;
-import io.grasscutter.utils.definitions.auth.LoginResultResponse;
+import io.grasscutter.utils.definitions.SDKResponse;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
 import io.grasscutter.utils.enums.KeyType;
 import io.grasscutter.utils.objects.lang.TextContainer;
@@ -12,11 +12,11 @@ import java.nio.charset.StandardCharsets;
 import org.jetbrains.annotations.NotNull;
 
 /** The default login authenticator. */
-public final class DefaultLoginAuthenticator
-        implements Authenticator<ShieldLoginRequest, LoginResultResponse> {
+public class DefaultLoginAuthenticator
+        implements Authenticator<ShieldLoginRequest> {
     @Override
-    @NotNull public LoginResultResponse authenticate(ShieldLoginRequest request) {
-        var response = new LoginResultResponse();
+    @NotNull public SDKResponse authenticate(ShieldLoginRequest request) {
+        var response = SDKResponse.builder();
 
         // Decode the password.
         var password = request.password;
@@ -36,9 +36,10 @@ public final class DefaultLoginAuthenticator
 
         // Check the password.
         if (password == null) {
-            response.message = new TextContainer("exception.error").toString();
-            response.retcode = Retcode.RETCODE_RET_FAIL.getNumber();
-            return response;
+            return response
+                    .message(new TextContainer("exception.error").toString())
+                    .retcode(Retcode.RETCODE_RET_FAIL.getNumber())
+                    .build();
         }
 
         // Check for account.
@@ -46,18 +47,12 @@ public final class DefaultLoginAuthenticator
         // TODO: Implement proper server checks.
         // TODO: Validate the password.
         if (account == null) {
-            response.message = new TextContainer("account.not_found").toString();
-            response.retcode = -201; // -201: Account not found. (not in Retcode.proto)
-            return response;
+            return response
+                    .message(new TextContainer("account.not_found").toString())
+                    .retcode(-201) // -201: Account not found. (not in Retcode.proto)
+                    .build();
         }
 
-        // Set the response data.
-        var verifyData = response.data;
-        var accountData = verifyData.account;
-        accountData.uid = String.valueOf(account.id);
-        accountData.email = account.email;
-        accountData.token = account.generateSessionKey();
-
-        return response;
+        return response.data(account.generateLoginResult()).build();
     }
 }

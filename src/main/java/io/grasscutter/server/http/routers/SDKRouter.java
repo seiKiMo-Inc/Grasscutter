@@ -22,13 +22,14 @@ public final class SDKRouter implements Router {
      * @route /account/risky/api/check
      */
     private void validateLogin(Context ctx) {
-        ctx.result(SDKResponse.builder()
+        ctx.json(SDKResponse.builder()
                 .retcode(Retcode.RETCODE_RET_SUCC.getNumber())
                 .message("OK")
                 .data(JObject.c()
                         .add("id", "none")
                         .add("action", "ACTION_NONE")
-                        .add("geetest", (JsonElement) null))
-                .build().toString());
+                        .add("geetest", (JsonElement) null)
+                        .json())
+                .build());
     }
 }

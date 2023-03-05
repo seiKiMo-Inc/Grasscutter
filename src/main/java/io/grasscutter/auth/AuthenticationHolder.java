@@ -1,18 +1,21 @@
 package io.grasscutter.auth;
 
 import io.grasscutter.account.Account;
-import io.grasscutter.utils.definitions.auth.LoginResultResponse;
+import io.grasscutter.utils.definitions.SDKResponse;
+import io.grasscutter.utils.definitions.auth.GranterLoginRequest;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
+import io.grasscutter.utils.definitions.auth.ShieldVerifyRequest;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 /** Holds {@link Authenticator} instances. */
 public final class AuthenticationHolder {
-    @Setter private Authenticator<ShieldLoginRequest, LoginResultResponse> loginAuth;
-    @Setter private Authenticator<Object, Account> tokenAuth;
-    @Setter private Authenticator<Object, Account> comboAuth;
+    @Setter private Authenticator<ShieldLoginRequest> loginAuth;
+    @Setter private Authenticator<ShieldVerifyRequest> tokenAuth;
+    @Setter private Authenticator<GranterLoginRequest> comboAuth;
 
     @Setter
     private BiFunction<String, String, Account> loginHandler = AuthenticationHolder::defaultLogin;
@@ -36,6 +39,16 @@ public final class AuthenticationHolder {
     }
 
     /**
+     * Attempt to authenticate to the account using a login token.
+     *
+     * @param request The request object.
+     * @return The account, or null if authentication failed.
+     */
+    public SDKResponse login(ShieldLoginRequest request) {
+        return this.loginAuth.authenticate(request);
+    }
+
+    /**
      * Attempt to reset the password of an account.
      *
      * @param username The username of the account to lookup.
@@ -56,7 +69,9 @@ public final class AuthenticationHolder {
      * @param password The encrypted password.
      * @return The account, or null if the account does not exist.
      */
-    @Nullable private static Account defaultLogin(String username, String password) {}
+    @Nullable private static Account defaultLogin(String username, String password) {
+        return null;
+    }
 
     /**
      * The default reset password method.
@@ -64,5 +79,7 @@ public final class AuthenticationHolder {
      * @param username The username of the account to lookup.
      * @return True if the reset action was successful, false if an error occurred.
      */
-    private static boolean defaultReset(String username) {}
+    private static boolean defaultReset(String username) {
+        return false;
+    }
 }
