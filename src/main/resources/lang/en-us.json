@@ -54,6 +54,13 @@
       "argument": "Invalid argument provided for {0}.",
       "permission": "You do not have permission to run this command.",
       "sender": "Please run this command {0}!"
+    },
+    "account": {
+      "invalid": {
+        "user_id": "The user ID {0} is invalid."
+      },
+      "username_taken": "An account with the username {0} already exists.",
+      "user_id_taken": "An account with the user ID {0} already exists."
     }
   }
 }

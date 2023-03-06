@@ -1,6 +1,9 @@
 package io.grasscutter.utils;
 
 import io.grasscutter.utils.enums.KeyType;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -33,6 +36,27 @@ public interface CryptoUtils {
     }
 
     /**
+     * Performs an MD5 hash on the given input.
+     *
+     * @param input The input to hash.
+     * @return The MD5 hash.
+     */
+    static String md5Hash(String input) {
+        try {
+            var md = MessageDigest.getInstance("MD5");
+            var array = md.digest(input.getBytes());
+            var sb = new StringBuilder();
+            for (var anArray : array) {
+                sb.append(Integer.toHexString((anArray & 0xFF) | 0x100), 1, 3);
+            }
+
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ignored) { }
+
+        return null;
+    }
+
+    /**
      * Generates a random byte array of the given length.
      *
      * @param length The length of the array.
@@ -42,5 +66,16 @@ public interface CryptoUtils {
         var bytes = new byte[length];
         random.nextBytes(bytes);
         return bytes;
+    }
+
+    /**
+     * Generates a random number.
+     *
+     * @param min The minimum value.
+     * @param max The maximum value.
+     * @return A random number.
+     */
+    static long randomNumber(long min, long max) {
+        return min + (long) (random.nextFloat() * (max - min));
     }
 }

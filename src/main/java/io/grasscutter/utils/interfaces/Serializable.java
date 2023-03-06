@@ -81,9 +81,11 @@ public interface Serializable {
                 }
 
                 // De-serialize and set.
-                var instance = field.getType().getConstructor().newInstance();
-                EncodingUtils.deserializeTo(instance, (Map<String, Object>) value);
-                field.set(this, instance);
+                if (value instanceof Map) {
+                    var instance = field.getType().getConstructor().newInstance();
+                    EncodingUtils.deserializeTo(instance, (Map<String, Object>) value);
+                    field.set(this, instance);
+                } else field.set(this, value);
             } catch (ReflectiveOperationException ignored) {
                 // Ignore.
             }

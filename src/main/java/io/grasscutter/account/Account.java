@@ -6,10 +6,10 @@ import io.grasscutter.data.Special;
 import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.definitions.auth.VerifyData;
-import io.grasscutter.utils.interfaces.Serializable;
+import io.grasscutter.utils.interfaces.DatabaseObject;
 
 @DataSerializable(table = "accounts")
-public final class Account implements Serializable {
+public final class Account implements DatabaseObject {
     @Special(FieldType.ID)
     public long id = Long.MAX_VALUE; // The account's ID.
 
