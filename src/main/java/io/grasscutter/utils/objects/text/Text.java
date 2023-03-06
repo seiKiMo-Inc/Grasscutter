@@ -1,10 +1,9 @@
 package io.grasscutter.utils.objects.text;
 
 import io.grasscutter.utils.objects.lang.TextContainer;
+import java.awt.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.awt.*;
 
 /* An instance of text. */
 public final class Text {
@@ -110,8 +109,7 @@ public final class Text {
     }
 
     /**
-     * Converts this object to a string.
-     * Converts to a console or Unity format.
+     * Converts this object to a string. Converts to a console or Unity format.
      *
      * @param console Whether to convert the text for the console.
      * @return The converted string.
@@ -119,12 +117,8 @@ public final class Text {
     public String toString(boolean console) {
         // Pull instances of style and text.
         var style = this.style.build();
-        var text = this.container != null ?
-                this.container.toString() :
-                this.text;
+        var text = this.container != null ? this.container.toString() : this.text;
 
-        return console ?
-                style.toTerminal(text) :
-                style.toUnity(text);
+        return console ? style.toTerminal(text) : style.toUnity(text);
     }
 }

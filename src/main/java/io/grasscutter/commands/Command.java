@@ -7,13 +7,12 @@ import io.grasscutter.commands.sender.CommandSender;
 import io.grasscutter.utils.enums.CommandExceptionType;
 import io.grasscutter.utils.exceptions.CommandException;
 import io.grasscutter.utils.objects.text.Text;
-import lombok.AllArgsConstructor;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import lombok.AllArgsConstructor;
 
 /* Command instance. */
 @AllArgsConstructor
@@ -30,9 +29,7 @@ public abstract class Command {
         sender.sendMessage(this.generateUsage());
     }
 
-    /**
-     * Generates a usage message for the command.
-     */
+    /** Generates a usage message for the command. */
     public Text generateUsage() {
         var data = this.data;
         var builder = new StringBuilder("Usage: ");
@@ -64,8 +61,7 @@ public abstract class Command {
         var argumentsList = new ArrayList<List<Argument>>();
         argumentsList.add(data.getArguments());
         if (subCommands != null) {
-            for (var subCommand : subCommands)
-                argumentsList.add(subCommand.getArguments());
+            for (var subCommand : subCommands) argumentsList.add(subCommand.getArguments());
         }
 
         // Add arguments to map.
@@ -89,23 +85,23 @@ public abstract class Command {
             var mixed = new AtomicBoolean(false);
 
             // Add the names of arguments.
-            args.forEach(arg -> {
-                var name = arg.name();
-                if (arg instanceof PrefixedArgument prefixArg) {
-                    // Change the first letter to uppercase.
-                    name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                    // Add the prefix.
-                    name = prefixArg.prefix() + name;
-                }
+            args.forEach(
+                    arg -> {
+                        var name = arg.name();
+                        if (arg instanceof PrefixedArgument prefixArg) {
+                            // Change the first letter to uppercase.
+                            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+                            // Add the prefix.
+                            name = prefixArg.prefix() + name;
+                        }
 
-                if (!argNames.contains(name))
-                    argNames.add(name);
+                        if (!argNames.contains(name)) argNames.add(name);
 
-                // Check if the argument is optional.
-                if (arg.optional()) optional.set(true);
-                // Check if the argument is mixed.
-                else if (optional.get()) mixed.set(true);
-            });
+                        // Check if the argument is optional.
+                        if (arg.optional()) optional.set(true);
+                        // Check if the argument is mixed.
+                        else if (optional.get()) mixed.set(true);
+                    });
 
             // Add the arguments to the usage message.
             if (mixed.get()) builder.append(" (");
@@ -124,8 +120,7 @@ public abstract class Command {
             else builder.append(">");
         }
 
-        return Text.of(builder.toString())
-                .color(Color.YELLOW);
+        return Text.of(builder.toString()).color(Color.YELLOW);
     }
 
     /**
@@ -145,9 +140,11 @@ public abstract class Command {
             var subCommands = this.data.getSubCommands();
             if (arguments.size() != 0 && subCommands.size() != 0) {
                 // Check if the first argument is a sub-command.
-                executing = subCommands.stream()
-                        .filter(sc -> sc.getLabel().equals(arguments.get(0)))
-                        .findFirst().orElse(null);
+                executing =
+                        subCommands.stream()
+                                .filter(sc -> sc.getLabel().equals(arguments.get(0)))
+                                .findFirst()
+                                .orElse(null);
                 if (executing == null) executing = this; // Not a sub-command.
                 else arguments.remove(0); // Remove the sub-command argument.
             }
@@ -175,8 +172,7 @@ public abstract class Command {
      * @param command The command to be executed.
      * @throws CommandException If the sender does not have permission.
      */
-    private void checkPermission(CommandSender sender, Command command)
-            throws CommandException {
+    private void checkPermission(CommandSender sender, Command command) throws CommandException {
         if (!sender.hasPermission(command.getPermission()))
             throw new CommandException(CommandExceptionType.INVALID_PERMISSION);
     }
@@ -196,9 +192,7 @@ public abstract class Command {
         var arguments = command.getArguments();
 
         // Check for required arguments.
-        var required = arguments.stream()
-                .filter(arg -> !arg.optional())
-                .count();
+        var required = arguments.stream().filter(arg -> !arg.optional()).count();
         if (arguments.size() > 0 && supplied.size() < required) {
             // Check if the command is ordered.
             if (!command.data.isOrdered()) {
@@ -207,7 +201,7 @@ public abstract class Command {
             }
 
             throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
-                    .setArgs(new Object[] { command.getLabel() });
+                    .setArgs(new Object[] {command.getLabel()});
         }
 
         // Check for argument types.
@@ -226,16 +220,18 @@ public abstract class Command {
             // Check if the arguments are all prefixed.
             if (!arguments.stream().allMatch(arg -> arg instanceof PrefixedArgument))
                 throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
-                        .setArgs(new Object[] { command.getLabel() });
+                        .setArgs(new Object[] {command.getLabel()});
 
             // Split the arguments into key-value pairs.
             for (var prefixedValue : supplied) {
                 // Check if the argument starts with an argument prefix.
-                var argument = arguments.stream()
-                        .filter(arg -> arg instanceof PrefixedArgument)
-                        .map(arg -> (PrefixedArgument) arg)
-                        .filter(arg -> prefixedValue.startsWith(arg.prefix()))
-                        .findFirst().orElse(null);
+                var argument =
+                        arguments.stream()
+                                .filter(arg -> arg instanceof PrefixedArgument)
+                                .map(arg -> (PrefixedArgument) arg)
+                                .filter(arg -> prefixedValue.startsWith(arg.prefix()))
+                                .findFirst()
+                                .orElse(null);
                 if (argument == null) continue; // Not a prefixed argument.
 
                 // Get the argument value.
@@ -258,12 +254,8 @@ public abstract class Command {
      * @param args The container for arguments.
      * @throws CommandException If the argument value is invalid.
      */
-    private void parseArgument(
-            Argument argument,
-            String value,
-            Class<?> type,
-            Arguments args
-    ) throws CommandException {
+    private void parseArgument(Argument argument, String value, Class<?> type, Arguments args)
+            throws CommandException {
         if (type == String.class) {
             args.put(argument.name(), value);
         } else if (type == Integer.class) {
@@ -271,35 +263,35 @@ public abstract class Command {
                 args.put(argument.name(), Integer.parseInt(value));
             } catch (NumberFormatException exception) {
                 throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
-                        .setArgs(new Object[] { argument.name() });
+                        .setArgs(new Object[] {argument.name()});
             }
         } else if (type == Long.class) {
             try {
                 args.put(argument.name(), Long.parseLong(value));
             } catch (NumberFormatException exception) {
                 throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
-                        .setArgs(new Object[] { argument.name() });
+                        .setArgs(new Object[] {argument.name()});
             }
         } else if (type == Float.class) {
             try {
                 args.put(argument.name(), Float.parseFloat(value));
             } catch (NumberFormatException exception) {
                 throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
-                        .setArgs(new Object[] { argument.name() });
+                        .setArgs(new Object[] {argument.name()});
             }
         } else if (type == Double.class) {
             try {
                 args.put(argument.name(), Double.parseDouble(value));
             } catch (NumberFormatException exception) {
                 throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
-                        .setArgs(new Object[] { argument.name() });
+                        .setArgs(new Object[] {argument.name()});
             }
         } else if (type == Boolean.class) {
             if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                 args.put(argument.name(), Boolean.parseBoolean(value));
             } else {
                 throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
-                        .setArgs(new Object[] { argument.name() });
+                        .setArgs(new Object[] {argument.name()});
             }
         }
     }

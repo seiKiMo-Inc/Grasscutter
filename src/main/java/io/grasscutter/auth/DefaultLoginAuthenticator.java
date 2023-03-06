@@ -12,8 +12,7 @@ import java.nio.charset.StandardCharsets;
 import org.jetbrains.annotations.NotNull;
 
 /** The default login authenticator. */
-public class DefaultLoginAuthenticator
-        implements Authenticator<ShieldLoginRequest> {
+public class DefaultLoginAuthenticator implements Authenticator<ShieldLoginRequest> {
     @Override
     @NotNull public SDKResponse authenticate(ShieldLoginRequest request) {
         var response = SDKResponse.builder();

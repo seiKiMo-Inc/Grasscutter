@@ -4,10 +4,9 @@ import io.grasscutter.account.Account;
 import io.grasscutter.utils.definitions.SDKResponse;
 import io.grasscutter.utils.definitions.auth.GranterLoginRequest;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
+import io.grasscutter.utils.definitions.auth.ShieldVerifyRequest;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-
-import io.grasscutter.utils.definitions.auth.ShieldVerifyRequest;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 

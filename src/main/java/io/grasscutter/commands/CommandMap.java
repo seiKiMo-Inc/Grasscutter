@@ -1,11 +1,9 @@
 package io.grasscutter.commands;
 
 import io.grasscutter.commands.defaults.*;
-
 import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.utils.enums.CommandExceptionType;
 import io.grasscutter.utils.exceptions.CommandException;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +21,7 @@ public final class CommandMap {
         return DedicatedServer.getInstance().getCommandMap();
     }
 
-    /**
-     * Creates a new command map.
-     * Registers default commands.
-     */
+    /** Creates a new command map. Registers default commands. */
     public CommandMap() {
         this.register(new ReloadCommand());
         this.register(new AccountCommand());
@@ -43,8 +38,7 @@ public final class CommandMap {
     }
 
     /**
-     * Executes a command.
-     * No sender was specified.
+     * Executes a command. No sender was specified.
      *
      * @param label The command label.
      * @param arguments The command arguments.
@@ -52,11 +46,9 @@ public final class CommandMap {
     public void execute(String label, List<String> arguments) {
         // Get the command instance.
         var command = commands.get(label);
-        if (command == null)
-            throw new CommandException(CommandExceptionType.NOT_FOUND);
+        if (command == null) throw new CommandException(CommandExceptionType.NOT_FOUND);
 
         // Execute the command.
-        command.tryExecute(DedicatedServer.getInstance()
-                .getServerSender(), arguments);
+        command.tryExecute(DedicatedServer.getInstance().getServerSender(), arguments);
     }
 }

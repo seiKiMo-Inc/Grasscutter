@@ -85,7 +85,7 @@ public final class HttpServer {
         // Finalize the connector.
         serverConnector.setPort(networkProperties.bindPort);
         serverConnector.setHost(networkProperties.bindAddress);
-        server.setConnectors(new ServerConnector[] { serverConnector });
+        server.setConnectors(new ServerConnector[] {serverConnector});
 
         return server;
     }

@@ -1,9 +1,8 @@
 package io.grasscutter.commands.args;
 
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 
 /* Container of argument values. */
 public final class Arguments {

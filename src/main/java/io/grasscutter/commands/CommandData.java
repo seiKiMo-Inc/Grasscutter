@@ -2,13 +2,13 @@ package io.grasscutter.commands;
 
 import io.grasscutter.commands.args.Argument;
 import io.grasscutter.utils.enums.Executor;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 /* Internal data for a command. */
-@Builder @Getter
+@Builder
+@Getter
 public final class CommandData {
     private final String label;
     @Builder.Default private String description = "";

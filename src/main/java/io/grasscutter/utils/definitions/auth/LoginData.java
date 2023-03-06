@@ -18,8 +18,7 @@ public final class LoginData {
     @SerializedName("open_id")
     public String openId;
 
-    public Object data = JObject.c()
-            .add("guest", false);
+    public Object data = JObject.c().add("guest", false);
 
     @SerializedName("fatigue_remind")
     public String timeRemind = null; // ?

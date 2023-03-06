@@ -36,8 +36,7 @@ public final class Account implements Serializable {
      */
 
     /**
-     * Generates a login result for the account.
-     * Generates a unique session key.
+     * Generates a login result for the account. Generates a unique session key.
      *
      * @return A login result.
      */
@@ -46,8 +45,7 @@ public final class Account implements Serializable {
     }
 
     /**
-     * Generates a login result for the account.
-     * Uses the provided session key.
+     * Generates a login result for the account. Uses the provided session key.
      *
      * @param sessionKey The session key to use.
      * @return A login result.

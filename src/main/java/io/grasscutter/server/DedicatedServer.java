@@ -13,13 +13,11 @@ import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.objects.lang.Language;
 import io.grasscutter.utils.objects.lang.TextContainer;
-
+import io.grasscutter.utils.objects.text.Text;
 import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.util.Arrays;
-
-import io.grasscutter.utils.objects.text.Text;
 import lombok.Getter;
 import org.slf4j.Logger;
 
@@ -86,8 +84,9 @@ public final class DedicatedServer {
 
     /** Performs a server reload. */
     public void reload() {
-        Log.info(this.logger, new Text(new TextContainer("server.dedicated.reload.start"))
-                .color(Color.YELLOW));
+        Log.info(
+                this.logger,
+                new Text(new TextContainer("server.dedicated.reload.start")).color(Color.YELLOW));
         var startupTime = System.currentTimeMillis();
 
         // Reload the server internals.
@@ -109,8 +108,9 @@ public final class DedicatedServer {
 
         // Log the time it took to reload.
         var time = EncodingUtils.toSeconds(System.currentTimeMillis() - startupTime);
-        Log.info(this.logger, new Text(new TextContainer("server.dedicated.reload.done", time))
-                .color(Color.YELLOW));
+        Log.info(
+                this.logger,
+                new Text(new TextContainer("server.dedicated.reload.done", time)).color(Color.YELLOW));
     }
 
     /**

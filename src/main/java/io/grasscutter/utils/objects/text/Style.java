@@ -1,53 +1,53 @@
 package io.grasscutter.utils.objects.text;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Builder;
+import lombok.Data;
 
 /* Text style container. */
-@Builder @Data
+@Builder
+@Data
 public final class Style {
     private static final Map<Character, String> unity = new HashMap<>();
     private static final Map<Character, String> ansi = new HashMap<>();
 
     static {
         // Add the Minecraft color codes to the color map.
-        unity.put('0', "#000000");  // Black
-        unity.put('1', "#0000AA");  // Dark Blue
-        unity.put('2', "#00AA00");  // Dark Green
-        unity.put('3', "#00AAAA");  // Dark Aqua
-        unity.put('4', "#AA0000");  // Dark Red
-        unity.put('5', "#AA00AA");  // Dark Purple
-        unity.put('6', "#FFAA00");  // Gold
-        unity.put('7', "#AAAAAA");  // Gray
-        unity.put('8', "#555555");  // Dark Gray
-        unity.put('9', "#5555FF");  // Blue
-        unity.put('a', "#55FF55");  // Green
-        unity.put('b', "#55FFFF");  // Aqua
-        unity.put('c', "#FF5555");  // Red
-        unity.put('d', "#FF55FF");  // Light Purple
-        unity.put('e', "#FFFF55");  // Yellow
-        unity.put('f', "#FFFFFF");  // White
+        unity.put('0', "#000000"); // Black
+        unity.put('1', "#0000AA"); // Dark Blue
+        unity.put('2', "#00AA00"); // Dark Green
+        unity.put('3', "#00AAAA"); // Dark Aqua
+        unity.put('4', "#AA0000"); // Dark Red
+        unity.put('5', "#AA00AA"); // Dark Purple
+        unity.put('6', "#FFAA00"); // Gold
+        unity.put('7', "#AAAAAA"); // Gray
+        unity.put('8', "#555555"); // Dark Gray
+        unity.put('9', "#5555FF"); // Blue
+        unity.put('a', "#55FF55"); // Green
+        unity.put('b', "#55FFFF"); // Aqua
+        unity.put('c', "#FF5555"); // Red
+        unity.put('d', "#FF55FF"); // Light Purple
+        unity.put('e', "#FFFF55"); // Yellow
+        unity.put('f', "#FFFFFF"); // White
 
-        ansi.put('0', "\u001B[30m");  // Black
-        ansi.put('1', "\u001B[34m");  // Dark Blue
-        ansi.put('2', "\u001B[32m");  // Dark Green
-        ansi.put('3', "\u001B[36m");  // Dark Aqua
-        ansi.put('4', "\u001B[31m");  // Dark Red
-        ansi.put('5', "\u001B[35m");  // Dark Purple
-        ansi.put('6', "\u001B[33m");  // Gold
-        ansi.put('7', "\u001B[37m");  // Gray
-        ansi.put('8', "\u001B[90m");  // Dark Gray
-        ansi.put('9', "\u001B[94m");  // Blue
-        ansi.put('a', "\u001B[92m");  // Green
-        ansi.put('b', "\u001B[96m");  // Aqua
-        ansi.put('c', "\u001B[91m");  // Red
-        ansi.put('d', "\u001B[95m");  // Light Purple
-        ansi.put('e', "\u001B[93m");  // Yellow
-        ansi.put('f', "\u001B[97m");  // White
+        ansi.put('0', "\u001B[30m"); // Black
+        ansi.put('1', "\u001B[34m"); // Dark Blue
+        ansi.put('2', "\u001B[32m"); // Dark Green
+        ansi.put('3', "\u001B[36m"); // Dark Aqua
+        ansi.put('4', "\u001B[31m"); // Dark Red
+        ansi.put('5', "\u001B[35m"); // Dark Purple
+        ansi.put('6', "\u001B[33m"); // Gold
+        ansi.put('7', "\u001B[37m"); // Gray
+        ansi.put('8', "\u001B[90m"); // Dark Gray
+        ansi.put('9', "\u001B[94m"); // Blue
+        ansi.put('a', "\u001B[92m"); // Green
+        ansi.put('b', "\u001B[96m"); // Aqua
+        ansi.put('c', "\u001B[91m"); // Red
+        ansi.put('d', "\u001B[95m"); // Light Purple
+        ansi.put('e', "\u001B[93m"); // Yellow
+        ansi.put('f', "\u001B[97m"); // White
     }
 
     @Builder.Default private int size = -1; // Unity only.
@@ -70,7 +70,8 @@ public final class Style {
         }
 
         var output = new StringBuilder();
-        var i = 0; while (i < input.length()) {
+        var i = 0;
+        while (i < input.length()) {
             var c = input.charAt(i);
             if (c == '&') {
                 // Check if the Minecraft color code is valid
@@ -123,7 +124,8 @@ public final class Style {
         }
 
         var output = new StringBuilder();
-        var i = 0; while (i < input.length()) {
+        var i = 0;
+        while (i < input.length()) {
             var c = input.charAt(i);
             if (c == '&') {
                 // Check if the Minecraft color code is valid
@@ -164,8 +166,7 @@ public final class Style {
     }
 
     /**
-     * Wraps the text in the style.
-     * Formatted for Unity clients.
+     * Wraps the text in the style. Formatted for Unity clients.
      *
      * @param text The text to wrap.
      * @return The wrapped text.
@@ -175,18 +176,17 @@ public final class Style {
 
         // Set the size.
         if (this.size != -1) {
-            builder.append("<size=")
-                    .append(this.size)
-                    .append(">");
+            builder.append("<size=").append(this.size).append(">");
         }
 
         // Set the color.
         if (this.color != null) {
-            builder.append("<color=")
-                    .append(String.format("#%02x%02x%02x",
-                            this.color.getRed(),
-                            this.color.getGreen(),
-                            this.color.getBlue()))
+            builder
+                    .append("<color=")
+                    .append(
+                            String.format(
+                                    "#%02x%02x%02x",
+                                    this.color.getRed(), this.color.getGreen(), this.color.getBlue()))
                     .append(">");
         }
 
@@ -208,8 +208,7 @@ public final class Style {
     }
 
     /**
-     * Wraps the text in the style.
-     * Formatted for terminal clients.
+     * Wraps the text in the style. Formatted for terminal clients.
      *
      * @param text The text to wrap.
      * @return The wrapped text.
@@ -219,14 +218,14 @@ public final class Style {
         if (this.color == null) return this.replaceTerminal(text);
 
         // Convert the color to an ANSI color.
-        var ansiColor = this.color.getRed() > 127 ?
-                this.color.getGreen() > 127 ?
-                        this.color.getBlue() > 127 ?
-                                15 : 11 : this.color.getBlue() > 127 ?
-                                13 : 9 : this.color.getGreen() > 127 ?
-                this.color.getBlue() > 127 ?
-                        14 : 10 : this.color.getBlue() > 127 ?
-                        12 : 8;
+        var ansiColor =
+                this.color.getRed() > 127
+                        ? this.color.getGreen() > 127
+                                ? this.color.getBlue() > 127 ? 15 : 11
+                                : this.color.getBlue() > 127 ? 13 : 9
+                        : this.color.getGreen() > 127
+                                ? this.color.getBlue() > 127 ? 14 : 10
+                                : this.color.getBlue() > 127 ? 12 : 8;
 
         // Return the text with the ANSI color.
         // Reset the color at the end.

@@ -129,9 +129,7 @@ public final class Grasscutter {
         return LineReaderBuilder.builder().terminal(terminal).build();
     }
 
-    /**
-     * Sets up the console for input.
-     */
+    /** Sets up the console for input. */
     private static void setupConsole() {
         while (true) {
             try {
@@ -144,8 +142,7 @@ public final class Grasscutter {
 
                 // Handle the line as a command.
                 var label = content[0];
-                var args = new ArrayList<>(Arrays.asList(
-                        content).subList(1, content.length));
+                var args = new ArrayList<>(Arrays.asList(content).subList(1, content.length));
                 DedicatedServer.getInstance().getCommandMap().execute(label, args);
             } catch (UserInterruptException ignored) {
                 // Ignore this exception.

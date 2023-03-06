@@ -11,11 +11,7 @@ public class Argument {
     private final boolean optional;
     private final Class<?> type;
 
-    public Argument(
-        String name,
-        boolean optional,
-        Class<?> type
-    ) {
+    public Argument(String name, boolean optional, Class<?> type) {
         this.name = name;
         this.optional = optional;
         this.type = type;

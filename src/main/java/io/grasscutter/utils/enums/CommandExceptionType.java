@@ -3,7 +3,8 @@ package io.grasscutter.utils.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor @Getter
+@AllArgsConstructor
+@Getter
 public enum CommandExceptionType {
     NOT_FOUND("command.exception.not_found"),
     ERROR_EXECUTING("command.exception.execute"),

@@ -7,7 +7,6 @@ import io.grasscutter.commands.args.Arguments;
 import io.grasscutter.commands.args.PrefixedArgument;
 import io.grasscutter.commands.defaults.give.AllSubCommand;
 import io.grasscutter.commands.sender.CommandSender;
-
 import java.util.List;
 
 /* Give items to players. */
@@ -16,20 +15,16 @@ public final class GiveCommand extends Command {
     public static final Argument LEVEL = new PrefixedArgument("level", "lv", true, Integer.class);
 
     public GiveCommand() {
-        super(CommandData.builder()
-                .ordered(false)
-                .async(true)
-                .label("give")
-                .description("Give items to players.")
-                .permission("grasscutter.give.item")
-                .subCommands(List.of(
-                        new AllSubCommand()
-                ))
-                .arguments(List.of(
-                        TARGET, LEVEL,
-                        new PrefixedArgument("item", "i", false, Long.class)
-                ))
-                .build());
+        super(
+                CommandData.builder()
+                        .ordered(false)
+                        .async(true)
+                        .label("give")
+                        .description("Give items to players.")
+                        .permission("grasscutter.give.item")
+                        .subCommands(List.of(new AllSubCommand()))
+                        .arguments(List.of(TARGET, LEVEL, new PrefixedArgument("item", "i", false, Long.class)))
+                        .build());
     }
 
     @Override
@@ -38,6 +33,7 @@ public final class GiveCommand extends Command {
         var level = arguments.get("level", 1);
         var item = arguments.get("item", 0L);
 
-        sender.sendMessage("Gave item " + item + " to " + target.hashCode() + " at level " + level + ".");
+        sender.sendMessage(
+                "Gave item " + item + " to " + target.hashCode() + " at level " + level + ".");
     }
 }

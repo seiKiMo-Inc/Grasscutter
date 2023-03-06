@@ -9,6 +9,7 @@ import com.google.gson.internal.LinkedTreeMap;
 public final class JObject extends JsonElement {
     /**
      * Creates a new empty object.
+     *
      * @return The new object.
      */
     public static JObject c() {

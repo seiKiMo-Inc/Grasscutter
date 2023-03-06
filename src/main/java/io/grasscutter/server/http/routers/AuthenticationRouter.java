@@ -32,8 +32,7 @@ public final class AuthenticationRouter implements Router {
         if (request == null) return;
 
         // Perform a login.
-        var response = DedicatedServer.getInstance()
-                .getAuthHolder().login(request);
+        var response = DedicatedServer.getInstance().getAuthHolder().login(request);
 
         // Send the response.
         ctx.json(response);
@@ -51,8 +50,7 @@ public final class AuthenticationRouter implements Router {
         if (request == null) return;
 
         // Perform a login.
-        var response = DedicatedServer.getInstance()
-                .getAuthHolder().login(request);
+        var response = DedicatedServer.getInstance().getAuthHolder().login(request);
 
         // Send the response.
         ctx.json(response);
@@ -70,8 +68,7 @@ public final class AuthenticationRouter implements Router {
         if (request == null) return;
 
         // Perform a login.
-        var response = DedicatedServer.getInstance()
-                .getAuthHolder().login(request);
+        var response = DedicatedServer.getInstance().getAuthHolder().login(request);
 
         // Send the response.
         ctx.json(response);

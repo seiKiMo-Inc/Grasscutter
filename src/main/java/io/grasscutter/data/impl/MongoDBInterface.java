@@ -9,7 +9,6 @@ import io.grasscutter.data.DataSerializable;
 import io.grasscutter.utils.constants.DataConstants;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.interfaces.Serializable;
-
 import java.util.Map;
 import org.bson.Document;
 
@@ -127,6 +126,7 @@ public final class MongoDBInterface implements DataInterface {
 
     /**
      * Checks if a collection exists.
+     *
      * @param collectionName The name of the collection.
      * @return True if the collection exists, false otherwise.
      */

@@ -7,8 +7,7 @@ import io.grasscutter.utils.objects.lang.TextContainer;
 import org.jetbrains.annotations.NotNull;
 
 /** Login authenticator through only a username. */
-public final class UsernameAuthenticator
-        implements Authenticator<ShieldLoginRequest> {
+public final class UsernameAuthenticator implements Authenticator<ShieldLoginRequest> {
     @Override
     @NotNull public SDKResponse authenticate(ShieldLoginRequest request) {
         var response = SDKResponse.builder();
