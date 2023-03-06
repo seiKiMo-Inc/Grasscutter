@@ -22,6 +22,16 @@ public interface DatabaseUtils {
     }
 
     /**
+     * Shortcut method to get the ID field name for a database.
+     *
+     * @param fieldName The field name.
+     * @return The ID field name.
+     */
+    static String getIdFieldName(String fieldName) {
+        return DatabaseUtils.getDataInterface().getIdFieldName(fieldName);
+    }
+
+    /**
      * Shortcut method to save an object.
      * The object should be annotated with {@link DataSerializable}.
      *
@@ -59,7 +69,7 @@ public interface DatabaseUtils {
      */
     static long fetchAndIncrement(String counter) {
         var dataInterface = DatabaseUtils.getDataInterface();
-        var counterObject = dataInterface.get(Counter.class, Map.of("type", counter));
+        var counterObject = dataInterface.get(Counter.class, Map.of("_id", counter));
 
         // If the counter does not exist, create it.
         if (counterObject == null) {
@@ -71,7 +81,7 @@ public interface DatabaseUtils {
         // Increment the counter.
         counterObject.value++;
         // Save the counter.
-        dataInterface.save(counterObject);
+        counterObject.save();
 
         return counterObject.value;
     }

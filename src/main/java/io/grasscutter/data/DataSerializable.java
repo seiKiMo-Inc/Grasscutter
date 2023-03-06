@@ -8,6 +8,4 @@ import java.lang.annotation.RetentionPolicy;
 public @interface DataSerializable {
     /* The name of the table to save to. */
     String table();
-    /* The name of the ID field. */
-    String idField() default "id";
 }

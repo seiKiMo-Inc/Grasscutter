@@ -52,6 +52,14 @@ public interface DataInterface {
     void purge(Object object);
 
     /**
+     * Returns the name of the ID field for a table.
+     *
+     * @param fallback The fallback name to use if the ID field name is not found.
+     * @return The name of the ID field for a table.
+     */
+    String getIdFieldName(String fallback);
+
+    /**
      * Checks if an object is data serializable.
      *
      * @param object The object to check. Class should be annotated with {@link DataSerializable}.
@@ -102,13 +110,24 @@ public interface DataInterface {
      * @return The ID value of the object.
      */
     static Pair<String, Object> getSerializeId(Object object) {
-        var fieldName = object.getClass().getAnnotation(DataSerializable.class).idField();
+        // Find a field annotated with @Special.
+        for (var field : object.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(Special.class)) {
+                field.setAccessible(true); // Make the field accessible.
 
-        try {
-            var field = object.getClass().getField(fieldName);
-            return new Pair<>(fieldName, field.get(object));
-        } catch (Exception ignored) {
-            return new Pair<>(fieldName, null);
+                // Check if the field is an ID field.
+                var data = field.getAnnotation(Special.class);
+                if (data.value() == FieldType.ID) {
+                    try {
+                        // Return the field's value.
+                        return new Pair<>(field.getName(), field.get(object));
+                    } catch (IllegalAccessException ignored) {
+                        return null;
+                    }
+                }
+            }
         }
+
+        return null;
     }
 }

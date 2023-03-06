@@ -10,7 +10,10 @@ import io.grasscutter.utils.constants.DataConstants;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.interfaces.Serializable;
 import java.util.Map;
+
+import io.grasscutter.utils.objects.Pair;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 /* A data interface for MongoDB. */
 public final class MongoDBInterface implements DataInterface {
@@ -82,9 +85,14 @@ public final class MongoDBInterface implements DataInterface {
         var collection = this.mongoDatabase.getCollection(collectionName);
         // Get the ID name & value.
         var id = DataInterface.getSerializeId(object);
+        if (id == null) id = new Pair<>("_id", ObjectId.get());
+
+        // Update the ID value in the document.
+        document.put("_id", id.b());
+        document.remove(id.a());
 
         // Check if the object already exists.
-        var filter = new Document(id.a(), id.b());
+        var filter = new Document("_id", id.b());
         if (collection.countDocuments(filter) == 0) {
             // Insert the object.
             collection.insertOne(document);
@@ -123,6 +131,11 @@ public final class MongoDBInterface implements DataInterface {
 
     @Override
     public void purge(Object object) {}
+
+    @Override
+    public String getIdFieldName(String fallback) {
+        return "_id"; // MongoDB uses "_id" as the default ID field name.
+    }
 
     /**
      * Checks if a collection exists.

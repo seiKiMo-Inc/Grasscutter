@@ -1,6 +1,9 @@
 package io.grasscutter.utils.interfaces;
 
 import com.google.gson.reflect.TypeToken;
+import io.grasscutter.data.FieldType;
+import io.grasscutter.data.Special;
+import io.grasscutter.utils.DatabaseUtils;
 import io.grasscutter.utils.EncodingUtils;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -72,10 +75,21 @@ public interface Serializable {
             field.setAccessible(true);
 
             try {
-                // Get field name and value.
+                // Get field name.
                 var name = field.getName();
+                // Check if the field is special.
+                if (field.isAnnotationPresent(Special.class)) {
+                    // Check if the field is an ID field.
+                    var special = field.getAnnotation(Special.class);
+                    if (special.value() != FieldType.ID)
+                        continue; // Skip.
+
+                    // Update the name depending on the database.
+                    name = DatabaseUtils.getIdFieldName(name);
+                }
+
+                // Get the field value.
                 var value = data.get(name);
-                // Check if the value is null.
                 if (value == null) {
                     continue;
                 }
