@@ -63,6 +63,17 @@ public interface DataInterface {
     }
 
     /**
+     * Checks if a class is data serializable.
+     *
+     * @param object The class to check. Class should be annotated with {@link DataSerializable}.
+     * @return True if the class is data serializable, false otherwise.
+     */
+    static boolean isSerializable(Class<?> object) {
+        return Serializable.class.isAssignableFrom(object)
+                && object.isAnnotationPresent(DataSerializable.class);
+    }
+
+    /**
      * Returns the name of the table to save the object to.
      *
      * @param object The object to get the table name for. Class should be annotated with {@link
@@ -71,6 +82,16 @@ public interface DataInterface {
      */
     static String getSerializeTable(Object object) {
         return object.getClass().getAnnotation(DataSerializable.class).table();
+    }
+
+    /**
+     * Returns the name of the table to save the object to.
+     *
+     * @param object The class to get the table name for. Class should be annotated with {@link
+     * @return The name of the table to save the object to.
+     */
+    static String getSerializeTable(Class<?> object) {
+        return object.getAnnotation(DataSerializable.class).table();
     }
 
     /**
