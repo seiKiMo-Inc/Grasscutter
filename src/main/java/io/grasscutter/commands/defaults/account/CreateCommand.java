@@ -1,6 +1,7 @@
 package io.grasscutter.commands.defaults.account;
 
-import io.grasscutter.commands.Argument;
+import io.grasscutter.commands.args.Argument;
+import io.grasscutter.commands.args.Arguments;
 import io.grasscutter.commands.CommandData;
 import io.grasscutter.commands.SubCommand;
 import io.grasscutter.commands.sender.CommandSender;
@@ -24,7 +25,7 @@ public final class CreateCommand extends SubCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, List<String> arguments) {
+    public void execute(CommandSender sender, Arguments arguments) {
         sender.sendMessage(Text.of("&aCreated account."));
     }
 }

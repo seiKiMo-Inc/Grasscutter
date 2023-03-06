@@ -30,6 +30,7 @@ public final class CommandMap {
     public CommandMap() {
         this.register(new ReloadCommand());
         this.register(new AccountCommand());
+        this.register(new GiveCommand());
     }
 
     /**

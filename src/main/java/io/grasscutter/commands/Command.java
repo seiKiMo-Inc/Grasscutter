@@ -1,5 +1,8 @@
 package io.grasscutter.commands;
 
+import io.grasscutter.commands.args.Argument;
+import io.grasscutter.commands.args.Arguments;
+import io.grasscutter.commands.args.PrefixedArgument;
 import io.grasscutter.commands.sender.CommandSender;
 import io.grasscutter.utils.enums.CommandExceptionType;
 import io.grasscutter.utils.exceptions.CommandException;
@@ -23,7 +26,7 @@ public abstract class Command {
      * @param sender The sender of the command.
      * @param arguments The command arguments.
      */
-    public void execute(CommandSender sender, List<String> arguments) {
+    public void execute(CommandSender sender, Arguments arguments) {
         sender.sendMessage(this.generateUsage());
     }
 
@@ -32,8 +35,15 @@ public abstract class Command {
      */
     public Text generateUsage() {
         var data = this.data;
-        var builder = new StringBuilder("Usage: /")
-                .append(data.getLabel());
+        var builder = new StringBuilder("Usage: ");
+
+        // Check if the command is un-ordered.
+        if (!data.isOrdered()) {
+            builder.append("(unordered) ");
+        }
+
+        // Add the command label.
+        builder.append("/").append(data.getLabel());
 
         // Check for sub commands.
         var subCommands = data.getSubCommands();
@@ -80,8 +90,16 @@ public abstract class Command {
 
             // Add the names of arguments.
             args.forEach(arg -> {
-                if (!argNames.contains(arg.name()))
-                    argNames.add(arg.name());
+                var name = arg.name();
+                if (arg instanceof PrefixedArgument prefixArg) {
+                    // Change the first letter to uppercase.
+                    name = name.substring(0, 1).toUpperCase() + name.substring(1);
+                    // Add the prefix.
+                    name = prefixArg.prefix() + name;
+                }
+
+                if (!argNames.contains(name))
+                    argNames.add(name);
 
                 // Check if the argument is optional.
                 if (arg.optional()) optional.set(true);
@@ -136,12 +154,14 @@ public abstract class Command {
 
             // Perform executing checks.
             this.checkPermission(sender, executing); // Check permission.
-            this.checkArguments(sender, executing, arguments); // Check arguments.
+            var args = this.checkArguments(sender, executing, arguments); // Check arguments.
 
-            if (executing == this) executing.execute(sender, arguments); // Execute the command.
+            if (executing == this) executing.execute(sender, args); // Execute the command.
             else executing.tryExecute(sender, arguments); // Try to execute the sub-command.
         } catch (CommandException exception) {
             throw exception; // Re-throw the exception.
+        } catch (InterruptedException ignored) {
+            // Do nothing.
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new CommandException(CommandExceptionType.ERROR_EXECUTING);
@@ -166,12 +186,122 @@ public abstract class Command {
      *
      * @param sender The sender of the command.
      * @param command The command to be executed.
-     * @param arguments The command arguments.
+     * @param supplied The command arguments.
+     * @return A container of parsed arguments.
      * @throws CommandException If the arguments are invalid.
+     * @throws InterruptedException If the command was interrupted.
      */
-    private void checkArguments(CommandSender sender, Command command, List<String> arguments)
-            throws CommandException {
+    private Arguments checkArguments(CommandSender sender, Command command, List<String> supplied)
+            throws CommandException, InterruptedException {
+        var arguments = command.getArguments();
 
+        // Check for required arguments.
+        var required = arguments.stream()
+                .filter(arg -> !arg.optional())
+                .count();
+        if (arguments.size() > 0 && supplied.size() < required) {
+            // Check if the command is ordered.
+            if (!command.data.isOrdered()) {
+                sender.sendMessage(this.generateUsage());
+                throw new InterruptedException();
+            }
+
+            throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
+                    .setArgs(new Object[] { command.getLabel() });
+        }
+
+        // Check for argument types.
+        var args = new Arguments();
+        if (command.data.isOrdered()) {
+            for (var i = 0; i < arguments.size(); i++) {
+                if (i >= supplied.size()) break; // No more arguments to check.
+                var value = supplied.get(i); // The argument value.
+                var argument = arguments.get(i); // The argument.
+                var type = argument.type(); // The argument type.
+
+                // Check the argument type.
+                this.parseArgument(argument, value, type, args);
+            }
+        } else {
+            // Check if the arguments are all prefixed.
+            if (!arguments.stream().allMatch(arg -> arg instanceof PrefixedArgument))
+                throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
+                        .setArgs(new Object[] { command.getLabel() });
+
+            // Split the arguments into key-value pairs.
+            for (var prefixedValue : supplied) {
+                // Check if the argument starts with an argument prefix.
+                var argument = arguments.stream()
+                        .filter(arg -> arg instanceof PrefixedArgument)
+                        .map(arg -> (PrefixedArgument) arg)
+                        .filter(arg -> prefixedValue.startsWith(arg.prefix()))
+                        .findFirst().orElse(null);
+                if (argument == null) continue; // Not a prefixed argument.
+
+                // Get the argument value.
+                var argValue = prefixedValue.substring(argument.prefix().length());
+                if (argValue.isEmpty()) continue; // No value provided.
+                // Check the argument type.
+                this.parseArgument(argument, argValue, argument.type(), args);
+            }
+        }
+
+        return args;
+    }
+
+    /**
+     * Parses the argument value.
+     *
+     * @param argument The argument.
+     * @param value The argument value.
+     * @param type The argument type.
+     * @param args The container for arguments.
+     * @throws CommandException If the argument value is invalid.
+     */
+    private void parseArgument(
+            Argument argument,
+            String value,
+            Class<?> type,
+            Arguments args
+    ) throws CommandException {
+        if (type == String.class) {
+            args.put(argument.name(), value);
+        } else if (type == Integer.class) {
+            try {
+                args.put(argument.name(), Integer.parseInt(value));
+            } catch (NumberFormatException exception) {
+                throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
+                        .setArgs(new Object[] { argument.name() });
+            }
+        } else if (type == Long.class) {
+            try {
+                args.put(argument.name(), Long.parseLong(value));
+            } catch (NumberFormatException exception) {
+                throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
+                        .setArgs(new Object[] { argument.name() });
+            }
+        } else if (type == Float.class) {
+            try {
+                args.put(argument.name(), Float.parseFloat(value));
+            } catch (NumberFormatException exception) {
+                throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
+                        .setArgs(new Object[] { argument.name() });
+            }
+        } else if (type == Double.class) {
+            try {
+                args.put(argument.name(), Double.parseDouble(value));
+            } catch (NumberFormatException exception) {
+                throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
+                        .setArgs(new Object[] { argument.name() });
+            }
+        } else if (type == Boolean.class) {
+            if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+                args.put(argument.name(), Boolean.parseBoolean(value));
+            } else {
+                throw new CommandException(CommandExceptionType.INVALID_ARGUMENT)
+                        .setArgs(new Object[] { argument.name() });
+            }
+        }
     }
 
     /*
