@@ -1,6 +1,7 @@
 package io.grasscutter.commands;
 
 import io.grasscutter.commands.defaults.*;
+
 import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.utils.enums.CommandExceptionType;
 import io.grasscutter.utils.exceptions.CommandException;
@@ -27,7 +28,8 @@ public final class CommandMap {
      * Registers default commands.
      */
     public CommandMap() {
-        this.register(new TestCommand());
+        this.register(new ReloadCommand());
+        this.register(new AccountCommand());
     }
 
     /**
@@ -53,6 +55,7 @@ public final class CommandMap {
             throw new CommandException(CommandExceptionType.NOT_FOUND);
 
         // Execute the command.
-        command.execute(null, arguments);
+        command.tryExecute(DedicatedServer.getInstance()
+                .getServerSender(), arguments);
     }
 }

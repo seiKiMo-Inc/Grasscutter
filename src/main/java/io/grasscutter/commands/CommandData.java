@@ -1,5 +1,6 @@
 package io.grasscutter.commands;
 
+import io.grasscutter.utils.enums.Executor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +11,10 @@ import java.util.List;
 public final class CommandData {
     private final String label;
     @Builder.Default private String description = "";
-    @Builder.Default private String usage = "";
     @Builder.Default private String permission = "";
     @Builder.Default private List<String> aliases = List.of();
+
+    @Builder.Default private List<SubCommand> subCommands = List.of();
+    @Builder.Default private List<Argument> arguments = List.of();
+    @Builder.Default private Executor executor = Executor.ALL;
 }

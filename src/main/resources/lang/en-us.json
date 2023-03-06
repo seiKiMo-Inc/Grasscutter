@@ -48,7 +48,12 @@
   },
   "command": {
     "exception": {
-      "not_found": "Command not found."
+      "not_found": "Command not found.",
+      "execute": "An error was encountered while executing this command.",
+      "usage": "Invalid arguments provided.",
+      "argument": "Invalid argument provided for {0}.",
+      "permission": "You do not have permission to run this command.",
+      "sender": "Please run this command {0}!"
     }
   }
 }

@@ -6,10 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor @Getter
 public enum CommandExceptionType {
     NOT_FOUND("command.exception.not_found"),
-    INVALID_USAGE(""),
-    INVALID_ARGUMENT(""),
-    INVALID_PERMISSION(""),
-    INVALID_SENDER("");
+    ERROR_EXECUTING("command.exception.execute"),
+    INVALID_USAGE("command.exception.usage"),
+    INVALID_ARGUMENT("command.exception.argument"),
+    INVALID_PERMISSION("command.exception.permission"),
+    INVALID_SENDER("command.exception.sender");
 
     final String message;
 }
