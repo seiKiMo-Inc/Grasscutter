@@ -2,6 +2,7 @@ package io.grasscutter.utils.constants;
 
 import io.grasscutter.Grasscutter;
 import io.grasscutter.utils.objects.lang.TextContainer;
+import io.grasscutter.utils.objects.text.Text;
 import org.slf4j.Logger;
 
 /* A language-compliant logging utility. */
@@ -52,6 +53,25 @@ public interface Log {
      *
      * @param text The text to log.
      */
+    static void info(Text text) {
+        LOGGER.info(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void info(Text text, Throwable throwable) {
+        LOGGER.info(text.toString(true), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     */
     static void warn(String text) {
         LOGGER.warn(text);
     }
@@ -83,6 +103,25 @@ public interface Log {
      */
     static void warn(TextContainer container, Throwable throwable) {
         LOGGER.warn(container.toString(), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     */
+    static void warn(Text text) {
+        LOGGER.warn(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void warn(Text text, Throwable throwable) {
+        LOGGER.warn(text.toString(true), throwable);
     }
 
     /**
@@ -128,6 +167,25 @@ public interface Log {
      *
      * @param text The text to log.
      */
+    static void error(Text text) {
+        LOGGER.error(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void error(Text text, Throwable throwable) {
+        LOGGER.error(text.toString(true), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     */
     static void debug(String text) {
         LOGGER.debug(text);
     }
@@ -159,6 +217,25 @@ public interface Log {
      */
     static void debug(TextContainer container, Throwable throwable) {
         LOGGER.debug(container.toString(), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     */
+    static void debug(Text text) {
+        LOGGER.debug(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void debug(Text text, Throwable throwable) {
+        LOGGER.debug(text.toString(true), throwable);
     }
 
     /**
@@ -209,6 +286,27 @@ public interface Log {
      * @param logger The logger to use.
      * @param text The text to log.
      */
+    static void info(Logger logger, Text text) {
+        logger.info(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void info(Logger logger, Text text, Throwable throwable) {
+        logger.info(text.toString(true), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     */
     static void warn(Logger logger, String text) {
         logger.warn(text);
     }
@@ -243,6 +341,27 @@ public interface Log {
      */
     static void warn(Logger logger, TextContainer container, Throwable throwable) {
         logger.warn(container.toString(), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     */
+    static void warn(Logger logger, Text text) {
+        logger.warn(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void warn(Logger logger, Text text, Throwable throwable) {
+        logger.warn(text.toString(true), throwable);
     }
 
     /**
@@ -293,6 +412,27 @@ public interface Log {
      * @param logger The logger to use.
      * @param text The text to log.
      */
+    static void error(Logger logger, Text text) {
+        logger.error(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void error(Logger logger, Text text, Throwable throwable) {
+        logger.error(text.toString(true), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     */
     static void debug(Logger logger, String text) {
         logger.debug(text);
     }
@@ -327,5 +467,26 @@ public interface Log {
      */
     static void debug(Logger logger, TextContainer container, Throwable throwable) {
         logger.debug(container.toString(), throwable);
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     */
+    static void debug(Logger logger, Text text) {
+        logger.debug(text.toString(true));
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param logger The logger to use.
+     * @param text The text to log.
+     * @param throwable The throwable to log.
+     */
+    static void debug(Logger logger, Text text, Throwable throwable) {
+        logger.debug(text.toString(true), throwable);
     }
 }
