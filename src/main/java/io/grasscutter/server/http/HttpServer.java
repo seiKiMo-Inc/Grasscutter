@@ -90,7 +90,7 @@ public final class HttpServer {
         return server;
     }
 
-    private final Javalin javalin;
+    private Javalin javalin;
     private final Logger logger;
 
     private HttpServer() {
@@ -149,6 +149,7 @@ public final class HttpServer {
     /** Invoked when a server reload occurs. */
     public void reload() {
         this.stop(); // Stop the server.
+        this.javalin = Javalin.create(HttpServer::javalinConfig); // Re-create the server.
         this.start(); // Start the server.
 
         Router.defaultSetup(this); // Re-apply default routes.

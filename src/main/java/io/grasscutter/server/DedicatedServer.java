@@ -3,6 +3,8 @@ package io.grasscutter.server;
 import io.grasscutter.Grasscutter;
 import io.grasscutter.auth.AuthenticationHolder;
 import io.grasscutter.commands.CommandMap;
+import io.grasscutter.commands.sender.CommandSender;
+import io.grasscutter.commands.sender.ConsoleCommandSender;
 import io.grasscutter.data.DataInterface;
 import io.grasscutter.server.game.GameServer;
 import io.grasscutter.server.http.HttpServer;
@@ -11,9 +13,13 @@ import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.objects.lang.Language;
 import io.grasscutter.utils.objects.lang.TextContainer;
+
+import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.util.Arrays;
+
+import io.grasscutter.utils.objects.text.Text;
 import lombok.Getter;
 import org.slf4j.Logger;
 
@@ -26,6 +32,7 @@ public final class DedicatedServer {
     @Getter private final Logger logger;
     @Getter private final AuthenticationHolder authHolder;
     @Getter private final CommandMap commandMap;
+    @Getter private final CommandSender serverSender;
     private final ServerThread thread;
 
     @Getter private DataInterface dataInterface;
@@ -48,6 +55,7 @@ public final class DedicatedServer {
         // Create server objects.
         this.authHolder = new AuthenticationHolder();
         this.commandMap = new CommandMap();
+        this.serverSender = new ConsoleCommandSender();
     }
 
     /** Performs a global server tick. */
@@ -78,7 +86,8 @@ public final class DedicatedServer {
 
     /** Performs a server reload. */
     public void reload() {
-        Log.info(this.logger, new TextContainer("server.dedicated.reload.start"));
+        Log.info(this.logger, new Text(new TextContainer("server.dedicated.reload.start"))
+                .color(Color.YELLOW));
         var startupTime = System.currentTimeMillis();
 
         // Reload the server internals.
@@ -100,7 +109,8 @@ public final class DedicatedServer {
 
         // Log the time it took to reload.
         var time = EncodingUtils.toSeconds(System.currentTimeMillis() - startupTime);
-        Log.info(this.logger, new TextContainer("server.dedicated.reload.done", time));
+        Log.info(this.logger, new Text(new TextContainer("server.dedicated.reload.done", time))
+                .color(Color.YELLOW));
     }
 
     /**

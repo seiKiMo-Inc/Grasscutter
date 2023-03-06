@@ -7,9 +7,8 @@ To use language-driven descriptions, prepend a `$` to the description.
 
 Otherwise, descriptions are displayed as plain text.
 
-# Adding Command Usages
-When writing a command's usage statement, use the following conventions:
-- Use `[]` to denote an optional argument.
-- Use `<>` to denote a required argument.
-- Use `|` to denote a choice between arguments.
-- Use `...` to denote a variable number of arguments.
+# Messages
+Messages are an instance of `Text`, which is one of many things:
+- The class can be language-driven.
+- The class can be plain-text.
+- The class is rich and can be formatted.
