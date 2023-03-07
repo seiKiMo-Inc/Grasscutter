@@ -2,7 +2,9 @@ package io.grasscutter.server.http.routers;
 
 import io.grasscutter.server.DedicatedServer;
 import io.grasscutter.server.http.Router;
+import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.definitions.auth.GranterLoginRequest;
+import io.grasscutter.utils.definitions.auth.LoginTokenData;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;
 import io.grasscutter.utils.definitions.auth.ShieldVerifyRequest;
 import io.javalin.Javalin;
@@ -66,6 +68,10 @@ public final class AuthenticationRouter implements Router {
         // De-serialize the request body.
         var request = ctx.bodyAsClass(GranterLoginRequest.class);
         if (request == null) return;
+
+        // De-serialize the login data.
+        request.loginData = EncodingUtils.fromJson(
+                request.rawLoginData, LoginTokenData.class);
 
         // Perform a login.
         var response = DedicatedServer.getInstance().getAuthHolder().login(request);

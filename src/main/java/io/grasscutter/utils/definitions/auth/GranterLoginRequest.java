@@ -10,6 +10,7 @@ public final class GranterLoginRequest {
     public int channel;
 
     @SerializedName("data")
+    public String rawLoginData;
     public LoginTokenData loginData;
 
     public String device;
