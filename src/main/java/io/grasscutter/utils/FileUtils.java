@@ -129,7 +129,7 @@ public interface FileUtils {
     static Path getResourceFile(Path root, String file) {
         var name = FileUtils.withoutExtension(file);
         for (var extension : FileConstants.RESOURCE_EXTENSIONS) {
-            var to = root.resolve(name + extension);
+            var to = root.resolve(name + "." + extension);
             if (Files.exists(to)) return to;
         }
 

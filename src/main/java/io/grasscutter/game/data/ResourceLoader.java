@@ -5,6 +5,7 @@ import io.grasscutter.utils.Preconditions;
 import io.grasscutter.utils.constants.DataConstants;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.encodings.Json;
+import io.grasscutter.utils.encodings.TabSeparatedJson;
 import io.grasscutter.utils.enums.Priority;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -86,6 +87,7 @@ public final class ResourceLoader {
             var path = GameResource.getExcelPath(name);
             var results = switch (FileUtils.extension(path)) {
                 case "json" -> Json.toList(path, resource);
+                case "tsj" -> TabSeparatedJson.toList(path, resource);
                 default -> null;
             };
             if (results == null) return;

@@ -1,4 +1,4 @@
-package io.grasscutter.game.data.excel;
+package io.grasscutter.game.data.excel.avatar;
 
 import io.grasscutter.game.data.GameResource;
 import io.grasscutter.game.data.Resource;
@@ -14,6 +14,6 @@ public final class AvatarData implements GameResource {
 
     @Override
     public void onLoad() {
-        System.out.println("loaded resource " + this.id);
+
     }
 }

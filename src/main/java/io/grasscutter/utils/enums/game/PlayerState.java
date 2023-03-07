@@ -1,4 +1,4 @@
-package io.grasscutter.utils.enums;
+package io.grasscutter.utils.enums.game;
 
 /** States for a {@link io.grasscutter.network.NetworkSession}. */
 public enum PlayerState {

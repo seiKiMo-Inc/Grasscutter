@@ -5,7 +5,7 @@ import io.grasscutter.data.FieldType;
 import io.grasscutter.data.Special;
 import io.grasscutter.network.NetworkSession;
 import io.grasscutter.utils.constants.GameConstants;
-import io.grasscutter.utils.enums.PlayerState;
+import io.grasscutter.utils.enums.game.PlayerState;
 import io.grasscutter.utils.interfaces.DatabaseObject;
 import io.grasscutter.world.Position;
 import lombok.Getter;

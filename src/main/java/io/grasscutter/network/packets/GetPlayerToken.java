@@ -15,7 +15,7 @@ import io.grasscutter.utils.Preconditions;
 import io.grasscutter.utils.constants.CryptoConstants;
 import io.grasscutter.utils.constants.GameConstants;
 import io.grasscutter.utils.enums.KeyType;
-import io.grasscutter.utils.enums.PlayerState;
+import io.grasscutter.utils.enums.game.PlayerState;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;

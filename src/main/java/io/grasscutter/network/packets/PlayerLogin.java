@@ -10,7 +10,7 @@ import io.grasscutter.utils.Preconditions;
 import io.grasscutter.utils.ServerUtils;
 import io.grasscutter.utils.constants.GameConstants;
 import io.grasscutter.utils.enums.KeyType;
-import io.grasscutter.utils.enums.PlayerState;
+import io.grasscutter.utils.enums.game.PlayerState;
 
 /** Player login packet. {@link PacketIds#PlayerLoginReq} and {@link PacketIds#PlayerLoginRsp} */
 public final class PlayerLogin extends BasePacket<PlayerLoginReq, PlayerLoginRsp> {
