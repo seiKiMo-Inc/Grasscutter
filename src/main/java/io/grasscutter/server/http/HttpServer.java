@@ -1,11 +1,16 @@
 package io.grasscutter.server.http;
 
+import io.grasscutter.proto.RetcodeOuterClass.Retcode;
+import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
+import io.grasscutter.utils.definitions.SDKResponse;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
+import io.javalin.http.Context;
+import io.javalin.json.JavalinGson;
 import io.javalin.util.JavalinBindException;
 import java.io.File;
 import lombok.Getter;
@@ -36,6 +41,8 @@ public final class HttpServer {
     private static void javalinConfig(JavalinConfig config) {
         // Set the Jetty HTTP(S) server to use.
         config.jetty.server(() -> HttpServer.createServer(true));
+        // Set the GSON instance to use.
+        config.jsonMapper(new JavalinGson(EncodingUtils.gson));
     }
 
     /**
@@ -90,6 +97,20 @@ public final class HttpServer {
         return server;
     }
 
+    /**
+     * Handles an exception encountered while serving HTTP traffic.
+     *
+     * @param exception The exception.
+     * @param ctx The HTTP context.
+     */
+    private static void handleException(Exception exception, Context ctx) {
+        exception.printStackTrace();
+        ctx.json(SDKResponse.builder()
+                .retcode(Retcode.RETCODE_RET_FAIL.getNumber())
+                .message(exception.getMessage())
+                .build());
+    }
+
     private Javalin javalin;
     private final Logger logger;
 
@@ -129,6 +150,9 @@ public final class HttpServer {
             System.exit(1);
             return;
         }
+
+        // Set the Javalin exception handler.
+        this.javalin.exception(Exception.class, HttpServer::handleException);
 
         try {
             // Start the server.
