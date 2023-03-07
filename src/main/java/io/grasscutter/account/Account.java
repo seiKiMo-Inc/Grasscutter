@@ -19,16 +19,25 @@ public final class Account implements DatabaseObject {
     public String username = ""; // The account's username.
     public String password = ""; // The account's password.
 
-    public String token = ""; // A login token for the account.
+    public String loginToken = ""; // A login token for the account.
     public String sessionKey = ""; // A session key for the account.
+
+    /**
+     * Generates a session token for the account.
+     *
+     * @return A randomly generated hex string.
+     */
+    public String generateSessionKey() {
+        return this.sessionKey = EncodingUtils.toHex(CryptoUtils.generateBytes(32));
+    }
 
     /**
      * Generates a login token for the account.
      *
      * @return A randomly generated hex string.
      */
-    public String generateSessionKey() {
-        return this.sessionKey = EncodingUtils.toHex(CryptoUtils.generateBytes(32));
+    public String generateLoginToken() {
+        return this.loginToken = EncodingUtils.toHex(CryptoUtils.generateBytes(32));
     }
 
     /*

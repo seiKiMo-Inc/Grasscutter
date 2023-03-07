@@ -2,24 +2,26 @@ package io.grasscutter.utils.definitions.auth;
 
 import com.google.gson.annotations.SerializedName;
 import io.grasscutter.utils.objects.JObject;
+import lombok.Builder;
 
+@Builder
 public final class LoginData {
     @SerializedName("account_type")
-    public int type = 1;
+    @Builder.Default public int type = 1;
 
-    public boolean heartbeat;
+    @Builder.Default public boolean heartbeat = false;
 
     @SerializedName("combo_id")
-    public String id;
+    public String comboId;
 
     @SerializedName("combo_token")
     public String token;
 
     @SerializedName("open_id")
-    public String openId;
+    public String id;
 
-    public Object data = JObject.c().add("guest", false);
+    @Builder.Default public Object data = JObject.c().add("guest", false);
 
     @SerializedName("fatigue_remind")
-    public String timeRemind = null; // ?
+    @Builder.Default public String timeRemind = null;
 }

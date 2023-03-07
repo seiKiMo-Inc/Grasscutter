@@ -11,7 +11,7 @@ import io.grasscutter.utils.objects.lang.TextContainer;
 import java.nio.charset.StandardCharsets;
 import org.jetbrains.annotations.NotNull;
 
-/** The default login authenticator. */
+/** The default on-demand login authenticator. */
 public class DefaultLoginAuthenticator implements Authenticator<ShieldLoginRequest> {
     @Override
     @NotNull public SDKResponse authenticate(ShieldLoginRequest request) {
@@ -31,15 +31,18 @@ public class DefaultLoginAuthenticator implements Authenticator<ShieldLoginReque
                 } catch (Exception ignored) {
                     password = null;
                 }
+        } else {
+            password = new String(EncodingUtils.fromBase64(
+                    password.getBytes()), StandardCharsets.UTF_8);
         }
 
         // Check the password.
-        if (password == null) {
-            return response
-                    .message(new TextContainer("exception.error").toString())
-                    .retcode(Retcode.RETCODE_RET_FAIL.getNumber())
-                    .build();
-        }
+        // if (password == null) {
+        //     return response
+        //             .message(new TextContainer("exception.error").toString())
+        //             .retcode(Retcode.RETCODE_RET_FAIL.getNumber())
+        //             .build();
+        // }
 
         // Check for account.
         var account = DatabaseUtils.fetchAccount(request.username);
