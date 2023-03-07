@@ -7,5 +7,6 @@
     <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ADDITIONAL_TAGS" value="route" />
     </inspection_tool>
+    <inspection_tool class="StringConcatenationInsideStringBufferAppend" enabled="true" level="INFORMATION" enabled_by_default="true" />
   </profile>
 </component>
