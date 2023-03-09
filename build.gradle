@@ -71,7 +71,7 @@ dependencies {
     implementation group: 'io.netty', name: 'netty-transport-native-kqueue', version: '4.1.79.Final'
 
     // HTTP implementation.
-    implementation(group: 'io.javalin', name: 'javalin', version: '5.0.1') {
+    implementation(group: 'io.javalin', name: 'javalin', version: '5.4.2') {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
 
