@@ -42,7 +42,7 @@ public final class CreateCommand extends SubCommand {
                     "command.account.username_taken", username)).color(Color.RED));
             return;
         }
-        if (DatabaseUtils.fetchAccount(userId) != null) {
+        if (DatabaseUtils.fetchAccountByUid(userId) != null) {
             sender.sendMessage(new Text(new TextContainer(
                     "command.account.user_id_taken", userId)).color(Color.RED));
             return;
@@ -51,7 +51,7 @@ public final class CreateCommand extends SubCommand {
         // Check for a valid userId.
         while (userId == -1) {
             userId = CryptoUtils.randomNumber(100000000, 999999999);
-            if (DatabaseUtils.fetchAccount(userId) != null) userId = -1L;
+            if (DatabaseUtils.fetchAccountByUid(userId) != null) userId = -1L;
         }
 
         // Create the account.

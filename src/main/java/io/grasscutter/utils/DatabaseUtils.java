@@ -58,7 +58,18 @@ public interface DatabaseUtils {
      * @return The account, or null if the account does not exist.
      */
     @Nullable static Account fetchAccount(long userId) {
-        return DatabaseUtils.getDataInterface().get(Account.class, Map.of("gameUserId", userId));
+        return DatabaseUtils.getDataInterface().get(Account.class, Map.of(
+                DatabaseUtils.getIdFieldName("id"), userId));
+    }
+
+    /**
+     * Shortcut method to get an account by UID, or the gameUserId.
+     *
+     * @param uid The UID.
+     * @return The account, or null if the account does not exist.
+     */
+    @Nullable static Account fetchAccountByUid(long uid) {
+        return DatabaseUtils.getDataInterface().get(Account.class, Map.of("gameUserId", uid));
     }
 
     /**
@@ -69,7 +80,8 @@ public interface DatabaseUtils {
      */
     static long fetchAndIncrement(String counter) {
         var dataInterface = DatabaseUtils.getDataInterface();
-        var counterObject = dataInterface.get(Counter.class, Map.of("_id", counter));
+        var counterObject = dataInterface.get(Counter.class, Map.of(
+                DatabaseUtils.getIdFieldName("id"), counter));
 
         // If the counter does not exist, create it.
         if (counterObject == null) {
