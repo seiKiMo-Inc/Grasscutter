@@ -3,6 +3,7 @@ package io.grasscutter.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.protobuf.ByteString;
+import io.grasscutter.utils.objects.JObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import java.io.File;
@@ -16,7 +17,10 @@ import java.util.Map;
 
 /* Utility methods seen when converting data. */
 public interface EncodingUtils {
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapter(JObject.class, new JObject.Adapter())
+            .setPrettyPrinting()
+            .create();
 
     /**
      * Encodes the given string into a Base64 string.
