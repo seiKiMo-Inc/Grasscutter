@@ -7,6 +7,7 @@ import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.definitions.auth.VerifyData;
 import io.grasscutter.utils.interfaces.DatabaseObject;
+import io.grasscutter.utils.interfaces.Output;
 
 @DataSerializable(table = "accounts")
 public final class Account implements DatabaseObject {
@@ -28,7 +29,8 @@ public final class Account implements DatabaseObject {
      * @return A randomly generated hex string.
      */
     public String generateSessionKey() {
-        return this.sessionKey = EncodingUtils.toHex(CryptoUtils.generateBytes(32));
+        return this.saveAndFetch(() -> this.sessionKey =
+                EncodingUtils.toHex(CryptoUtils.generateBytes(32)));
     }
 
     /**
@@ -37,7 +39,22 @@ public final class Account implements DatabaseObject {
      * @return A randomly generated hex string.
      */
     public String generateLoginToken() {
-        return this.loginToken = EncodingUtils.toHex(CryptoUtils.generateBytes(32));
+        return this.saveAndFetch(() -> this.loginToken =
+                EncodingUtils.toHex(CryptoUtils.generateBytes(32)));
+    }
+
+    /*
+     * Utility.
+     */
+
+    /**
+     * Saves the database object and returns the field.
+     * @param field The field to return.
+     * @return The field.
+     */
+    public <T> T saveAndFetch(Output<T> field) {
+        var result = field.result();
+        this.save(); return result;
     }
 
     /*
