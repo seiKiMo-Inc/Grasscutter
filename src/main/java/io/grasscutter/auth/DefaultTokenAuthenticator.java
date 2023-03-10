@@ -9,7 +9,7 @@ public class DefaultTokenAuthenticator implements Authenticator<ShieldVerifyRequ
     @Override
     public SDKResponse authenticate(ShieldVerifyRequest token) {
         // Get the account from the database.
-        var account = DatabaseUtils.fetchAccount(token.accountId);
+        var account = DatabaseUtils.fetchAccount(Long.parseLong(token.accountId));
         if (account == null) {
             return SDKResponse.builder()
                     .message("Account not found.")

@@ -77,6 +77,6 @@ public final class AuthenticationRouter implements Router {
         var response = DedicatedServer.getInstance().getAuthHolder().login(request);
 
         // Send the response.
-        ctx.json(response);
+        ctx.result(response.toString());
     }
 }
