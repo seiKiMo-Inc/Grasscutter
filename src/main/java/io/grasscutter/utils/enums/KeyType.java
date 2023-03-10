@@ -14,10 +14,13 @@ public enum KeyType {
     DISPATCH_SEED(FileUtils.resource("keys/xor/dispatchSeed.bin"), true),
     ENCRYPT(FileUtils.resource("keys/xor/encryptKey.bin"), true),
 
-    OS(FileUtils.resource("keys/public/OS.der"), false),
-    CN(FileUtils.resource("keys/public/CN.der"), false),
-    SIGNING(FileUtils.resource("keys/private/SigningKey.der"), false),
-    AUTH(FileUtils.resource("keys/private/AuthKey.der"), false);
+    PUBLIC_2(FileUtils.resource("keys/public/2.der"), true, "RSA"),
+    PUBLIC_3(FileUtils.resource("keys/public/3.der"), true, "RSA"),
+    PUBLIC_4(FileUtils.resource("keys/public/4.der"), true, "RSA"),
+    PUBLIC_5(FileUtils.resource("keys/public/5.der"), true, "RSA"),
+
+    SIGNING(FileUtils.resource("keys/private/SigningKey.der"), false, "RSA"),
+    AUTH(FileUtils.resource("keys/private/AuthKey.der"), false, "RSA");
 
     private final Object key;
     private final boolean isByte;
@@ -28,6 +31,14 @@ public enum KeyType {
         this.key = key;
         this.isByte = isByte;
         this.protoKey = this.isByte ? ByteString.copyFrom(this.getKey()) : ByteString.EMPTY;
+    }
+
+    KeyType(byte[] key, boolean isPublic, String type) {
+        this.key = isPublic ?
+                CryptoUtils.generatePublicKey(key, type) :
+                CryptoUtils.generatePrivateKey(key, type);;
+        this.isByte = false;
+        this.protoKey = ByteString.EMPTY;
     }
 
     /**
@@ -41,14 +52,14 @@ public enum KeyType {
      * @return The key as a public key.
      */
     public PublicKey getPublicKey() {
-        return this.isByte ? (PublicKey) this.key : null;
+        return this.isByte ? null : (PublicKey) this.key;
     }
 
     /**
      * @return The key as a private key.
      */
     public PrivateKey getPrivateKey() {
-        return this.isByte ? (PrivateKey) this.key : null;
+        return this.isByte ? null : (PrivateKey) this.key;
     }
 
     /**

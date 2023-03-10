@@ -9,10 +9,7 @@ import io.grasscutter.proto.RegionSimpleInfoOuterClass.RegionSimpleInfo;
 import io.grasscutter.server.http.Router;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.NetworkUtils;
-import io.grasscutter.utils.constants.CryptoConstants;
-import io.grasscutter.utils.constants.Log;
-import io.grasscutter.utils.constants.NetworkConstants;
-import io.grasscutter.utils.constants.Properties;
+import io.grasscutter.utils.constants.*;
 import io.grasscutter.utils.definitions.Configuration;
 import io.grasscutter.utils.definitions.QueryRegionResponse;
 import io.grasscutter.utils.enums.KeyType;
@@ -128,7 +125,8 @@ public final class DispatchRouter implements Router {
      */
     private void queryRegion(Context ctx) {
         var region = ctx.pathParam("region");
-        var version = ctx.pathParam("version");
+        var version = lr(ctx.queryParam("version"),
+                "OSRELWin" + GameConstants.GAME_VERSION);
 
         // Fetch region data.
         var regionData = this.regions.get(region);
@@ -149,25 +147,26 @@ public final class DispatchRouter implements Router {
                 }
 
                 // Create a cipher.
-                var keyId = lr(ctx.queryParam("key_id"), "3");
-                var keyType = keyId.equals("3") ? KeyType.OS : KeyType.CN;
+                var keyId = lr(ctx.queryParam("key_id"), "5");
+                var keyType = KeyType.valueOf("PUBLIC_" + keyId);
                 var cipher = keyType.encrypt(CryptoConstants.ENCRYPTION_TYPE);
                 if (cipher == null) {
-                    throw new IllegalStateException("Invalid key.");
+                    throw new IllegalArgumentException();
                 }
 
                 // Encrypt the data.
-                var regionDataBytes = encodedData.getBytes();
+                var regionDataBytes = EncodingUtils.fromBase64(
+                        encodedData.getBytes());
                 var encrypted = new ByteArrayOutputStream();
 
                 var chunkSize = 256 - 11;
                 var regionInfoLength = regionDataBytes.length;
                 var numChunks = (int) Math.ceil(regionInfoLength / (double) chunkSize);
-                for (int i = 0; i < numChunks; i++) {
-                    byte[] chunk =
+                for (var i = 0; i < numChunks; i++) {
+                    var chunk =
                             Arrays.copyOfRange(
                                     regionDataBytes, i * chunkSize, Math.min((i + 1) * chunkSize, regionInfoLength));
-                    byte[] encryptedChunk = cipher.doFinal(chunk);
+                    var encryptedChunk = cipher.doFinal(chunk);
                     encrypted.write(encryptedChunk);
                 }
 
@@ -177,10 +176,13 @@ public final class DispatchRouter implements Router {
                     throw new IllegalStateException("Invalid key.");
                 }
 
-                signature.update(encrypted.toByteArray());
-                var content = new String(EncodingUtils.toBase64(signature.sign()));
+                signature.update(regionDataBytes);
+                var content = new String(EncodingUtils.toBase64(encrypted.toByteArray()));
                 var signatureData = new String(EncodingUtils.toBase64(signature.sign()));
                 ctx.json(new QueryRegionResponse(content, signatureData));
+            } catch (IllegalArgumentException ignored) {
+                Log.error(new TextContainer("system.dispatch.invalid_key",
+                        lr(ctx.queryParam("key_id"), "None")));
             } catch (Exception exception) {
                 Log.warn(new TextContainer("exception.error"), exception);
             }

@@ -14,7 +14,10 @@
       "done": "Grasscutter started in {0}s."
     },
     "shutdown": "Shutting down Grasscutter...",
-    "console_error": "An error occurred while reading the console."
+    "console_error": "An error occurred while reading the console.",
+    "dispatch": {
+      "invalid_key": "Invalid dispatch key: {0}."
+    }
   },
   "network": {
     "exception": "Exception caught during transit.",

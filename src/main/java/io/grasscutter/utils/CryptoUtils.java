@@ -1,10 +1,12 @@
 package io.grasscutter.utils;
 
 import io.grasscutter.utils.enums.KeyType;
+import org.jetbrains.annotations.Nullable;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Random;
 
 /* Utility methods for cryptography. */
@@ -77,5 +79,35 @@ public interface CryptoUtils {
      */
     static long randomNumber(long min, long max) {
         return min + (long) (random.nextFloat() * (max - min));
+    }
+
+    /**
+     * Generates a public key from the given bytes.
+     *
+     * @param keyBytes The key bytes.
+     * @return The public key.
+     */
+    @Nullable static PublicKey generatePublicKey(byte[] keyBytes, String type) {
+        try {
+            return KeyFactory.getInstance(type)
+                    .generatePublic(new X509EncodedKeySpec(keyBytes));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Generates a private key from the given bytes.
+     *
+     * @param keyBytes The key bytes.
+     * @return The private key.
+     */
+    @Nullable static PrivateKey generatePrivateKey(byte[] keyBytes, String type) {
+        try {
+            return KeyFactory.getInstance(type)
+                    .generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ignored) {
+            return null;
+        }
     }
 }
