@@ -6,7 +6,8 @@
     "version": "2.0.0-snapshot"
   },
   "exception": {
-    "error": "An error occurred."
+    "error": "An error occurred.",
+    "packet": "Invalid packet received."
   },
   "system": {
     "startup": {
@@ -41,7 +42,12 @@
     },
     "game": {
       "done": "Game server started on port {0}. Accessible at {1}:{0}.",
-      "unavailable": "The game server is currently unavailable."
+      "unavailable": "The game server is currently unavailable.",
+      "client": {
+        "connected": "A client connected from {0}.",
+        "disconnected": "Client {0} has disconnected.",
+        "error": "Client {0} encountered an error."
+      }
     }
   },
   "database": {
