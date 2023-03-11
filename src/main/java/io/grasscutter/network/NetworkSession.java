@@ -1,12 +1,24 @@
 package io.grasscutter.network;
 
-import io.grasscutter.network.kcp.KcpChannel;
+import io.grasscutter.network.kcp.KcpHandler;
+import io.grasscutter.network.kcp.KcpTunnel;
 import io.grasscutter.network.protocol.BasePacket;
 import lombok.Getter;
 
+import kcp.highway.Ukcp;
+
 /** An internal KCP-client wrapper. Serves as the interface to a client. */
-public final class NetworkSession extends KcpChannel {
+public final class NetworkSession extends KcpTunnel implements KcpHandler {
     @Getter private long lastPing = System.currentTimeMillis();
+
+    /**
+     * Creates a new network session.
+     *
+     * @param handle The KCP handle.
+     */
+    public NetworkSession(Ukcp handle) {
+        super(handle);
+    }
 
     /*
      * Network methods.
@@ -20,7 +32,7 @@ public final class NetworkSession extends KcpChannel {
     public void send(BasePacket<?, ?> packet) {
         // Encode the packet into the proper format.
         // Send the encoded byte array to the client.
-        super.send(packet.encode());
+        super.writeData(packet.encode());
     }
 
     /**
@@ -37,17 +49,17 @@ public final class NetworkSession extends KcpChannel {
      */
 
     @Override
-    protected void onConnect() {
+    public void onConnect() {
         System.out.println("Connected!");
     }
 
     @Override
-    protected void onDisconnect() {
+    public void onDisconnect() {
         System.out.println("Disconnected!");
     }
 
     @Override
-    protected void onMessage(KcpChannel channel, byte[] data) {
+    public void onMessage(byte[] data) {
         System.out.println("Received: " + new String(data).subSequence(0, 9));
     }
 }

@@ -40,7 +40,8 @@
       "router_error": "Unable to setup router {0}."
     },
     "game": {
-      "done": "Game server started on port {0}. Accessible at {1}:{0}."
+      "done": "Game server started on port {0}. Accessible at {1}:{0}.",
+      "unavailable": "The game server is currently unavailable."
     }
   },
   "database": {

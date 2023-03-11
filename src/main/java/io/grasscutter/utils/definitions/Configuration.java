@@ -27,6 +27,8 @@ public final class Configuration implements Serializable {
         public String routingAddress =
                 "127.0.0.1"; // What address the client connects to. Default: Localhost. (127.0.0.1)
         public int routingPort = 22102; // What port the client connects to. Default: 22102.
+
+        public int updateInterval = 20; // The KCP server update interval in milliseconds. Default: 20.
     }
 
     public static class Http {
@@ -82,7 +84,7 @@ public final class Configuration implements Serializable {
     public static class Region {
         public String name = "default"; // The name of the region. Default: default.
         public String display = "Grasscutter"; // The region's display name. Default: Grasscutter.
-        public String address = "localhost"; // The address of the region. Default: localhost.
+        public String address = "127.0.0.1"; // The address of the region. Default: 127.0.0.1.
         public int port = 22102; // The port of the region. Default: 22102.
     }
 

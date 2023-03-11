@@ -72,7 +72,7 @@ public final class DedicatedServer {
     /** Stops both game & HTTP servers. */
     public void stop() {
         // Stop the dedicated servers.
-        DedicatedServer.gameServer.interrupt();
+        DedicatedServer.gameServer.stop();
         DedicatedServer.httpServer.stop();
 
         // Stop the dedicated server thread.

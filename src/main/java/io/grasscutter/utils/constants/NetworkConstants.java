@@ -1,6 +1,7 @@
 package io.grasscutter.utils.constants;
 
 import io.grasscutter.utils.enums.KeyType;
+import kcp.highway.ChannelConfig;
 
 /* Constants seen in server networking. */
 public interface NetworkConstants {
@@ -16,4 +17,7 @@ public interface NetworkConstants {
             KeyType.DISPATCH.xor(
                     "{\"sdkenv\":\"2\",\"checkdevice\":\"false\",\"loadPatch\":\"false\",\"showexception\":\"false\",\"regionConfig\":\"pm|fk|add\",\"downloadMode\":\"0\"}"
                             .getBytes());
+
+    // KCP channel configuration.
+    ChannelConfig KCP_CONFIG = new ChannelConfig();
 }
