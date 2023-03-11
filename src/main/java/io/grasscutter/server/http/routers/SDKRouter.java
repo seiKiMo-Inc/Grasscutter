@@ -24,7 +24,7 @@ public final class SDKRouter implements Router {
     private void validateLogin(Context ctx) {
         ctx.json(
                 SDKResponse.builder()
-                        .retcode(Retcode.RETCODE_RET_SUCC.getNumber())
+                        .retcode(Retcode.RET_SUCC.getNumber())
                         .message("OK")
                         .data(
                                 JObject.c()

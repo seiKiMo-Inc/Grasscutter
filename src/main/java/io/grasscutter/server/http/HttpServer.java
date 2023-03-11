@@ -106,7 +106,7 @@ public final class HttpServer {
     private static void handleException(Exception exception, Context ctx) {
         exception.printStackTrace();
         ctx.json(SDKResponse.builder()
-                .retcode(Retcode.RETCODE_RET_FAIL.getNumber())
+                .retcode(Retcode.RET_FAIL.getNumber())
                 .message(exception.getMessage())
                 .build());
     }
