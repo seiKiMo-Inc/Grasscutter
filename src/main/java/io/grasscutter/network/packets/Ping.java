@@ -21,7 +21,7 @@ public final class Ping extends BasePacket<PingReq, PingRsp> {
     }
 
     @Override
-    public void handlePacket(NetworkSession session, PacketHead header, PingReq message) {
+    protected void handlePacket(NetworkSession session, PacketHead header, PingReq message) {
         session.updateLastPingTime(message.getClientTime());
         session.send(new Ping(header.getClientSequenceId(), message.getClientTime()));
     }

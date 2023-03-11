@@ -34,7 +34,19 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
      * @param header The packet's header.
      * @param message The message to handle.
      */
-    public void handlePacket(NetworkSession session, PacketHead header, I message) {}
+    @SuppressWarnings("unchecked")
+    public final void handlePacket(NetworkSession session, PacketHead header, Object message) {
+        this.handlePacket(session, header, (I) message);
+    }
+
+    /**
+     * Handles an incoming packet.
+     *
+     * @param session The session sending the packet.
+     * @param header The packet's header.
+     * @param message The message to handle.
+     */
+    protected void handlePacket(NetworkSession session, PacketHead header, I message) {}
 
     /*
      * Sending.

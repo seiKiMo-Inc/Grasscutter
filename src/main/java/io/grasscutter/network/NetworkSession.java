@@ -1,10 +1,11 @@
 package io.grasscutter.network;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import io.grasscutter.account.Account;
 import io.grasscutter.network.kcp.KcpHandler;
 import io.grasscutter.network.kcp.KcpTunnel;
 import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.utils.CryptoUtils;
-import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.Preconditions;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.enums.KeyType;
@@ -14,11 +15,15 @@ import io.netty.buffer.Unpooled;
 import lombok.Getter;
 
 import kcp.highway.Ukcp;
+import lombok.Setter;
 
 /** An internal KCP-client wrapper. Serves as the interface to a client. */
 public final class NetworkSession extends KcpTunnel implements KcpHandler {
     @Getter private long lastPing = System.currentTimeMillis();
     @Getter private boolean encrypted = false;
+
+    @Setter @Getter
+    private Account account = null;
 
     /**
      * Creates a new network session.
@@ -54,15 +59,16 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
     }
 
     /**
-     * Formats the client's address into IP:Port.
+     * Formats the client's address.
      *
+     * @param withPort Whether to include the port.
      * @return The formatted address.
      */
-    public String getPrettyAddress() {
+    public String getPrettyAddress(boolean withPort) {
         var address = this.getAddress();
         return address.getAddress()
                 .getHostAddress() +
-                ":" + address.getPort();
+                (withPort ? ":" + address.getPort() : "");
     }
 
     /*
@@ -73,14 +79,14 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
     public void onConnect() {
         // Log the connection.
         Log.debug(new TextContainer("server.game.client.connected",
-                this.getPrettyAddress()));
+                this.getPrettyAddress(true)));
     }
 
     @Override
     public void onDisconnect() {
         // Log the disconnection.
         Log.debug(new TextContainer("server.game.client.disconnected",
-                this.getPrettyAddress()));
+                this.getPrettyAddress(true)));
     }
 
     @Override
@@ -108,20 +114,21 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
                 // Validate the packet.
                 Preconditions.validPacket(buffer);
 
-                System.out.println("Packet ID: " + packetId);
-                System.out.println("Head Length: " + headLength);
-                System.out.println("Packet Length: " + packetLength);
-                System.out.println("Head Data: " +
-                        new String(EncodingUtils.toBase64(headData)));
-                System.out.println("Packet Data: " +
-                        new String(EncodingUtils.toBase64(packetData)));
+                // Handle the packet.
+                PacketHandler.handlePacket(this,
+                        packetId, headData, packetData);
             }
         } catch (InvalidException exception) {
             // Log the exception.
             Log.error(exception.getLocalizedMessage());
+            exception.printStackTrace();
+        } catch (InvalidProtocolBufferException exception) {
+            // Log the exception.
+            Log.error(new TextContainer("exception.packet"));
         } catch (Exception ignored) {
             // Log the exception.
-            Log.error(new TextContainer("server.game.client.error", this.getPrettyAddress()));
+            Log.error(new TextContainer("server.game.client.error",
+                    this.getPrettyAddress(true)));
         }
     }
 }

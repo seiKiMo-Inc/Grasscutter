@@ -1,8 +1,10 @@
 package io.grasscutter.utils;
 
+import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.exceptions.InvalidException;
 import io.netty.buffer.ByteBuf;
+import org.jetbrains.annotations.Nullable;
 
 /* Collection of validations. */
 public interface Preconditions {
@@ -19,5 +21,16 @@ public interface Preconditions {
             return;
 
         throw new InvalidException("exception.packet");
+    }
+
+    /**
+     * Validates a packet.
+     *
+     * @param packet The packet to validate.
+     * @throws InvalidException If the packet is invalid.
+     */
+    static void validPacket(@Nullable Packet packet) throws InvalidException {
+        if (packet == null || packet.getPacket() == null)
+            throw new InvalidException("exception.packet");
     }
 }
