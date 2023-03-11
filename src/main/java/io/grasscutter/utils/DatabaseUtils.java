@@ -3,6 +3,7 @@ package io.grasscutter.utils;
 import io.grasscutter.player.Account;
 import io.grasscutter.data.DataInterface;
 import io.grasscutter.data.DataSerializable;
+import io.grasscutter.player.Player;
 import io.grasscutter.server.DedicatedServer;
 import java.util.Map;
 
@@ -48,7 +49,8 @@ public interface DatabaseUtils {
      * @return The account, or null if the account does not exist.
      */
     @Nullable static Account fetchAccount(String username) {
-        return DatabaseUtils.getDataInterface().get(Account.class, Map.of("username", username));
+        return DatabaseUtils.getDataInterface().get(Account.class,
+                Map.of("username", username));
     }
 
     /**
@@ -69,7 +71,31 @@ public interface DatabaseUtils {
      * @return The account, or null if the account does not exist.
      */
     @Nullable static Account fetchAccountByUid(long uid) {
-        return DatabaseUtils.getDataInterface().get(Account.class, Map.of("gameUserId", uid));
+        return DatabaseUtils.getDataInterface().get(Account.class,
+                Map.of("gameUserId", uid));
+    }
+
+    /**
+     * Shortcut method to get a player by account.
+     *
+     * @param account The account.
+     * @return The player, or null if the player does not exist.
+     */
+    @Nullable static Player fetchPlayer(Account account) {
+        return DatabaseUtils.fetchPlayer(account, Player.class);
+    }
+
+    /**
+     * Shortcut method to get a player by account.
+     * This method allows you to specify the player class to use.
+     *
+     * @param account The account.
+     * @param playerClass The player class to use.
+     * @return The player, or null if the player does not exist.
+     */
+    @Nullable static <T extends Player> T fetchPlayer(Account account, Class<T> playerClass) {
+        return DatabaseUtils.getDataInterface().get(playerClass,
+                Map.of("accountId", account.id));
     }
 
     /**

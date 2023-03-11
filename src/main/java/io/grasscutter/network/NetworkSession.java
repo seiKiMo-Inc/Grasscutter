@@ -21,7 +21,7 @@ import lombok.Setter;
 /** An internal KCP-client wrapper. Serves as the interface to a client. */
 public final class NetworkSession extends KcpTunnel implements KcpHandler {
     @Getter private long lastPing = System.currentTimeMillis();
-    @Getter private boolean encrypted = false;
+    @Setter @Getter private boolean encrypted = false;
 
     @Setter @Getter private Account account = null;
     @Setter @Getter private Player player = null;
@@ -122,7 +122,6 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
         } catch (InvalidException exception) {
             // Log the exception.
             Log.error(exception.getLocalizedMessage());
-            exception.printStackTrace();
         } catch (InvalidProtocolBufferException exception) {
             // Log the exception.
             Log.error(new TextContainer("exception.packet"));

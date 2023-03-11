@@ -56,7 +56,7 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
     @Getter private PacketHead packetHeader = null;
 
     @Setter(AccessLevel.PROTECTED)
-    private boolean shouldEncrypt = false;
+    private boolean shouldEncrypt = true;
 
     @Setter(AccessLevel.PROTECTED)
     private KeyType keyType = KeyType.DISPATCH;

@@ -216,4 +216,23 @@ public interface EncodingUtils {
     static ByteString toByteString(byte[] bytes) {
         return ByteString.copyFrom(bytes);
     }
+
+    /**
+     * Converts a 64-bit number to a byte array.
+     *
+     * @param value The value to convert.
+     * @return The converted value.
+     */
+    static byte[] toBytes(long value) {
+        var bytes = new byte[8];
+        bytes[0] = (byte) (value >> 56);
+        bytes[1] = (byte) (value >> 48);
+        bytes[2] = (byte) (value >> 40);
+        bytes[3] = (byte) (value >> 32);
+        bytes[4] = (byte) (value >> 24);
+        bytes[5] = (byte) (value >> 16);
+        bytes[6] = (byte) (value >> 8);
+        bytes[7] = (byte) (value);
+        return bytes;
+    }
 }

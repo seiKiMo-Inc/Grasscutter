@@ -6,6 +6,8 @@ import io.grasscutter.utils.FileUtils;
 import java.security.*;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
+
+import io.grasscutter.utils.constants.CryptoConstants;
 import lombok.Getter;
 
 /** Types of encryption keys. Varies in XOR, RSA, etc. */
@@ -21,6 +23,12 @@ public enum KeyType {
 
     SIGNING(FileUtils.resource("keys/private/SigningKey.der"), false, "RSA"),
     AUTH(FileUtils.resource("keys/private/AuthKey.der"), false, "RSA");
+
+    static {
+        // Set the encryption seed buffer.
+        var encryptBuffer = FileUtils.resource("keys/xor/encryptKeyBuffer.bin");
+        CryptoConstants.ENCRYPT_SEED_BUFFER.set(ByteString.copyFrom(encryptBuffer));
+    }
 
     private final Object key;
     private final boolean isByte;

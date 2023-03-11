@@ -1,6 +1,7 @@
 package io.grasscutter.utils;
 
 import io.grasscutter.network.protocol.Packet;
+import io.grasscutter.player.Player;
 import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.exceptions.InvalidException;
 import io.netty.buffer.ByteBuf;
@@ -32,5 +33,16 @@ public interface Preconditions {
     static void validPacket(@Nullable Packet packet) throws InvalidException {
         if (packet == null || packet.getPacket() == null)
             throw new InvalidException("exception.packet");
+    }
+
+    /**
+     * Validates a player.
+     *
+     * @param player The player to validate.
+     * @throws InvalidException If the player is invalid.
+     */
+    static void validPlayer(@Nullable Player player) throws InvalidException {
+        if (player == null)
+            throw new InvalidException("exception.player");
     }
 }
