@@ -149,7 +149,7 @@ public final class Grasscutter {
             } catch (EndOfFileException ignored) {
                 // Ignore this exception.
             } catch (CommandException commandException) {
-                Log.error(commandException.getMessage());
+                Log.error(commandException.getLocalizedMessage());
             } catch (IOError ioException) {
                 Log.error(new TextContainer("system.console_error"), ioException);
                 return;

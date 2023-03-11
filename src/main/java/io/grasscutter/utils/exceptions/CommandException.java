@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/* Thrown during command validation. */
 @Accessors(chain = true)
 public final class CommandException extends RuntimeException {
     @Getter private final CommandExceptionType type;
@@ -16,7 +17,7 @@ public final class CommandException extends RuntimeException {
     }
 
     @Override
-    public String getMessage() {
+    public String getLocalizedMessage() {
         return new TextContainer(type.getMessage(), this.args).toString();
     }
 }
