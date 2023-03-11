@@ -7,6 +7,7 @@ import java.io.File;
 
 /* Utility for fetching config properties. */
 public interface Properties {
+    boolean DEBUG = System.getenv("DEBUG") != null;
     File CONFIG = new File(System.getProperty("user.dir") + "/config.json");
 
     /** Reloads the server's configuration from file. */

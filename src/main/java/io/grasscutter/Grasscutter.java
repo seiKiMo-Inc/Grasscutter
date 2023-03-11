@@ -52,6 +52,10 @@ public final class Grasscutter {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         System.setProperty("logback.configurationFile", "src/main/resources/logback.xml");
+        // Check if debug is enabled.
+        if (Properties.DEBUG) {
+            System.setProperty("log.level", "DEBUG");
+        }
 
         // Load the server configuration.
         Grasscutter.loadConfig();
@@ -75,6 +79,7 @@ public final class Grasscutter {
         Grasscutter.serverLanguage = new Language(languageData);
 
         // Log a message to the console.
+        if (Properties.DEBUG) Log.debug(new TextContainer("system.debug_enabled"));
         Log.info(new TextContainer("system.startup.loading"));
 
         // Create server instances.

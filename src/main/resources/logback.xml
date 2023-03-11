@@ -19,15 +19,16 @@
     </encoder>
   </appender>
 
+  <logger name="io.netty" level="OFF" />
   <logger name="io.javalin" level="OFF" />
   <logger name="org.quartz" level="OFF" />
   <logger name="org.mongodb" level="OFF" />
   <logger name="org.reflections" level="OFF" />
   <logger name="org.eclipse.jetty" level="OFF" />
 
-  <logger name="io.grasscutter" level="${LOG_LEVEL}" />
+  <logger name="io.grasscutter" level="${log.level}" />
 
-  <root level="INFO">
+  <root level="DEBUG">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </root>

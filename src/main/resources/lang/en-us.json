@@ -15,6 +15,7 @@
       "done": "Grasscutter started in {0}s."
     },
     "shutdown": "Shutting down Grasscutter...",
+    "debug_enabled": "Debug mode enabled.",
     "console_error": "An error occurred while reading the console.",
     "dispatch": {
       "invalid_key": "Invalid dispatch key: {0}."
