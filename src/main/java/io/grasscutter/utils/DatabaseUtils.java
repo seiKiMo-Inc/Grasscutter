@@ -1,6 +1,6 @@
 package io.grasscutter.utils;
 
-import io.grasscutter.account.Account;
+import io.grasscutter.player.Account;
 import io.grasscutter.data.DataInterface;
 import io.grasscutter.data.DataSerializable;
 import io.grasscutter.server.DedicatedServer;

@@ -1,6 +1,6 @@
 package io.grasscutter.commands.defaults.account;
 
-import io.grasscutter.account.Account;
+import io.grasscutter.player.Account;
 import io.grasscutter.commands.CommandData;
 import io.grasscutter.commands.SubCommand;
 import io.grasscutter.commands.args.Argument;

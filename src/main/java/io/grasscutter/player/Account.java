@@ -1,4 +1,4 @@
-package io.grasscutter.account;
+package io.grasscutter.player;
 
 import io.grasscutter.data.DataSerializable;
 import io.grasscutter.data.FieldType;

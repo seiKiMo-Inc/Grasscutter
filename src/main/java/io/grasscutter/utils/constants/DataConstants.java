@@ -1,6 +1,7 @@
 package io.grasscutter.utils.constants;
 
-import io.grasscutter.account.Account;
+import io.grasscutter.player.Account;
+import io.grasscutter.player.Player;
 import io.grasscutter.utils.interfaces.Serializable;
 import io.grasscutter.utils.objects.Counter;
 
@@ -11,7 +12,8 @@ public interface DataConstants {
     // Classes to be serialized.
     Set<Class<? extends Serializable>> SERIALIZABLE_DATA =
             Set.of(
+                    Counter.class, // Server counters.
                     Account.class, // Server accounts.
-                    Counter.class // Server counters.
+                    Player.class // Server players.
                     );
 }

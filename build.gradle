@@ -81,6 +81,9 @@ dependencies {
     // Encoding.
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 
+    // Game Server.
+    implementation group: 'com.github.davidmoten', name: 'rtree-multi', version: '0.1'
+
     // Configure Lombok.
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'

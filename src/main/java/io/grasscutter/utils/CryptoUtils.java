@@ -82,6 +82,17 @@ public interface CryptoUtils {
     }
 
     /**
+     * Generates a random number.
+     *
+     * @param min The minimum value.
+     * @param max The maximum value.
+     * @return A random number.
+     */
+    static float randomNumber(float min, float max) {
+        return min + (random.nextFloat() * (max - min));
+    }
+
+    /**
      * Generates a public key from the given bytes.
      *
      * @param keyBytes The key bytes.

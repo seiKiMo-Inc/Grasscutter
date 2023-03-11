@@ -1,6 +1,6 @@
 package io.grasscutter.auth;
 
-import io.grasscutter.account.Account;
+import io.grasscutter.player.Account;
 import io.grasscutter.utils.definitions.SDKResponse;
 import io.grasscutter.utils.definitions.auth.GranterLoginRequest;
 import io.grasscutter.utils.definitions.auth.ShieldLoginRequest;

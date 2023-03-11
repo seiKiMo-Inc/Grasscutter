@@ -1,10 +1,11 @@
 package io.grasscutter.network;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import io.grasscutter.account.Account;
+import io.grasscutter.player.Account;
 import io.grasscutter.network.kcp.KcpHandler;
 import io.grasscutter.network.kcp.KcpTunnel;
 import io.grasscutter.network.protocol.BasePacket;
+import io.grasscutter.player.Player;
 import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.Preconditions;
 import io.grasscutter.utils.constants.Log;
@@ -22,8 +23,8 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
     @Getter private long lastPing = System.currentTimeMillis();
     @Getter private boolean encrypted = false;
 
-    @Setter @Getter
-    private Account account = null;
+    @Setter @Getter private Account account = null;
+    @Setter @Getter private Player player = null;
 
     /**
      * Creates a new network session.
