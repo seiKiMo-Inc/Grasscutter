@@ -23,8 +23,8 @@ public class Player implements DatabaseObject {
 
     @Getter @Setter private transient PlayerState state; // The player's state.
 
-    @Getter private int nameCard = 210001;
-    @Getter private String nickname = "", signature = null;
+    @Getter @Setter private int nameCard = 210001;
+    @Getter @Setter private String nickName = "", signature = null;
     @Getter private Position position = GameConstants.START;
 
     @Getter @Setter private Position lastPos = GameConstants.START;

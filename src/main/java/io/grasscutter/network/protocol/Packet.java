@@ -16,7 +16,9 @@ public enum Packet {
     GET_PLAYER_TOKEN(PacketIds.GetPlayerTokenReq, PacketIds.GetPlayerTokenRsp,
             GetPlayerToken.class, GetPlayerTokenReqOuterClass.GetPlayerTokenReq.class),
     PLAYER_LOGIN(PacketIds.PlayerLoginReq, PacketIds.PlayerLoginRsp,
-            PlayerLogin.class, PlayerLoginReqOuterClass.PlayerLoginReq.class);
+            PlayerLogin.class, PlayerLoginReqOuterClass.PlayerLoginReq.class),
+    SET_PLAYER_BORN_DATA(PacketIds.SetPlayerBornDataReq, PacketIds.SetPlayerBornDataRsp,
+            SetPlayerBornData.class, SetPlayerBornDataReqOuterClass.SetPlayerBornDataReq.class);
 
     /**
      * Converts the name of a packet to a packet identifier.
