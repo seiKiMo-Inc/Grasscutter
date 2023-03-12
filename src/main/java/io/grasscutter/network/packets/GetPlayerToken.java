@@ -33,7 +33,7 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
         // Empty constructor for handling.
     }
 
-    public GetPlayerToken(NetworkSession session) {
+    private GetPlayerToken(NetworkSession session) {
         this.session = session;
     }
 
@@ -50,7 +50,10 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
         // Fetch the player by the account.
         var player = DatabaseUtils.fetchPlayer(account);
         if (player == null) {
-            player = new Player(); // Create a new player.
+            // Create a new player.
+            player = new Player(
+                    account.gameUserId,
+                    account.id);
             player.save(); // Save the player.
         }
         Preconditions.validPlayer(player);
@@ -66,13 +69,11 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
 
         // Check if the seed is encrypted.
         this.encrypted = message.getKeyId() > 0;
-        if (!this.encrypted) session.send(new GetPlayerToken(session));
-
-        try {
+        if (this.encrypted) try {
             var cipher = KeyType.SIGNING.decrypt(CryptoConstants.ENCRYPTION_TYPE);
 
             // Get the client seed.
-            var clientSeed = EncodingUtils.fromBase64(message.getClientRandKey().getBytes());
+            var clientSeed = EncodingUtils.fromSBase64(message.getClientRandKey());
             var clientSeedDecrypted = ByteBuffer.wrap(cipher.doFinal(clientSeed)).getLong();
 
             // Get the server seed.
@@ -80,14 +81,14 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
                     .putLong(CryptoConstants.ENCRYPT_SEED ^ clientSeedDecrypted)
                     .array();
             cipher = KeyType.valueOf("PUBLIC_" + message.getKeyId())
-                    .decrypt(CryptoConstants.ENCRYPTION_TYPE);
+                    .encrypt(CryptoConstants.ENCRYPTION_TYPE);
             var serverSeedEncrypted = cipher.doFinal(serverSeed);
 
             // Create a signature for the server seed.
             var signature = KeyType.SIGNING
                     .signature(CryptoConstants.SIGNATURE_TYPE);
             Objects.requireNonNull(signature)
-                    .update(serverSeedEncrypted);
+                    .update(serverSeed);
 
             this.seed = new String(EncodingUtils.toBase64(serverSeedEncrypted));
             this.seedSignature = new String(EncodingUtils.toBase64(signature.sign()));
@@ -99,6 +100,10 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
             this.seed = new String(EncodingUtils.toBase64(clientSeed));
             this.seedSignature = CryptoConstants.LEGACY_SEED_SIGNATURE;
         }
+
+        // Send the response.
+        this.session = session;
+        session.send(this);
     }
 
     @Override
@@ -128,6 +133,7 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
 
         // Set headers for a successful login.
         baseResponse = baseResponse
+                .setChannelId(1)
                 .setToken(account.loginToken)
                 .setSecretKeySeed(CryptoConstants.ENCRYPT_SEED)
                 .setSecurityCmdBuffer(CryptoConstants.ENCRYPT_SEED_BUFFER.get())

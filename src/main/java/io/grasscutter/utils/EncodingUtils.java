@@ -49,7 +49,17 @@ public interface EncodingUtils {
      * @return The decoded string.
      */
     static String fromBase64(String string) {
-        return new String(EncodingUtils.fromBase64(string.getBytes()));
+        return new String(Base64.getDecoder().decode(string));
+    }
+
+    /**
+     * Decodes the given Base64 string into a byte array.
+     *
+     * @param bytes The bytes to decode.
+     * @return The decoded byte array.
+     */
+    static byte[] fromSBase64(String bytes) {
+        return Base64.getDecoder().decode(bytes);
     }
 
     /**

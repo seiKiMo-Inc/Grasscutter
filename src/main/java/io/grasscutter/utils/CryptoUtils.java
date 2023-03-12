@@ -77,6 +77,17 @@ public interface CryptoUtils {
      * @param max The maximum value.
      * @return A random number.
      */
+    static int randomNumber(int min, int max) {
+        return min + (int) (random.nextFloat() * (max - min));
+    }
+
+    /**
+     * Generates a random number.
+     *
+     * @param min The minimum value.
+     * @param max The maximum value.
+     * @return A random number.
+     */
     static long randomNumber(long min, long max) {
         return min + (long) (random.nextFloat() * (max - min));
     }
