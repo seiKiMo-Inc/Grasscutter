@@ -23,6 +23,8 @@ public interface DataConstants {
     Set<Class<? extends GameResource>> GAME_RESOURCES =
             Set.of(
                     AvatarData.class, // Avatar data.
-                    AvatarSkillData.class // Avatar skill data.
+                    AvatarSkillData.class, // Avatar skill data.
+                    AvatarTalentData.class, // Avatar talent data.
+                    AvatarSkillDepotData.class // Avatar skill depot data.
                     );
 }

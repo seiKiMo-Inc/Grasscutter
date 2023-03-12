@@ -1,12 +1,16 @@
 package io.grasscutter.game.data;
 
-import io.grasscutter.game.data.excel.avatar.AvatarData;
-import io.grasscutter.game.data.excel.avatar.AvatarSkillData;
+import io.grasscutter.game.data.bin.AvatarConfig;
+import io.grasscutter.game.data.excel.avatar.*;
 import io.grasscutter.utils.PrimitiveUtils;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.Getter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /* Collection of loaded game resources. */
 public final class GameData {
@@ -37,9 +41,18 @@ public final class GameData {
     }
 
     /*
+     * Additional game data.
+     */
+
+    @Getter private static final Map<String, AvatarConfig> playerAbilities = new HashMap<>();
+
+    /*
      * Excels
      */
 
-    private static final Int2ObjectMap<AvatarData> avatarDataMap = new Int2ObjectOpenHashMap<>();
-    private static final Int2ObjectMap<AvatarSkillData> avatarSkillDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<AvatarData> avatarDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<AvatarSkillData> avatarSkillDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<AvatarCurveData> avatarCurveDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<AvatarTalentData> avatarTalentDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<AvatarSkillDepotData> avatarSkillDepotDataMap = new Int2ObjectOpenHashMap<>();
 }

@@ -16,5 +16,5 @@ public @interface Resource {
     /*
      * Changes when the resource will be loaded.
      */
-    Priority priority();
+    Priority priority() default Priority.NORMAL;
 }
