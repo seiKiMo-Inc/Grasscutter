@@ -50,9 +50,14 @@ public interface NetworkUtils {
                 // Read the value and the name.
                 var value = constant.getInt(null);
                 var name = constant.getName();
-                var packet = Packet.valueOf(name).getPacket();
+
+                // Clean the name.
+                name = name.replace("Req", "")
+                        .replace("Rsp", "")
+                        .replace("Notify", "");
+                var packet = Packet.fromPacketName(name).getPacket();
                 map.put(packet, value);
-            } catch (IllegalAccessException ignored) { }
+            } catch (IllegalAccessException | IllegalArgumentException ignored) { }
         }
 
         return map;
