@@ -3,8 +3,10 @@ package io.grasscutter.network.packets;
 import io.grasscutter.network.NetworkSession;
 import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.PacketIds;
+import io.grasscutter.player.Avatar;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.proto.SetPlayerBornDataReqOuterClass.SetPlayerBornDataReq;
+import io.grasscutter.utils.constants.GameConstants;
 
 import static io.grasscutter.proto.SetPlayerBornDataRspOuterClass.*;
 
@@ -20,8 +22,27 @@ public final class SetPlayerBornData extends BasePacket<SetPlayerBornDataReq, Se
         var player = session.getPlayer();
         player.setNickName(message.getNickName());
 
-        // Create the main character avatar.
-        // TODO: Create the avatar.
+        // Get the skill data for the avatar.
+        var avatarId = message.getAvatarId();
+        var depotId = switch (avatarId) {
+            case GameConstants.MAIN_CHARACTER_MALE -> 504;
+            case GameConstants.MAIN_CHARACTER_FEMALE -> 704;
+            default -> throw new IllegalStateException("Unexpected value: " + avatarId);
+        };
+
+        // Check if the player already has a main character.
+        if (player.getAvatars().count() < 1) {
+            // Create the main character avatar.
+            var avatar = new Avatar(avatarId);
+            // TODO: Set the skill depot.
+
+            // Add the avatar to the player's team.
+            player.getAvatars().add(avatar);
+            // Set the player's basic data.
+            player.setMainCharacter(avatarId);
+            player.setProfileIcon(avatarId);
+            player.save();
+        } else return;
 
         player.doLogin(); // Perform login sequence.
         session.send(new SetPlayerBornData()); // Send response packet.

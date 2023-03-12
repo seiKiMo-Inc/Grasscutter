@@ -2,6 +2,7 @@ package io.grasscutter.utils;
 
 import io.grasscutter.network.NetworkSession;
 import io.grasscutter.network.protocol.Packet;
+import io.grasscutter.player.Avatar;
 import io.grasscutter.player.Player;
 import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.exceptions.InvalidException;
@@ -70,5 +71,23 @@ public interface Preconditions {
         if (session == null || session.getPlayer() == null ||
                 session.getAccount() == null)
             throw new InvalidException("exception.player");
+    }
+
+    /**
+     * Validates an avatar.
+     * The avatar should have data.
+     * The player should not have the avatar.
+     *
+     * @param avatar The avatar to validate.
+     * @param player The player to validate.
+     * @throws InvalidException If the avatar is invalid.
+     */
+    static void addAvatar(Avatar avatar, Player player) throws InvalidException {
+        if (avatar == null || player == null)
+            throw new InvalidException("exception.avatar");
+        if (avatar.getData() == null)
+            throw new InvalidException("exception.avatar");
+        if (player.getAvatars().contains(avatar))
+            throw new InvalidException("exception.avatar");
     }
 }

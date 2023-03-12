@@ -14,7 +14,13 @@ public interface GameConstants {
 
     // The hash code of the ability data.
     int ABILITY_HASH_CODE = 1844674;
+    // The main characters. (by gender)
+    int MAIN_CHARACTER_MALE = 10000005;
+    int MAIN_CHARACTER_FEMALE = 10000007;
 
     // This is where the player starts when first created.
     Position START = new Position(2747, 194, -1719);
+
+    // A constant for an 'Infinite' value.
+    int Infinity = Integer.MAX_VALUE;
 }

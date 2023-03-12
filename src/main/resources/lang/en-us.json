@@ -8,7 +8,8 @@
   "exception": {
     "error": "An error occurred.",
     "packet": "Invalid packet received.",
-    "player": "Invalid player."
+    "player": "Invalid player.",
+    "avatar": "Invalid avatar."
   },
   "system": {
     "startup": {
