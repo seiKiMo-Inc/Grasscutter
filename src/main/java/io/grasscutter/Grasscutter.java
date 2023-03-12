@@ -82,6 +82,9 @@ public final class Grasscutter {
         if (Properties.DEBUG) Log.debug(new TextContainer("system.debug_enabled"));
         Log.info(new TextContainer("system.startup.loading"));
 
+        // Set references.
+        FileUtils.setReferences();
+
         // Create server instances.
         var gameServer = GameServer.create();
         var httpServer = HttpServer.create();

@@ -1,5 +1,6 @@
 package io.grasscutter.server;
 
+import io.grasscutter.game.data.ResourceLoader;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import java.util.Arrays;
@@ -23,6 +24,14 @@ public final class ServerThread extends Thread {
     public ServerThread(DedicatedServer server) {
         this.server = server;
         this.logger = LoggerFactory.getLogger("Server Thread");
+    }
+
+    @Override
+    public synchronized void start() {
+        super.start();
+
+        // Load game resources.
+        ResourceLoader.loadResources();
     }
 
     /**

@@ -18,6 +18,8 @@ public final class Configuration implements Serializable {
         public RunMode runAs = RunMode.HYBRID; // What the server runs as. Default: Hybrid.
         public Game gameServer = new Game(); // Game server properties.
         public Http httpServer = new Http(); // HTTP server properties.
+
+        public String resources = "./resources.zip"; // The path to the resources ZIP file.
     }
 
     public static class Game {

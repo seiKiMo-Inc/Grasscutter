@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBufAllocator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Base64;
@@ -143,6 +144,17 @@ public interface EncodingUtils {
     }
 
     /**
+     * Decodes and deserializes a JSON string into an object.
+     *
+     * @param reader The reader to read the JSON from.
+     * @param type The type of object to deserialize.
+     * @return The deserialized object.
+     */
+    static <T> T fromJson(Reader reader, Type type) {
+        return gson.fromJson(reader, type);
+    }
+
+    /**
      * De-serializes and decodes a JSON string into an object.
      *
      * @param data The data to deserialize.
@@ -163,6 +175,17 @@ public interface EncodingUtils {
      */
     static <T> T fromJson(File file, Class<T> type) throws IOException {
         return gson.fromJson(new FileReader(file), type);
+    }
+
+    /**
+     * Decodes and deserializes a JSON string into an object.
+     *
+     * @param reader The reader to read the JSON from.
+     * @param type The type of object to deserialize.
+     * @return The deserialized object.
+     */
+    static <T> T fromJson(Reader reader, Class<T> type) {
+        return gson.fromJson(reader, type);
     }
 
     /**

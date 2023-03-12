@@ -11,6 +11,17 @@ import org.jetbrains.annotations.Nullable;
 /* Collection of validations. */
 public interface Preconditions {
     /**
+     * Checks if an object is null.
+     *
+     * @param object The object to check.
+     * @throws NullPointerException If the object is null.
+     */
+    static void notNull(@Nullable Object object) throws NullPointerException {
+        if (object == null)
+            throw new NullPointerException();
+    }
+
+    /**
      * Validates a packet's head or foot.
      *
      * @param packet The packet to validate.

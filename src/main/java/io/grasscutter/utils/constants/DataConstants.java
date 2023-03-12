@@ -1,5 +1,7 @@
 package io.grasscutter.utils.constants;
 
+import io.grasscutter.game.data.GameResource;
+import io.grasscutter.game.data.excel.AvatarData;
 import io.grasscutter.player.Account;
 import io.grasscutter.player.Player;
 import io.grasscutter.utils.interfaces.Serializable;
@@ -15,5 +17,11 @@ public interface DataConstants {
                     Counter.class, // Server counters.
                     Account.class, // Server accounts.
                     Player.class // Server players.
+                    );
+
+    // Classes to be loaded.
+    Set<Class<? extends GameResource>> GAME_RESOURCES =
+            Set.of(
+                    AvatarData.class // Avatar data.
                     );
 }

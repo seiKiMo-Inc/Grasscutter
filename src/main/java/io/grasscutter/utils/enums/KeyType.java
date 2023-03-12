@@ -44,7 +44,7 @@ public enum KeyType {
     KeyType(byte[] key, boolean isPublic, String type) {
         this.key = isPublic ?
                 CryptoUtils.generatePublicKey(key, type) :
-                CryptoUtils.generatePrivateKey(key, type);;
+                CryptoUtils.generatePrivateKey(key, type);
         this.isByte = false;
         this.protoKey = ByteString.EMPTY;
     }

@@ -40,6 +40,14 @@
       "reload": {
         "start": "Reloading server...",
         "done": "Reload complete. ({0}s)"
+      },
+      "resources": {
+        "done": "Loaded all resources in {0}ms.",
+        "map_error": "Unable to fetch map for {0}.",
+        "zip_error": "Unable to scan the resources ZIP archive.",
+        "no_resources": "Unable to find resources in the ZIP archive.",
+        "no_file": "No resources file was found.",
+        "add_resources": "Please add a {0} to your working directory."
       }
     },
     "http": {
