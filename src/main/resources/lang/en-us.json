@@ -26,7 +26,11 @@
     "invalid_address": "The provided address {0}:{1} is invalid.",
     "bind_failed": "Failed to bind to port {0}. Ensure that the port is not already in use.",
     "no_keystore": "Unable to access keystore {0}. Ensure that the file exists and is readable.",
-    "bad_password": "Unable to access keystore {0}. Ensure the specified password is correct."
+    "bad_password": "Unable to access keystore {0}. Ensure the specified password is correct.",
+    "packet": {
+      "inbound": ">> {0} ({1}) from {2}",
+      "outbound": "<< {0} ({1}) from {2}"
+    }
   },
   "server": {
     "dedicated": {

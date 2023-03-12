@@ -1,6 +1,7 @@
 package io.grasscutter.network;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.player.Account;
 import io.grasscutter.network.kcp.KcpHandler;
 import io.grasscutter.network.kcp.KcpTunnel;
@@ -12,6 +13,7 @@ import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.enums.KeyType;
 import io.grasscutter.utils.exceptions.InvalidException;
 import io.grasscutter.utils.objects.lang.TextContainer;
+import io.grasscutter.utils.objects.text.Text;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 
@@ -45,6 +47,13 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
      * @param packet The packet to send.
      */
     public void send(BasePacket<?, ?> packet) {
+        // Log the outbound packet.
+        var name = packet.getClass().getSimpleName();
+        Log.debug(new Text(new TextContainer(
+                "network.packet.outbound",
+                name, Packet.fromPacketName(name).getSendId(),
+                this.getPrettyAddress(true))));
+
         // Encode the packet into the proper format.
         // Send the encoded byte array to the client.
         super.writeData(packet.encode());

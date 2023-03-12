@@ -16,6 +16,35 @@ public enum Packet {
     GET_PLAYER_TOKEN(PacketIds.GetPlayerTokenReq, PacketIds.GetPlayerTokenRsp,
             GetPlayerToken.class, GetPlayerTokenReqOuterClass.GetPlayerTokenReq.class);
 
+    /**
+     * Converts the name of a packet to a packet identifier.
+     *
+     * @param packetName The name of the packet.
+     * @return The packet identifier.
+     */
+    public static Packet fromPacketName(String packetName) {
+        // Split the name by uppercase letters.
+        var split = packetName.split("(?=[A-Z])");
+
+        var builder = new StringBuilder();
+        for (var part : split) {
+            // Append the part to the builder.
+            builder.append(part.toLowerCase());
+            builder.append('_');
+        }
+
+        // Remove the last underscore.
+        builder.deleteCharAt(builder.length() - 1);
+
+        try {
+            // Get the packet by the name.
+            return Packet.valueOf(builder
+                    .toString().toUpperCase());
+        } catch (Exception ignored) {
+            return Packet.NONE;
+        }
+    }
+
     private final int handleId;
     private final int sendId;
     private final Class<? extends BasePacket<?, ?>> packet;
