@@ -28,8 +28,8 @@
     "no_keystore": "Unable to access keystore {0}. Ensure that the file exists and is readable.",
     "bad_password": "Unable to access keystore {0}. Ensure the specified password is correct.",
     "packet": {
-      "inbound": ">> {0} ({1}) from {2}",
-      "outbound": "<< {0} ({1}) from {2}"
+      "inbound": "&c>> {0} &e({1}) &cfrom &b{2}",
+      "outbound": "&a<< {0} &e({1}) &cfrom &b{2}"
     }
   },
   "server": {
