@@ -14,7 +14,9 @@ public enum Packet {
     PING(PacketIds.PingReq, PacketIds.PingRsp,
             Ping.class, PingReqOuterClass.PingReq.class),
     GET_PLAYER_TOKEN(PacketIds.GetPlayerTokenReq, PacketIds.GetPlayerTokenRsp,
-            GetPlayerToken.class, GetPlayerTokenReqOuterClass.GetPlayerTokenReq.class);
+            GetPlayerToken.class, GetPlayerTokenReqOuterClass.GetPlayerTokenReq.class),
+    PLAYER_LOGIN(PacketIds.PlayerLoginReq, PacketIds.PlayerLoginRsp,
+            PlayerLogin.class, PlayerLoginReqOuterClass.PlayerLoginReq.class);
 
     /**
      * Converts the name of a packet to a packet identifier.

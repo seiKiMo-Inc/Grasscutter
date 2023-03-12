@@ -46,11 +46,9 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
      *
      * @param packet The packet to send.
      */
-    @SuppressWarnings("unchecked")
     public void send(BasePacket<?, ?> packet) {
         // Log the outbound packet.
-        var packetId = NetworkUtils.getIdOf(
-                (Class<? extends BasePacket<?, ?>>) packet.getClass());
+        var packetId = NetworkUtils.getIdOf(packet);
         var name = NetworkUtils.getNameOf(packetId);
         Log.debug(new Text(new TextContainer(
                 "network.packet.outbound",
@@ -59,7 +57,7 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
 
         // Encode the packet into the proper format.
         // Send the encoded byte array to the client.
-        super.writeData(packet.encode());
+        super.writeData(packet.encode(this));
     }
 
     /**

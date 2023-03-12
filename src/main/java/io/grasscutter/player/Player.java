@@ -44,6 +44,19 @@ public class Player implements DatabaseObject {
         this.accountId = accountId;
     }
 
+    /*
+     * Player events.
+     */
+
+    /**
+     * Invoked when the player finishes logging in.
+     */
+    public void doLogin() {}
+
+    /*
+     * Data methods.
+     */
+
     /**
      * Loads additional data from the database not saved here.
      * Call this after first initializing the object.

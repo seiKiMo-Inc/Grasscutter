@@ -32,7 +32,7 @@ public interface CryptoUtils {
      * @param key The key to XOR with.
      */
     static void performXor(byte[] buffer, byte[] key) {
-        for (int i = 0; i < buffer.length; i++) {
+        for (var i = 0; i < buffer.length; i++) {
             buffer[i] ^= key[i % key.length];
         }
     }

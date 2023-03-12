@@ -4,7 +4,6 @@ import com.google.protobuf.GeneratedMessageV3;
 import io.grasscutter.network.NetworkSession;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.utils.CryptoUtils;
-import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.enums.KeyType;
@@ -60,7 +59,10 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
     private boolean shouldEncrypt = true;
 
     @Setter(AccessLevel.PROTECTED)
-    private KeyType keyType = KeyType.DISPATCH;
+    private KeyType keyType = null;
+
+    @Setter(AccessLevel.PROTECTED)
+    private int otherPacketId = -1;
 
     /**
      * Calculates the size of the encoded packet.
@@ -92,20 +94,29 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
     /**
      * Encodes this packet for sending.
      *
+     * @param session The session to send the packet to.
      * @return The encoded packet.
      */
-    @SuppressWarnings("unchecked")
-    public final byte[] encode() {
+    public final byte[] encode(NetworkSession session) {
         // Encode data into buffers.
-        var header = this.packetHeader == null ? new byte[0] : this.packetHeader.toByteArray();
-        var data = this.preparePacket().toByteArray();
+        var packet = this.preparePacket();
+        var data = packet == null ?
+                new byte[0] :
+                packet.toByteArray();
+        var header = this.packetHeader == null ?
+                new byte[0] :
+                this.packetHeader.toByteArray();
+
+        // Get the packet's ID.
+        var packetId = this.otherPacketId == -1 ?
+                NetworkUtils.getIdOf(this) :
+                this.otherPacketId;
 
         // Construct packet.
-        var thisClass = (Class<? extends BasePacket<?, ?>>) getClass();
         var buffer =
                 new Buffer(this.getBufferSize(header, data))
                         .writeUint16(NetworkConstants.MAGIC_1)
-                        .writeUint16(NetworkUtils.getIdOf(thisClass))
+                        .writeUint16(packetId)
                         .writeUint16(header.length)
                         .writeUint32(data.length)
                         .writeBytes(header)
@@ -114,7 +125,14 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
                         .finish();
 
         // Encrypt packet with XOR if needed.
-        if (this.shouldEncrypt) CryptoUtils.performXor(buffer, this.keyType);
+        if (this.shouldEncrypt) {
+            // Get the key type.
+            var key = this.keyType == null ?
+                    session.isEncrypted() ?
+                            KeyType.ENCRYPT : KeyType.DISPATCH :
+                    this.keyType;
+            CryptoUtils.performXor(buffer, key);
+        }
 
         return buffer;
     }

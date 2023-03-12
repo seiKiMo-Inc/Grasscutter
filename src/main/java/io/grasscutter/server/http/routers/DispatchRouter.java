@@ -9,6 +9,7 @@ import io.grasscutter.proto.RegionSimpleInfoOuterClass.RegionSimpleInfo;
 import io.grasscutter.server.http.Router;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.NetworkUtils;
+import io.grasscutter.utils.ServerUtils;
 import io.grasscutter.utils.constants.*;
 import io.grasscutter.utils.definitions.Configuration;
 import io.grasscutter.utils.definitions.QueryRegionResponse;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /* Handles region query (dispatch) requests. */
 public final class DispatchRouter implements Router {
@@ -66,6 +68,7 @@ public final class DispatchRouter implements Router {
         }
 
         // Parse region info.
+        final var firstRegion = new AtomicReference<RegionData>();
         dispatch.regions.forEach(
                 region -> {
                     // Check for duplicate region names.
@@ -87,6 +90,9 @@ public final class DispatchRouter implements Router {
 
                     // Add the region to the map.
                     this.regions.put(region.name, RegionData.parse(region));
+                    if (firstRegion.get() == null) {
+                        firstRegion.set(this.regions.get(region.name));
+                    }
                 });
 
         // Create a region list response.
@@ -99,6 +105,9 @@ public final class DispatchRouter implements Router {
                         .build();
 
         this.regionListResponse = new String(EncodingUtils.toBase64(regionList.toByteArray()));
+
+        // Set the server's region.
+        ServerUtils.CURRENT_REGION.set(firstRegion.get().regionQuery());
     }
 
     @Override

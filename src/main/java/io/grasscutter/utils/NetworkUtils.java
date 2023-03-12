@@ -1,5 +1,6 @@
 package io.grasscutter.utils;
 
+import io.grasscutter.network.packets.GenericPacket;
 import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.network.protocol.PacketIds;
@@ -66,11 +67,19 @@ public interface NetworkUtils {
     /**
      * Identifies the packet ID for sending the packet.
      *
-     * @param packetClass The packet class.
+     * @param packet The packet instance.
      * @return A packet ID in {@link PacketIds}.
      */
-    static int getIdOf(Class<? extends BasePacket<?, ?>> packetClass) {
-        return PACKET_IDS.getOrDefault(packetClass, -1);
+    @SuppressWarnings("unchecked")
+    static int getIdOf(BasePacket<?, ?> packet) {
+        // Try to fetch the packet ID via the packet instance.
+        if (packet instanceof GenericPacket generic) {
+            return generic.getPacketId();
+        } else {
+            // Try to fetch the packet ID via the class.
+            var packetClass = (Class<? extends BasePacket<?, ?>>) packet.getClass();
+            return PACKET_IDS.getOrDefault(packetClass, -1);
+        }
     }
 
     /**

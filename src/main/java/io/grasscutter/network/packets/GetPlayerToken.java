@@ -20,7 +20,7 @@ import io.grasscutter.utils.enums.PlayerState;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-/** Ping packet. {@link PacketIds#PingReq} and {@link PacketIds#PingRsp}. */
+/** Player token packet. {@link PacketIds#GetPlayerTokenReq} and {@link PacketIds#GetPlayerTokenRsp}. */
 public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlayerTokenRsp> {
     private NetworkSession session;
 
