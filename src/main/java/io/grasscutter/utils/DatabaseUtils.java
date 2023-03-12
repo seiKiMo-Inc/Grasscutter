@@ -70,7 +70,7 @@ public interface DatabaseUtils {
      * @param uid The UID.
      * @return The account, or null if the account does not exist.
      */
-    @Nullable static Account fetchAccountByUid(long uid) {
+    @Nullable static Account fetchAccountByUid(int uid) {
         return DatabaseUtils.getDataInterface().get(Account.class,
                 Map.of("gameUserId", uid));
     }

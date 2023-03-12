@@ -25,7 +25,7 @@ public final class CreateCommand extends SubCommand {
                         .arguments(
                                 List.of(
                                         new Argument("username", false, String.class),
-                                        new Argument("userId", true, Long.class),
+                                        new Argument("userId", true, Integer.class),
                                         new Argument("password", true, String.class)))
                         .build());
     }
@@ -33,7 +33,7 @@ public final class CreateCommand extends SubCommand {
     @Override
     public void execute(CommandSender sender, Arguments arguments) {
         var username = arguments.get("username", "");
-        var userId = arguments.get("userId", -1L);
+        var userId = arguments.get("userId", -1);
         var password = arguments.get("password", "");
 
         // Check if the account already exists.
@@ -51,7 +51,7 @@ public final class CreateCommand extends SubCommand {
         // Check for a valid userId.
         while (userId == -1) {
             userId = CryptoUtils.randomNumber(100000000, 999999999);
-            if (DatabaseUtils.fetchAccountByUid(userId) != null) userId = -1L;
+            if (DatabaseUtils.fetchAccountByUid(userId) != null) userId = -1;
         }
 
         // Create the account.

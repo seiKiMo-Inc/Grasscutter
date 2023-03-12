@@ -14,7 +14,7 @@ public final class Account implements DatabaseObject {
     @Special(FieldType.ID)
     public long id = Long.MAX_VALUE; // The account's ID.
 
-    public long gameUserId = Long.MAX_VALUE; // The ID shown as "UID" in-game.
+    public int gameUserId = Integer.MAX_VALUE; // The ID shown as "UID" in-game.
 
     public String email = ""; // The account's email.
     public String username = ""; // The account's username.

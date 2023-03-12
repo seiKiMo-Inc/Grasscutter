@@ -29,6 +29,21 @@ public class Player implements DatabaseObject {
 
     @Getter @Setter private Position lastPos = GameConstants.START;
 
+    public Player() {
+        // Empty constructor for initialization.
+    }
+
+    /**
+     * Constructor for newly created players.
+     *
+     * @param userId The player's ID.
+     * @param accountId The player's account's ID.
+     */
+    public Player(int userId, long accountId) {
+        this.userId = userId;
+        this.accountId = accountId;
+    }
+
     /**
      * Loads additional data from the database not saved here.
      * Call this after first initializing the object.
