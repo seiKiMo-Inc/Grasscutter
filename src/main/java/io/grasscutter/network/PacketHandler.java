@@ -3,7 +3,7 @@ package io.grasscutter.network;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
-import io.grasscutter.utils.Preconditions;
+import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.exceptions.InvalidException;
 import io.grasscutter.utils.objects.lang.TextContainer;
@@ -37,20 +37,16 @@ public final class PacketHandler {
             NetworkSession client,
             int packetId, byte[] head, byte[] data
     ) throws InvalidProtocolBufferException {
-        var name = "unknown";
-
-        // Get the packet from the ID.
-        var packet = packets.get(packetId);
-        if (packet != null)
-            name = packet.getPacket().getSimpleName();
-
         // Log the inbound packet.
+        var name = NetworkUtils.getNameOf(packetId);
         Log.debug(new Text(new TextContainer(
                 "network.packet.inbound", name, packetId,
                 client.getPrettyAddress(true))));
 
+        // Get the packet from the ID.
+        var packet = packets.get(packetId);
         // Validate the packet.
-        Preconditions.validPacket(packet);
+        if (packet == null) return;
 
         // Create an instance of the packet.
         var instance = packet.newInstance();

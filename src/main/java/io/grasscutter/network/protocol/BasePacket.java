@@ -105,14 +105,13 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
         var buffer =
                 new Buffer(this.getBufferSize(header, data))
                         .writeUint16(NetworkConstants.MAGIC_1)
-                        .writeUint16(NetworkUtils.getSendIdOf(thisClass))
+                        .writeUint16(NetworkUtils.getIdOf(thisClass))
                         .writeUint16(header.length)
                         .writeUint32(data.length)
                         .writeBytes(header)
                         .writeBytes(data)
                         .writeUint16(NetworkConstants.MAGIC_2)
                         .finish();
-        System.out.println(new String(EncodingUtils.toBase64(data)));
 
         // Encrypt packet with XOR if needed.
         if (this.shouldEncrypt) CryptoUtils.performXor(buffer, this.keyType);
