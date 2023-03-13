@@ -1,6 +1,7 @@
 package io.grasscutter.game.data;
 
 import io.grasscutter.game.data.bin.AvatarConfig;
+import io.grasscutter.game.data.excel.SceneData;
 import io.grasscutter.game.data.excel.avatar.*;
 import io.grasscutter.utils.PrimitiveUtils;
 import io.grasscutter.utils.constants.Log;
@@ -55,4 +56,6 @@ public final class GameData {
     @Getter private static final Int2ObjectMap<AvatarCurveData> avatarCurveDataMap = new Int2ObjectOpenHashMap<>();
     @Getter private static final Int2ObjectMap<AvatarTalentData> avatarTalentDataMap = new Int2ObjectOpenHashMap<>();
     @Getter private static final Int2ObjectMap<AvatarSkillDepotData> avatarSkillDepotDataMap = new Int2ObjectOpenHashMap<>();
+
+    @Getter private static final Int2ObjectMap<SceneData> sceneDataMap = new Int2ObjectOpenHashMap<>();
 }

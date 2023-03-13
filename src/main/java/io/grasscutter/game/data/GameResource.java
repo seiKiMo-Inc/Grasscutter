@@ -15,7 +15,7 @@ public interface GameResource {
     /**
      * Invoked when this resource loads.
      */
-    void onLoad();
+    default void onLoad() {}
 
     /**
      * Returns a path to the game resource.

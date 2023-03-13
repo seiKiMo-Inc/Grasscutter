@@ -1,10 +1,9 @@
 package io.grasscutter.utils.constants;
 
 import io.grasscutter.game.data.GameResource;
+import io.grasscutter.game.data.excel.*;
 import io.grasscutter.game.data.excel.avatar.*;
-import io.grasscutter.player.Account;
-import io.grasscutter.player.Avatar;
-import io.grasscutter.player.Player;
+import io.grasscutter.player.*;
 import io.grasscutter.utils.interfaces.Serializable;
 import io.grasscutter.utils.objects.Counter;
 
@@ -27,6 +26,8 @@ public interface DataConstants {
                     AvatarData.class, // Avatar data.
                     AvatarSkillData.class, // Avatar skill data.
                     AvatarTalentData.class, // Avatar talent data.
-                    AvatarSkillDepotData.class // Avatar skill depot data.
+                    AvatarSkillDepotData.class, // Avatar skill depot data.
+
+                    SceneData.class // Scene data.
                     );
 }
