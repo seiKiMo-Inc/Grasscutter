@@ -1,4 +1,4 @@
-package io.grasscutter.network.packets;
+package io.grasscutter.network.packets.notify;
 
 import com.google.protobuf.Empty;
 import io.grasscutter.network.NetworkSession;

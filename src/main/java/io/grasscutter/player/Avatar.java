@@ -13,22 +13,22 @@ import io.grasscutter.utils.interfaces.DatabaseObject;
 import it.unimi.dsi.fastutil.ints.Int2FloatOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /* An instance of an avatar. */
 @DataSerializable(table = "avatars")
 public final class Avatar implements DatabaseObject {
     @Special(FieldType.ID)
-    @Getter private UUID id = UUID.randomUUID(); // The avatar object's unique identifier.
+    @Getter private ObjectId id = new ObjectId(); // The avatar object's unique identifier.
     @Getter private int avatarId = Integer.MAX_VALUE; // The avatar's ID.
     @Getter private int ownerUserId = Integer.MAX_VALUE; // The avatar's owner's game user ID (UID).
 
     @Getter private int skillDepotId = Integer.MAX_VALUE; // The avatar's skill depot ID.
-    @Getter private Set<Integer> talentListId = new HashSet<>(); // The avatar's talent list ID.
+    @Getter private Set<Integer> talents = new HashSet<>(); // The avatar's talent IDs.
 
     @Getter private transient Player owner = null; // The avatar's owner.
     @Getter private transient AvatarData data = null; // The avatar's data.
@@ -46,10 +46,10 @@ public final class Avatar implements DatabaseObject {
 
     @Getter private int creationTime = 0; // The avatar's creation time.
 
-    @Getter private final transient Int2FloatOpenHashMap fightProperties
-            = new Int2FloatOpenHashMap(); // The avatar's fight properties.
+    @Getter private final transient Int2FloatOpenHashMap combatProperties
+            = new Int2FloatOpenHashMap(); // The avatar's combat properties.
     @Getter private final transient Int2FloatOpenHashMap fightOverrides
-            = new Int2FloatOpenHashMap(); // The avatar's fight properties.
+            = new Int2FloatOpenHashMap(); // The avatar's combat property overrides.
 
     @ApiStatus.Internal
     public Avatar() {
@@ -98,7 +98,7 @@ public final class Avatar implements DatabaseObject {
                 .setAvatarId(this.getAvatarId())
                 .setGuid(this.getGuid())
                 .setLifeState(1)
-                .putAllFightPropMap(this.getFightProperties())
+                .putAllFightPropMap(this.getCombatProperties())
                 .setSkillDepotId(this.getSkillDepotId())
                 .setAvatarType(1)
                 .setBornTime(this.getCreationTime());

@@ -34,7 +34,7 @@ public final class PlayerLogin extends BasePacket<PlayerLoginReq, PlayerLoginRsp
         var player = session.getPlayer();
 
         // Check if the player is new.
-        if (true) {
+        if (player.getAvatars().count() < 1) {
             // Show the opening cutscene to the player.
             player.setState(PlayerState.CHARACTER);
             session.send(new GenericPacket(PacketIds.DoSetPlayerBornDataNotify));

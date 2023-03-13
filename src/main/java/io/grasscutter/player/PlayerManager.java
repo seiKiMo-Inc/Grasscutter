@@ -6,7 +6,7 @@ import lombok.Getter;
 /* Base player manager. */
 @AllArgsConstructor
 public abstract class PlayerManager {
-    @Getter protected final transient Player player;
+    @Getter protected transient Player player;
 
     /**
      * Saves the player to the database.

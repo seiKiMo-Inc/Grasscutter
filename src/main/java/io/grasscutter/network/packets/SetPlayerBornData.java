@@ -36,12 +36,16 @@ public final class SetPlayerBornData extends BasePacket<SetPlayerBornDataReq, Se
             var avatar = new Avatar(avatarId);
             // TODO: Set the skill depot.
 
-            // Add the avatar to the player's team.
+            // Add the avatar to the player's storage.
             player.getAvatars().add(avatar);
             // Set the player's basic data.
             player.setMainCharacter(avatarId);
             player.setProfileIcon(avatarId);
-            player.save();
+
+            // Add the avatar to the player's team.
+            player.getTeams().getCurrentTeam().add(avatar);
+
+            player.save(); // Save the player's data.
         } else return;
 
         player.doLogin(); // Perform login sequence.

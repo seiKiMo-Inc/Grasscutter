@@ -1,4 +1,4 @@
-package io.grasscutter.network.packets;
+package io.grasscutter.network.packets.notify;
 
 import com.google.protobuf.Empty;
 import io.grasscutter.network.protocol.BasePacket;
@@ -7,7 +7,7 @@ import io.grasscutter.player.Avatar;
 import io.grasscutter.proto.AvatarAddNotifyOuterClass.AvatarAddNotify;
 import lombok.AllArgsConstructor;
 
-/** Wind seed client packet. {@link PacketIds#AvatarAddNotify}. */
+/** Add avatar to player. {@link PacketIds#AvatarAddNotify}. */
 @AllArgsConstructor
 public final class AvatarAdd extends BasePacket<Empty, AvatarAddNotify> {
     private final Avatar avatar;

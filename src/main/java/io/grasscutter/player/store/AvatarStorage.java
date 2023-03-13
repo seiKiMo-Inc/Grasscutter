@@ -10,6 +10,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 
+import java.util.function.Consumer;
+
 /* Storage container for player avatars. */
 public final class AvatarStorage extends PlayerManager {
     @Getter private final Int2ObjectMap<Avatar> avatars
@@ -24,6 +26,15 @@ public final class AvatarStorage extends PlayerManager {
      */
     public AvatarStorage(Player player) {
         super(player);
+    }
+
+    /**
+     * For each avatar, run the consumer.
+     *
+     * @param forEach The consumer to run.
+     */
+    public void forEach(Consumer<Avatar> forEach) {
+        this.avatars.values().forEach(forEach);
     }
 
     /**
@@ -77,5 +88,15 @@ public final class AvatarStorage extends PlayerManager {
         // TODO: Add a weapon to the avatar.
 
         // Send the avatar add notification.
+    }
+
+    /**
+     * Fetches the avatar from the storage.
+     *
+     * @param id The avatar's ID.
+     * @return The avatar object.
+     */
+    public Avatar get(int id) {
+        return this.avatars.get(id);
     }
 }
