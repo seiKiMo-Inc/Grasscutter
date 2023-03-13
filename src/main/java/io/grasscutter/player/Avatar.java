@@ -44,6 +44,8 @@ public final class Avatar implements DatabaseObject {
     @Getter @Setter private int currentHealth = 0; // The avatar's current health.
     @Getter @Setter private int currentEnergy = 0; // The avatar's current energy.
 
+    @Getter @Setter private int wings = 140001; // The avatar's wings.
+    @Getter @Setter private int costume = 0; // The avatar's costume.
     @Getter private int creationTime = 0; // The avatar's creation time.
 
     @Getter private final transient Int2FloatOpenHashMap combatProperties
