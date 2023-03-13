@@ -34,7 +34,7 @@ public final class SetPlayerBornData extends BasePacket<SetPlayerBornDataReq, Se
         if (player.getAvatars().count() < 1) {
             // Create the main character avatar.
             var avatar = new Avatar(avatarId);
-            // TODO: Set the skill depot.
+            avatar.setSkillDepot(depotId);
 
             // Add the avatar to the player's storage.
             player.getAvatars().add(avatar);

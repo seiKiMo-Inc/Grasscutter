@@ -91,6 +91,17 @@ public final class Avatar implements DatabaseObject {
     }
 
     /**
+     * Sets the avatar's skill depot.
+     *
+     * @param depotId The avatar's skill depot ID.
+     */
+    public void setSkillDepot(int depotId) {
+        // Set the skill depot.
+        this.skill = GameData.getAvatarSkillDepotDataMap().get(depotId);
+        this.skillDepotId = depotId;
+    }
+
+    /**
      * Converts this object into an {@link AvatarInfo} object.
      *
      * @return The converted object.
