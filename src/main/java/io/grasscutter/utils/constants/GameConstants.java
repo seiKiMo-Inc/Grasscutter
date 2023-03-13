@@ -2,7 +2,10 @@ package io.grasscutter.utils.constants;
 
 import io.grasscutter.proto.SceneEntityAiInfoOuterClass.SceneEntityAiInfo;
 import io.grasscutter.proto.VectorOuterClass.Vector;
+import io.grasscutter.utils.ServerUtils;
 import io.grasscutter.world.Position;
+
+import java.util.stream.Stream;
 
 /* Constants seen in game-related handling. */
 public interface GameConstants {
@@ -34,4 +37,11 @@ public interface GameConstants {
     // The default entity AI value.
     SceneEntityAiInfo.Builder DEFAULT_AI = SceneEntityAiInfo.newBuilder()
             .setIsAiOpen(true).setBornPos(Vector.newBuilder());
+
+    // Default avatar abilities.
+    int[] DEFAULT_ABILITIES = Stream.of("Avatar_DefaultAbility_VisionReplaceDieInvincible", "Avatar_DefaultAbility_AvartarInShaderChange", "Avatar_SprintBS_Invincible",
+            "Avatar_Freeze_Duration_Reducer", "Avatar_Attack_ReviveEnergy", "Avatar_Component_Initializer", "Avatar_FallAnthem_Achievement_Listener")
+            .map(ServerUtils::hashAbility).mapToInt(Integer::intValue).toArray();
+    // The default ability hash.
+    int DEFAULT_ABILITY = ServerUtils.hashAbility("Default");
 }

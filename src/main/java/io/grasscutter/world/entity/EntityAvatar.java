@@ -1,8 +1,10 @@
 package io.grasscutter.world.entity;
 
+import io.grasscutter.game.data.GameData;
 import io.grasscutter.player.Avatar;
 import io.grasscutter.player.Player;
 import io.grasscutter.proto.AbilityControlBlockOuterClass.AbilityControlBlock;
+import io.grasscutter.proto.AbilityEmbryoOuterClass.AbilityEmbryo;
 import io.grasscutter.proto.AbilitySyncStateInfoOuterClass.AbilitySyncStateInfo;
 import io.grasscutter.proto.AnimatorParameterValueInfoPairOuterClass.AnimatorParameterValueInfoPair;
 import io.grasscutter.proto.EntityAuthorityInfoOuterClass.EntityAuthorityInfo;
@@ -11,6 +13,7 @@ import io.grasscutter.proto.EntityRendererChangedInfoOuterClass.EntityRendererCh
 import io.grasscutter.proto.ProtEntityTypeOuterClass.ProtEntityType;
 import io.grasscutter.proto.SceneAvatarInfoOuterClass.SceneAvatarInfo;
 import io.grasscutter.proto.SceneEntityInfoOuterClass.SceneEntityInfo;
+import io.grasscutter.proto.SceneWeaponInfoOuterClass.SceneWeaponInfo;
 import io.grasscutter.utils.ServerUtils;
 import io.grasscutter.utils.constants.GameConstants;
 import io.grasscutter.utils.enums.game.EntityIdType;
@@ -89,9 +92,15 @@ public final class EntityAvatar extends Entity {
 
         // Add the avatar's weapon.
         // TODO: Add the weapon ID.
-        // info.setWeapon(null);
-        // info.setReliquaryList();
-        // info.setEquipIdList();
+         info.setWeapon(SceneWeaponInfo.newBuilder()
+                 .setEntityId(100664575)
+                 .setGuid(2785642601942876162L)
+                 .setLevel(90)
+                 .setItemId(11512)
+                 .setPromoteLevel(6)
+                 .setGadgetId(50011512));
+//         info.setReliquaryList();
+//         info.setEquipIdList();
 
         return info.build();
     }
@@ -102,10 +111,46 @@ public final class EntityAvatar extends Entity {
      * @return The ability control block.
      */
     public AbilityControlBlock getAbilities() {
-        var data = this.getAvatar().getData();
+        var avatar = this.getAvatar();
+        var data = avatar.getData();
         var abilities = AbilityControlBlock.newBuilder();
+        var embryoId = 0;
 
-        // TODO: Add abilities.
+        // Add avatar abilities.
+        if (data.getAbilities() != null) {
+            for (var id : data.getAbilities())
+                abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
+                        .setAbilityId(++embryoId)
+                        .setAbilityNameHash(id)
+                        .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+        }
+
+        // Add default abilities.
+        for (var id : GameConstants.DEFAULT_ABILITIES)
+            abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
+                    .setAbilityId(++embryoId)
+                    .setAbilityNameHash(id)
+                    .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+
+        // Add team resonance abilities.
+        for (var id : this.getPlayer().getTeams().getResonancesConfig())
+            abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
+                    .setAbilityId(++embryoId)
+                    .setAbilityNameHash(id)
+                    .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+
+        // Add skill depot abilities.
+        var skillDepot = GameData.getAvatarSkillDepotDataMap().get(
+                avatar.getSkillDepotId());
+        if (skillDepot != null && skillDepot.getAbilities() != null)
+            for (var id : skillDepot.getAbilities())
+                abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
+                        .setAbilityId(++embryoId)
+                        .setAbilityNameHash(id)
+                        .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+
+        // Add extra abilities.
+        // TODO: Add extra abilities.
 
         return abilities.build();
     }
