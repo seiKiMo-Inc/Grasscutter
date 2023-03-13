@@ -31,6 +31,15 @@ public final class Configuration implements Serializable {
         public int routingPort = 22102; // What port the client connects to. Default: 22102.
 
         public int updateInterval = 20; // The KCP server update interval in milliseconds. Default: 20.
+        public Limits limits = new Limits(); // All limits properties.
+    }
+
+    public static class Limits {
+        public int weapons = 2000; // The maximum amount of weapons. Default: 2000.
+        public int artifacts = 2000; // The maximum amount of relics. Default: 2000.
+        public int materials = 2000; // The maximum amount of materials. Default: 2000.
+        public int furniture = 2000; // The maximum amount of furniture. Default: 2000.
+        public int all = 30000; // The maximum amount of all items. Default: 30000.
     }
 
     public static class Http {

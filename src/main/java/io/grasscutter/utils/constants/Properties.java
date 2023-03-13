@@ -52,4 +52,15 @@ public interface Properties {
     static Configuration.Dispatch DISPATCH() {
         return CONFIGURATION().dispatch;
     }
+
+    /*
+     * More specific properties.
+     */
+
+    /**
+     * @return Game limits properties.
+     */
+    static Configuration.Limits LIMITS() {
+        return CONFIGURATION().server.gameServer.limits;
+    }
 }
