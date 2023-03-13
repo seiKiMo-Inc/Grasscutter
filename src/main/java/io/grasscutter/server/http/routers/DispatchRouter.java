@@ -14,7 +14,7 @@ import io.grasscutter.utils.constants.*;
 import io.grasscutter.utils.definitions.Configuration;
 import io.grasscutter.utils.definitions.QueryRegionResponse;
 import io.grasscutter.utils.enums.KeyType;
-import io.grasscutter.utils.objects.RegionData;
+import io.grasscutter.utils.objects.game.RegionData;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import io.javalin.Javalin;
 import io.javalin.http.Context;

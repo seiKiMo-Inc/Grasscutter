@@ -1,4 +1,4 @@
-package io.grasscutter.utils.objects;
+package io.grasscutter.utils.objects.game;
 
 import io.grasscutter.proto.QueryCurrRegionHttpRspOuterClass.QueryCurrRegionHttpRsp;
 import io.grasscutter.proto.RegionInfoOuterClass.RegionInfo;
