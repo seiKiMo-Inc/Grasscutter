@@ -74,7 +74,7 @@ public interface Serializable {
     @SuppressWarnings("unchecked")
     default void deserialize(Map<String, Object> data) {
         // Find fields and create data map.
-        var fields = getClass().getFields();
+        var fields = getClass().getDeclaredFields();
 
         // Iterate through fields.
         for (var field : fields) {
