@@ -62,6 +62,8 @@ public final class SceneInitFinish extends BasePacket<SceneInitFinishReq, SceneI
 
     @Override
     public SceneInitFinishRsp preparePacket() {
+        this.buildHeaderWith(11);
+
         return SceneInitFinishRsp.newBuilder()
                 .setEnterSceneToken(this.player.getSceneToken())
                 .build();
