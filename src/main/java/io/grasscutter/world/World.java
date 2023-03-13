@@ -29,7 +29,7 @@ public final class World implements Iterable<Player> {
 
     private int peerId = 0;
     private int entityId = 0;
-    @Getter private int levelId = 0;
+    @Getter private int levelId;
     @Getter private int worldLevel = 0;
 
     /**
@@ -52,6 +52,8 @@ public final class World implements Iterable<Player> {
 
         this.owner = owner;
         this.multiplayer = multiplayer;
+
+        this.levelId = this.nextEntityId(EntityIdType.MPLEVEL);
     }
 
     /**
