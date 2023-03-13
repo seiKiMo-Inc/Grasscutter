@@ -21,6 +21,9 @@ import io.grasscutter.world.Scene;
 import it.unimi.dsi.fastutil.ints.Int2FloatMap;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.Map;
+
 /** An entity instance of an {@link Avatar}. */
 public final class EntityAvatar extends Entity {
     @Getter private final Avatar avatar;
@@ -75,13 +78,13 @@ public final class EntityAvatar extends Entity {
                 .setAvatarId(avatar.getAvatarId())
                 .setGuid(avatar.getGuid())
                 .addAllTalentIdList(avatar.getTalents())
-//                .setCoreProudSkillLevel(avatar.getSkillLevels())
+                .setCoreProudSkillLevel(0) // avatar.getSkillLevels())
                 .setSkillDepotId(avatar.getSkillDepotId())
-//                .addAllInherentProudSkillList(avatar.getSkillList())
-//                .putAllProudSkillExtraLevelMap(avatar.getExtraSkills())
+                .addAllInherentProudSkillList(List.of()) // avatar.getSkillList()
+                .putAllProudSkillExtraLevelMap(Map.of()) // avatar.getExtraSkills()
                 .addAllTeamResonanceList(player.getTeams().getResonances())
-//                .setWearingFlycloakId(avatar.getWings())
-//                .setCostumeId(avatar.getCostume())
+                .setWearingFlycloakId(avatar.getWings())
+                .setCostumeId(avatar.getCostume())
                 .setBornTime(avatar.getCreationTime());
 
         // Add the avatar's weapon.
