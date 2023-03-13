@@ -5,6 +5,7 @@ import io.grasscutter.network.protocol.Packet;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.constants.Log;
+import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.exceptions.InvalidException;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import io.grasscutter.utils.objects.text.Text;
@@ -37,11 +38,14 @@ public final class PacketHandler {
             NetworkSession client,
             int packetId, byte[] head, byte[] data
     ) throws InvalidProtocolBufferException {
-        // Log the inbound packet.
-        var name = NetworkUtils.getNameOf(packetId);
-        Log.debug(new Text(new TextContainer(
-                "network.packet.inbound", name, packetId,
-                client.getPrettyAddress(true))));
+        // Check if the packet should be logged.
+        if (!NetworkConstants.LOG_BLACKLIST.contains(packetId)) {
+            // Log the inbound packet.
+            var name = NetworkUtils.getNameOf(packetId);
+            Log.debug(new Text(new TextContainer(
+                    "network.packet.inbound", name, packetId,
+                    client.getPrettyAddress(true))));
+        }
 
         // Get the packet from the ID.
         var packet = packets.get(packetId);

@@ -10,6 +10,7 @@ import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.NetworkUtils;
 import io.grasscutter.utils.Preconditions;
 import io.grasscutter.utils.constants.Log;
+import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.enums.KeyType;
 import io.grasscutter.utils.exceptions.InvalidException;
 import io.grasscutter.utils.objects.lang.TextContainer;
@@ -47,13 +48,16 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
      * @param packet The packet to send.
      */
     public void send(BasePacket<?, ?> packet) {
-        // Log the outbound packet.
         var packetId = NetworkUtils.getIdOf(packet);
-        var name = NetworkUtils.getNameOf(packetId);
-        Log.debug(new Text(new TextContainer(
-                "network.packet.outbound",
-                name, packetId,
-                this.getPrettyAddress(true))));
+        // Check if the packet should be logged.
+        if (!NetworkConstants.LOG_BLACKLIST.contains(packetId)) {
+            // Log the outbound packet.
+            var name = NetworkUtils.getNameOf(packetId);
+            Log.debug(new Text(new TextContainer(
+                    "network.packet.outbound",
+                    name, packetId,
+                    this.getPrettyAddress(true))));
+        }
 
         // Encode the packet into the proper format.
         // Send the encoded byte array to the client.
@@ -134,11 +138,11 @@ public final class NetworkSession extends KcpTunnel implements KcpHandler {
             Log.error(exception.getLocalizedMessage());
         } catch (InvalidProtocolBufferException exception) {
             // Log the exception.
-            Log.error(new TextContainer("exception.packet"));
-        } catch (Exception ignored) {
+            Log.error(new TextContainer("exception.packet"), exception);
+        } catch (Exception exception) {
             // Log the exception.
             Log.error(new TextContainer("server.game.client.error",
-                    this.getPrettyAddress(true)));
+                    this.getPrettyAddress(true)), exception);
         }
     }
 }
