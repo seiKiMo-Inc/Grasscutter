@@ -31,7 +31,7 @@ public class Player implements DatabaseObject {
     @Special(FieldType.ID)
     @Getter private int userId = Integer.MAX_VALUE; // The player's ID (shown as UID).
     @Getter private long accountId = Long.MAX_VALUE; // The player's account's ID.
-    private transient long nextGameId = Long.MAX_VALUE; // The next game ID to use.
+    private transient long nextGameId = 0; // The next game ID to use.
 
     @Getter @Setter private transient NetworkSession session; // The associated session.
     @Getter @Setter private transient Account account; // The associated account.
