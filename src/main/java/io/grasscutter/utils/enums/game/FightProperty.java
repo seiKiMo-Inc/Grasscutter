@@ -161,9 +161,9 @@ public enum FightProperty {
 
     static {
         // Cache the values.
-        Stream.of(FightProperty.values()).forEach(e -> {
-            map.put(e.getId(), e);
-            stringMap.put(e.name(), e);
+        Stream.of(FightProperty.values()).forEach(element -> {
+            map.put(element.getId(), element);
+            stringMap.put(element.name(), element);
         });
     }
 

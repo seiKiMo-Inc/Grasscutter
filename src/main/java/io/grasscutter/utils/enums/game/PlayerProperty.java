@@ -63,7 +63,7 @@ public enum PlayerProperty {
     static {
         // Cache the values.
         Stream.of(PlayerProperty.values())
-                .forEach(e -> map.put(e.getId(), e));
+                .forEach(element -> map.put(element.getId(), element));
     }
 
     /**

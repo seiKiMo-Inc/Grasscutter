@@ -33,9 +33,9 @@ public enum WeaponType {
 
 	static {
 		// Cache the values.
-		Stream.of(WeaponType.values()).forEach(e -> {
-			map.put(e.getValue(), e);
-			stringMap.put(e.name(), e);
+		Stream.of(WeaponType.values()).forEach(element -> {
+			map.put(element.getValue(), element);
+			stringMap.put(element.name(), element);
 		});
 	}
 
