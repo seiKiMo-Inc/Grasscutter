@@ -34,4 +34,19 @@ public interface DataUtils {
     static int lr(int left, int right) {
         return left == 0 ? right : left;
     }
+
+    /**
+     * Checks if the given object is a primitive.
+     *
+     * @param object The object to check.
+     * @return True if the object is a primitive.
+     */
+    static boolean isPrimitive(Object object) {
+        return object instanceof String ||
+                object instanceof Integer ||
+                object instanceof Long ||
+                object instanceof Double ||
+                object instanceof Float ||
+                object instanceof Boolean;
+    }
 }

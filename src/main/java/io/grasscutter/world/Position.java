@@ -4,12 +4,13 @@ import com.github.davidmoten.rtreemulti.geometry.Point;
 import com.google.gson.annotations.SerializedName;
 import io.grasscutter.proto.VectorOuterClass.Vector;
 import io.grasscutter.utils.CryptoUtils;
+import io.grasscutter.utils.interfaces.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-public class Position implements Cloneable {
+public class Position implements Serializable, Cloneable {
     @SerializedName(value = "x", alternate = {"_x", "X"})
     @Getter @Setter private float x;
 

@@ -3,6 +3,7 @@ package io.grasscutter.utils.interfaces;
 import com.google.gson.reflect.TypeToken;
 import io.grasscutter.data.FieldType;
 import io.grasscutter.data.Special;
+import io.grasscutter.utils.DataUtils;
 import io.grasscutter.utils.DatabaseUtils;
 import io.grasscutter.utils.EncodingUtils;
 import java.lang.reflect.Modifier;
@@ -19,20 +20,23 @@ public interface Serializable {
     Type SERIALIZE_TYPE = new TypeToken<Map<String, Object>>() {}.getType();
 
     /**
-     * Serializes this object into a key-value map. Objects to be serialized must: - Be a public
-     * field. - Not be transient. - Not be static.
+     * Serializes this object into a key-value map.
+     * Objects to be serialized must:
+     * - Not be transient.
+     * - Not be static.
      *
      * @return The serialized object.
      */
     default Map<String, Object> serialize() {
         // Find fields and create data map.
-        var fields = getClass().getFields();
+        var fields = getClass().getDeclaredFields();
         var dataMap = new HashMap<String, Object>();
 
         // Iterate through fields.
         for (var field : fields) {
             // Skip if transient or static.
-            if (Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers())) {
+            if (Modifier.isTransient(field.getModifiers()) ||
+                    Modifier.isStatic(field.getModifiers())) {
                 continue;
             }
 
@@ -43,6 +47,14 @@ public interface Serializable {
                 // Get field name and value.
                 var name = field.getName();
                 var value = field.get(this);
+                // Check if the value is not a primitive.
+                if (!DataUtils.isPrimitive(value)) {
+                    // Check if the field is serializable.
+                    if (value instanceof Serializable serializable) {
+                        // Serialize the value.
+                        value = serializable.serialize();
+                    } else continue; // Skip.
+                }
 
                 // Add to map.
                 dataMap.put(name, value);
