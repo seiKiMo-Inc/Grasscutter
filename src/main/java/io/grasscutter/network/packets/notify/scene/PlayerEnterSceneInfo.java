@@ -48,8 +48,8 @@ public final class PlayerEnterSceneInfo extends BasePacket<Empty, PlayerEnterSce
             packet.addAvatarEnterInfo(AvatarEnterSceneInfo.newBuilder()
                     .setAvatarGuid(entity.getAvatar().getGuid())
                     .setAvatarEntityId(entity.getId())
-                    .setWeaponGuid(weaponGuid)
-                    .setWeaponEntityId(0)
+                    .setWeaponGuid(2785642601942876162L)
+                    .setWeaponEntityId(100664575)
                     .setAvatarAbilityInfo(empty)
                     .setWeaponAbilityInfo(empty));
         }
