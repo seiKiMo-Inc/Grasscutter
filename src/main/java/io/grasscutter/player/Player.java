@@ -70,7 +70,7 @@ public class Player implements DatabaseObject {
      * Should be instances of {@link PlayerManager}.
      */
 
-    @Getter private final transient TeamManager teams
+    @Getter private final TeamManager teams
             = new TeamManager(this); // The player's team.
     @Getter private final transient AvatarStorage avatars
             = new AvatarStorage(this); // The player's avatars.

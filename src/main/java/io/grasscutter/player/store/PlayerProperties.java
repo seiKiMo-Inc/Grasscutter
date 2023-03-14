@@ -21,7 +21,7 @@ public final class PlayerProperties extends Int2IntOpenHashMap implements Serial
 
     @Override
     public void deserialize(Map<String, Object> data) {
-        // Deserialize the map.
+        // De-serialize the map.
         data.forEach((key, value) ->
                 this.put(Integer.parseInt(key), (int) value));
     }

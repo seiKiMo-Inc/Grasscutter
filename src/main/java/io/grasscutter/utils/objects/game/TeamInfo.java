@@ -3,15 +3,20 @@ package io.grasscutter.utils.objects.game;
 import io.grasscutter.player.Avatar;
 import io.grasscutter.player.Player;
 import io.grasscutter.proto.AvatarTeamOuterClass.AvatarTeam;
+import io.grasscutter.utils.interfaces.Serializable;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /* A game team of avatars. */
-public final class TeamInfo {
+public final class TeamInfo implements Serializable {
     @Getter @Setter private String name;
-    @Getter private final IntList avatars;
+    @Getter private IntList avatars;
 
     /**
      * Constructor for a blank team.
@@ -76,5 +81,21 @@ public final class TeamInfo {
         }
 
         return team.build();
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        var map = new HashMap<String, Object>();
+        map.put("name", this.name);
+        map.put("avatars", List.of(this.avatars));
+
+        return map;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void deserialize(Map<String, Object> data) {
+        this.name = (String) data.get("name");
+        this.avatars = new IntArrayList((List<Integer>) data.get("avatars"));
     }
 }

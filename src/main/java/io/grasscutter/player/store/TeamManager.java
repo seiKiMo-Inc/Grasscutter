@@ -3,6 +3,7 @@ package io.grasscutter.player.store;
 import io.grasscutter.player.Player;
 import io.grasscutter.player.PlayerManager;
 import io.grasscutter.utils.constants.GameConstants;
+import io.grasscutter.utils.interfaces.Serializable;
 import io.grasscutter.utils.objects.game.TeamInfo;
 import io.grasscutter.world.World;
 import io.grasscutter.world.entity.EntityAvatar;
@@ -11,14 +12,11 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /* Manages the player's team(s). */
-public final class TeamManager extends PlayerManager {
+public final class TeamManager extends PlayerManager implements Serializable {
     @Getter private final Map<Integer, TeamInfo> teams
             = new LinkedHashMap<>(); // A collection of teams.
     @Getter @Setter private transient TeamInfo multiplayerTeam
@@ -117,5 +115,30 @@ public final class TeamManager extends PlayerManager {
     public EntityAvatar getCurrentAvatar() {
         return this.getActiveAvatars().get(
                 this.getSelectedAvatar());
+    }
+
+    /*
+     * Serialization.
+     */
+
+    @Override
+    public Map<String, Object> serialize() {
+        // Serialize the map.
+        var map = new HashMap<String, Object>();
+        this.teams.forEach((key, value) ->
+                map.put(String.valueOf(key), value.serialize()));
+
+        return map;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void deserialize(Map<String, Object> data) {
+        // De-serialize the map.
+        data.forEach((key, value) -> {
+            var team = new TeamInfo();
+            team.deserialize((Map<String, Object>) value);
+            this.teams.put(Integer.parseInt(key), team);
+        });
     }
 }
