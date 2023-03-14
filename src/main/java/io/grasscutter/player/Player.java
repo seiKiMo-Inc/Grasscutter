@@ -3,6 +3,7 @@ package io.grasscutter.player;
 import io.grasscutter.data.DataSerializable;
 import io.grasscutter.data.FieldType;
 import io.grasscutter.data.Special;
+import io.grasscutter.game.inventory.PlayerInventory;
 import io.grasscutter.network.NetworkSession;
 import io.grasscutter.network.packets.notify.data.AvatarData;
 import io.grasscutter.network.packets.notify.data.PlayerData;
@@ -62,15 +63,19 @@ public class Player implements DatabaseObject {
     @Getter private PlayerProperties properties = new PlayerProperties(); // The player's properties.
     @Getter @Setter private Position lastPos = GameConstants.START; // The player's previous position.
 
-    @Getter private transient TeamManager teams = new TeamManager(this); // The player's team.
+    @Getter private boolean loggedIn = false; // Whether the player is logged in.
 
     /**
      * Player managers.
      * Should be instances of {@link PlayerManager}.
      */
 
+    @Getter private final transient TeamManager teams
+            = new TeamManager(this); // The player's team.
     @Getter private final transient AvatarStorage avatars
             = new AvatarStorage(this); // The player's avatars.
+    @Getter private final transient PlayerInventory inventory
+            = new PlayerInventory(this); // The player's inventory.
 
     public Player() {
         // Empty constructor for initialization.
@@ -110,6 +115,8 @@ public class Player implements DatabaseObject {
 
         // Set the player state.
         this.setState(PlayerState.ACTIVE);
+        // Set the log in flag.
+        this.loggedIn = true;
     }
 
     /*
@@ -131,7 +138,9 @@ public class Player implements DatabaseObject {
      * Call this after first initializing the object.
      */
     public void loadAllData() {
-
+        this.getTeams().load();
+        this.getAvatars().load();
+        this.getInventory().load();
     }
 
     /*

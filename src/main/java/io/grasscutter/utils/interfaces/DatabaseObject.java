@@ -10,4 +10,11 @@ public interface DatabaseObject extends Serializable {
     default void save() {
         DatabaseUtils.save(this);
     }
+
+    /**
+     * Shortcut method to delete this object.
+     */
+    default void delete() {
+        DatabaseUtils.delete(this);
+    }
 }

@@ -25,6 +25,7 @@ public final class SceneTeamUpdate extends BasePacket<Empty, SceneTeamUpdateNoti
             var teams = player.getTeams();
             for (var entity : teams.getActiveAvatars()) {
                 var avatar = entity.getAvatar();
+                var weapon = avatar.getWeapon();
                 var active = teams.getCurrentAvatar() == entity;
 
                 // Create the avatar info.
@@ -34,8 +35,8 @@ public final class SceneTeamUpdate extends BasePacket<Empty, SceneTeamUpdateNoti
                         .setSceneId(player.getSceneId())
                         .setEntityId(entity.getId())
                         .setSceneEntityInfo(entity.toProto())
-                        .setWeaponGuid(2785642601942876162L)
-                        .setWeaponEntityId(100664575)
+                        .setWeaponGuid(weapon.getItemGuid())
+                        .setWeaponEntityId(weapon.getEntityId())
                         .setIsPlayerCurAvatar(active)
                         .setIsOnScene(active)
                         .setAvatarAbilityInfo(AbilitySyncStateInfo.newBuilder())

@@ -4,6 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import io.grasscutter.network.packets.*;
 import io.grasscutter.network.packets.notify.*;
 import io.grasscutter.network.packets.notify.data.*;
+import io.grasscutter.network.packets.notify.inventory.*;
 import io.grasscutter.network.packets.notify.scene.*;
 import io.grasscutter.network.packets.notify.world.*;
 import io.grasscutter.network.packets.scene.*;
@@ -77,7 +78,11 @@ public enum Packet {
     SYNC_TEAM_ENTITY(-1, PacketIds.SyncTeamEntityNotify,
             SyncTeamEntity.class, null),
     WIND_SEED_CLIENT(-1, PacketIds.WindSeedClientNotify,
-            WindSeedClient.class, null);
+            WindSeedClient.class, null),
+    ITEM_ADD_HINT(-1, PacketIds.ItemAddHintNotify,
+            ItemAddHint.class, null),
+    AVATAR_EQUIP_CHANGE(-1, PacketIds.AvatarEquipChangeNotify,
+            AvatarEquipChange.class, null);
 
     /**
      * Converts the name of a packet to a packet identifier.

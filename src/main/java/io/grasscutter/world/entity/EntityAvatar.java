@@ -74,6 +74,7 @@ public final class EntityAvatar extends Entity {
     public SceneAvatarInfo toSceneAvatarInfo() {
         var player = this.getPlayer();
         var avatar = this.getAvatar();
+        var weapon = avatar.getWeapon();
 
         var info = SceneAvatarInfo.newBuilder()
                 .setUid(player.getUserId())
@@ -91,14 +92,13 @@ public final class EntityAvatar extends Entity {
                 .setBornTime(avatar.getCreationTime());
 
         // Add the avatar's weapon.
-        // TODO: Add the weapon ID.
-         info.setWeapon(SceneWeaponInfo.newBuilder()
-                 .setEntityId(100664575)
-                 .setGuid(2785642601942876162L)
-                 .setLevel(90)
-                 .setItemId(11512)
-                 .setPromoteLevel(6)
-                 .setGadgetId(50011512));
+        info.setWeapon(SceneWeaponInfo.newBuilder()
+                .setEntityId(weapon.getEntityId())
+                .setGuid(weapon.getItemGuid())
+                .setLevel(weapon.getLevel())
+                .setItemId(weapon.getItemId())
+                .setPromoteLevel(weapon.getAscensionLevel())
+                .setGadgetId(weapon.getItemData().getGadgetId()));
 //         info.setReliquaryList();
 //         info.setEquipIdList();
 

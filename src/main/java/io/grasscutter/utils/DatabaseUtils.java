@@ -43,6 +43,16 @@ public interface DatabaseUtils {
     }
 
     /**
+     * Shortcut method to delete an object.
+     * The object should be annotated with {@link DataSerializable}.
+     *
+     * @param object The object to delete.
+     */
+    static void delete(Serializable object) {
+        DatabaseUtils.getDataInterface().purge(object);
+    }
+
+    /**
      * Shortcut method to get an account by username.
      *
      * @param username The username.

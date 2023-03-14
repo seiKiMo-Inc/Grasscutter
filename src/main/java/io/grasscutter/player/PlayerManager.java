@@ -14,4 +14,9 @@ public abstract class PlayerManager {
     public void save() {
         this.player.save();
     }
+
+    /**
+     * Loads the player from the database.
+     */
+    public void load() {}
 }

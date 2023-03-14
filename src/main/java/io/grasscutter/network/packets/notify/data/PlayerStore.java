@@ -23,7 +23,8 @@ public final class PlayerStore extends BasePacket<Empty, PlayerStoreNotify> {
                 .setWeightLimit(Properties.LIMITS().all);
 
         // Add the player's items.
-        // TODO: Add the player's items.
+        for (var item : this.player.getInventory())
+            packet.addItemList(item.toGameObject());
 
         return packet.build();
     }

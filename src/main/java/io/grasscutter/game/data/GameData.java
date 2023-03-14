@@ -1,16 +1,20 @@
 package io.grasscutter.game.data;
 
 import io.grasscutter.game.data.bin.AvatarConfig;
+import io.grasscutter.game.data.excel.ItemData;
 import io.grasscutter.game.data.excel.SceneData;
 import io.grasscutter.game.data.excel.avatar.*;
+import io.grasscutter.game.data.excel.item.ReliquaryMainPropData;
 import io.grasscutter.utils.PrimitiveUtils;
 import io.grasscutter.utils.constants.Log;
+import io.grasscutter.utils.objects.WeightedList;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /* Collection of loaded game resources. */
@@ -41,6 +45,24 @@ public final class GameData {
         return targetMap;
     }
 
+    /**
+     * Loads the data into the depot maps.
+     */
+    public static void loadDepots() {
+        // Compute the artifact properties.
+        for (var propData : GameData.getReliquaryMainPropDataMap().values()) {
+            // Validate the property.
+            if (propData.getWeight() <= 0 ||
+                    propData.getPropDepotId() <= 0)
+                continue;
+
+            // Create a property entry.
+            var list = GameData.artifactProperties.computeIfAbsent(
+                    propData.getPropDepotId(), k -> new WeightedList<>());
+            list.add(propData.getWeight(), propData);
+        }
+    }
+
     /*
      * Additional game data.
      */
@@ -58,4 +80,39 @@ public final class GameData {
     @Getter private static final Int2ObjectMap<AvatarSkillDepotData> avatarSkillDepotDataMap = new Int2ObjectOpenHashMap<>();
 
     @Getter private static final Int2ObjectMap<SceneData> sceneDataMap = new Int2ObjectOpenHashMap<>();
+
+    @Getter private static final Int2ObjectMap<ItemData> itemDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<ReliquaryMainPropData> reliquaryMainPropDataMap = new Int2ObjectOpenHashMap<>();
+
+    /*
+     * Depots
+     */
+
+    private static final Int2ObjectMap<WeightedList<ReliquaryMainPropData>> artifactProperties = new Int2ObjectOpenHashMap<>();
+
+    /*
+     * Data generators.
+     */
+
+    /**
+     * Gets the list of properties for the given depot.
+     *
+     * @param depot The depot ID.
+     * @return The list of properties.
+     */
+    public static List<ReliquaryMainPropData> getPropertyList(int depot) {
+        return GameData.artifactProperties.get(depot);
+    }
+
+    /**
+     * Generates a random main property.
+     *
+     * @param depot The property depot ID.
+     * @return The random property.
+     */
+    public static ReliquaryMainPropData getRandomProp(int depot) {
+        // Get the depot's property list.
+        var list = GameData.artifactProperties.get(depot);
+        return list == null ? null : list.random();
+    }
 }

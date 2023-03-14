@@ -6,11 +6,18 @@ import io.grasscutter.data.Special;
 import io.grasscutter.game.data.GameData;
 import io.grasscutter.game.data.excel.avatar.AvatarData;
 import io.grasscutter.game.data.excel.avatar.AvatarSkillDepotData;
+import io.grasscutter.game.inventory.Item;
+import io.grasscutter.network.packets.notify.inventory.AvatarEquipChange;
 import io.grasscutter.proto.AvatarInfoOuterClass.AvatarInfo;
 import io.grasscutter.utils.ServerUtils;
+import io.grasscutter.utils.enums.game.EntityIdType;
+import io.grasscutter.utils.enums.game.EquipType;
 import io.grasscutter.utils.enums.game.PlayerProperty;
 import io.grasscutter.utils.interfaces.DatabaseObject;
+import it.unimi.dsi.fastutil.ints.Int2FloatMap;
 import it.unimi.dsi.fastutil.ints.Int2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
@@ -48,9 +55,11 @@ public final class Avatar implements DatabaseObject {
     @Getter @Setter private int costume = 0; // The avatar's costume.
     @Getter private int creationTime = 0; // The avatar's creation time.
 
-    @Getter private final transient Int2FloatOpenHashMap combatProperties
+    @Getter private final transient Int2ObjectMap<Item> equipment
+            = new Int2ObjectOpenHashMap<>(); // The avatar's equipment.
+    @Getter private final transient Int2FloatMap combatProperties
             = new Int2FloatOpenHashMap(); // The avatar's combat properties.
-    @Getter private final transient Int2FloatOpenHashMap fightOverrides
+    @Getter private final transient Int2FloatMap fightOverrides
             = new Int2FloatOpenHashMap(); // The avatar's combat property overrides.
 
     @ApiStatus.Internal
@@ -102,6 +111,67 @@ public final class Avatar implements DatabaseObject {
     }
 
     /**
+     * Equips an item to the avatar.
+     *
+     * @param item The item to equip.
+     * @param recalculate Whether to recalculate the avatar's combat properties.
+     */
+    public boolean equipItem(Item item, boolean recalculate) {
+        // Check the equipment type.
+        var type = item.getItemData().getEquipType();
+        if (type == EquipType.EQUIP_NONE) return false;
+
+        // Check if other avatars are using the item.
+        var avatar = this.getOwner().getAvatars()
+                .get(item.getEquippedAvatar());
+        if (avatar != null) {
+            // Un-equip the item from the avatar.
+            // TODO: Un-equip the item from the avatar.
+        }
+
+        // Add the item to the avatar's equipment.
+        this.getEquipment().put(type.getValue(), item);
+        // Add an entity ID if required.
+        if (type == EquipType.EQUIP_WEAPON &&
+                this.getOwner().getWorld() != null) {
+            item.setEntityId(this.getOwner().getWorld()
+                    .nextEntityId(EntityIdType.WEAPON));
+        }
+
+        // Save the item.
+        item.setEquippedAvatar(this.getAvatarId());
+        item.save();
+
+        // Send the equipment change packet.
+        if (this.getOwner().isLoggedIn())
+            this.getOwner().getSession().send(
+                    new AvatarEquipChange(this, item));
+
+        // TODO: Re-calculate the avatar's combat properties.
+
+        return true;
+    }
+
+    /**
+     * Fetches an item from the avatar's equipment.
+     *
+     * @param type The equipment type.
+     * @return The item, or {@code null} if the avatar doesn't have an item equipped.
+     */
+    public Item getItem(EquipType type) {
+        return this.getEquipment().get(type.getValue());
+    }
+
+    /**
+     * Shortcut method for fetching the avatar's weapon.
+     *
+     * @return The avatar's weapon, or {@code null} if the avatar doesn't have a weapon equipped.
+     */
+    public Item getWeapon() {
+        return this.getItem(EquipType.EQUIP_WEAPON);
+    }
+
+    /**
      * Converts this object into an {@link AvatarInfo} object.
      *
      * @return The converted object.
@@ -114,7 +184,9 @@ public final class Avatar implements DatabaseObject {
                 .putAllFightPropMap(this.getCombatProperties())
                 .setSkillDepotId(this.getSkillDepotId())
                 .setAvatarType(1)
-                .setBornTime(this.getCreationTime());
+                .setBornTime(this.getCreationTime())
+                .setWearingFlycloakId(this.getWings())
+                .setCostumeId(this.getCostume());
 
         // Add the other avatar properties.
         ServerUtils.property(avatarInfo, PlayerProperty.PROP_LEVEL, this.getLevel());

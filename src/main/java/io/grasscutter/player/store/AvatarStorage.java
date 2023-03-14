@@ -1,5 +1,7 @@
 package io.grasscutter.player.store;
 
+import io.grasscutter.game.inventory.Item;
+import io.grasscutter.network.packets.notify.inventory.AvatarAdd;
 import io.grasscutter.player.Avatar;
 import io.grasscutter.player.Player;
 import io.grasscutter.player.PlayerManager;
@@ -85,9 +87,16 @@ public final class AvatarStorage extends PlayerManager {
         avatar.save(); // Save the avatar.
 
         // Add the starting weapon to the avatar.
-        // TODO: Add a weapon to the avatar.
+        this.addStartingWeapon(avatar);
 
         // Send the avatar add notification.
+        if (this.getPlayer().isLoggedIn()) {
+            // Re-calculate the avatar's stats.
+
+            // Send the notification.
+            this.getPlayer().getSession().send(
+                    new AvatarAdd(avatar, addToTeam));
+        }
     }
 
     /**
@@ -98,5 +107,28 @@ public final class AvatarStorage extends PlayerManager {
      */
     public Avatar get(int id) {
         return this.avatars.get(id);
+    }
+
+    /*
+     * Avatar manipulation.
+     */
+
+    /**
+     * Adds the starting weapon to the avatar.
+     *
+     * @param avatar The avatar to add the weapon to.
+     */
+    private void addStartingWeapon(Avatar avatar) {
+        // Check if the avatar is owned by the player.
+        if (avatar.getOwner() != this.getPlayer())
+            return;
+
+        // Create the item.
+        var weapon = new Item(avatar
+                .getData().getInitialWeapon());
+        if (weapon.getItemData() != null) {
+            this.getPlayer().getInventory().addItem(weapon);
+            avatar.equipItem(weapon, true);
+        }
     }
 }

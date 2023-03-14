@@ -40,16 +40,15 @@ public final class PlayerEnterSceneInfo extends BasePacket<Empty, PlayerEnterSce
 
         // Add the player's avatars.
         for (var entity : player.getTeams().getActiveAvatars()) {
-            // Get the weapon's GUID.
-            // TODO: Implement weapons.
-            var weaponGuid = 0;
+            var avatar = entity.getAvatar();
+            var weapon = avatar.getWeapon();
 
             // Create the avatar info.
             packet.addAvatarEnterInfo(AvatarEnterSceneInfo.newBuilder()
                     .setAvatarGuid(entity.getAvatar().getGuid())
                     .setAvatarEntityId(entity.getId())
-                    .setWeaponGuid(2785642601942876162L)
-                    .setWeaponEntityId(100664575)
+                    .setWeaponGuid(weapon.getItemGuid())
+                    .setWeaponEntityId(weapon.getEntityId())
                     .setAvatarAbilityInfo(empty)
                     .setWeaponAbilityInfo(empty));
         }
