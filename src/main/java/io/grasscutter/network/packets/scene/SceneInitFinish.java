@@ -17,7 +17,10 @@ import io.grasscutter.proto.SceneInitFinishReqOuterClass.SceneInitFinishReq;
 import io.grasscutter.proto.SceneInitFinishRspOuterClass.SceneInitFinishRsp;
 import io.grasscutter.utils.enums.game.SceneLoadState;
 
-/** Scene initialization finished. {@link PacketIds#SceneInitFinishReq} and {@link PacketIds#SceneInitFinishRsp}. */
+/**
+ * Scene initialization finished. {@link PacketIds#SceneInitFinishReq} and {@link
+ * PacketIds#SceneInitFinishRsp}.
+ */
 public final class SceneInitFinish extends BasePacket<SceneInitFinishReq, SceneInitFinishRsp> {
     private Player player;
 
@@ -30,7 +33,8 @@ public final class SceneInitFinish extends BasePacket<SceneInitFinishReq, SceneI
     }
 
     @Override
-    protected void handlePacket(NetworkSession session, PacketHead header, SceneInitFinishReq message) {
+    protected void handlePacket(
+            NetworkSession session, PacketHead header, SceneInitFinishReq message) {
         var player = session.getPlayer();
 
         // Send world info packets.
@@ -64,8 +68,6 @@ public final class SceneInitFinish extends BasePacket<SceneInitFinishReq, SceneI
     public SceneInitFinishRsp preparePacket() {
         this.buildHeaderWith(11);
 
-        return SceneInitFinishRsp.newBuilder()
-                .setEnterSceneToken(this.player.getSceneToken())
-                .build();
+        return SceneInitFinishRsp.newBuilder().setEnterSceneToken(this.player.getSceneToken()).build();
     }
 }

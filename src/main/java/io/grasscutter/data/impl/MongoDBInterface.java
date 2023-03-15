@@ -9,9 +9,8 @@ import io.grasscutter.data.DataSerializable;
 import io.grasscutter.utils.constants.DataConstants;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.interfaces.Serializable;
-import java.util.Map;
-
 import io.grasscutter.utils.objects.Pair;
+import java.util.Map;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 

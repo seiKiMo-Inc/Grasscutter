@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Location extends Position {
-    @Getter @Setter
-    private transient Scene scene;
+    @Getter @Setter private transient Scene scene;
 
     public Location(Scene scene, Position position) {
         this.set(position);

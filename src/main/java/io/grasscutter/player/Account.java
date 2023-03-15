@@ -29,8 +29,8 @@ public final class Account implements DatabaseObject {
      * @return A randomly generated hex string.
      */
     public String generateSessionKey() {
-        return this.saveAndFetch(() -> this.sessionKey =
-                EncodingUtils.toHex(CryptoUtils.generateBytes(32)));
+        return this.saveAndFetch(
+                () -> this.sessionKey = EncodingUtils.toHex(CryptoUtils.generateBytes(32)));
     }
 
     /**
@@ -39,8 +39,8 @@ public final class Account implements DatabaseObject {
      * @return A randomly generated hex string.
      */
     public String generateLoginToken() {
-        return this.saveAndFetch(() -> this.loginToken =
-                EncodingUtils.toHex(CryptoUtils.generateBytes(32)));
+        return this.saveAndFetch(
+                () -> this.loginToken = EncodingUtils.toHex(CryptoUtils.generateBytes(32)));
     }
 
     /*
@@ -49,12 +49,14 @@ public final class Account implements DatabaseObject {
 
     /**
      * Saves the database object and returns the field.
+     *
      * @param field The field to return.
      * @return The field.
      */
     public <T> T saveAndFetch(Output<T> field) {
         var result = field.result();
-        this.save(); return result;
+        this.save();
+        return result;
     }
 
     /*

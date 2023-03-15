@@ -12,11 +12,10 @@ import io.grasscutter.utils.objects.WeightedList;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 
 /* Collection of loaded game resources. */
 public final class GameData {
@@ -32,8 +31,7 @@ public final class GameData {
 
         try {
             // Fetch the map's static field.
-            var field = GameData.class.getDeclaredField(
-                    PrimitiveUtils.lowerFirst(targetName) + "Map");
+            var field = GameData.class.getDeclaredField(PrimitiveUtils.lowerFirst(targetName) + "Map");
 
             // Set the field accessible and fetch the map.
             field.setAccessible(true);
@@ -46,20 +44,17 @@ public final class GameData {
         return targetMap;
     }
 
-    /**
-     * Loads the data into the depot maps.
-     */
+    /** Loads the data into the depot maps. */
     public static void loadDepots() {
         // Compute the artifact properties.
         for (var propData : GameData.getReliquaryMainPropDataMap().values()) {
             // Validate the property.
-            if (propData.getWeight() <= 0 ||
-                    propData.getPropDepotId() <= 0)
-                continue;
+            if (propData.getWeight() <= 0 || propData.getPropDepotId() <= 0) continue;
 
             // Create a property entry.
-            var list = GameData.artifactProperties.computeIfAbsent(
-                    propData.getPropDepotId(), k -> new WeightedList<>());
+            var list =
+                    GameData.artifactProperties.computeIfAbsent(
+                            propData.getPropDepotId(), k -> new WeightedList<>());
             list.add(propData.getWeight(), propData);
         }
     }
@@ -74,24 +69,48 @@ public final class GameData {
      * Excels
      */
 
-    @Getter private static final Int2ObjectMap<AvatarData> avatarDataMap = new Int2ObjectOpenHashMap<>();
-    @Getter private static final Int2ObjectMap<AvatarSkillData> avatarSkillDataMap = new Int2ObjectOpenHashMap<>();
-    @Getter private static final Int2ObjectMap<AvatarCurveData> avatarCurveDataMap = new Int2ObjectOpenHashMap<>();
-    @Getter private static final Int2ObjectMap<AvatarTalentData> avatarTalentDataMap = new Int2ObjectOpenHashMap<>();
-    @Getter private static final Int2ObjectMap<AvatarPromoteData> avatarPromoteDataMap = new Int2ObjectOpenHashMap<>();
-    @Getter private static final Int2ObjectMap<AvatarSkillDepotData> avatarSkillDepotDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter
+    private static final Int2ObjectMap<AvatarData> avatarDataMap = new Int2ObjectOpenHashMap<>();
 
-    @Getter private static final Int2ObjectMap<SceneData> sceneDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter
+    private static final Int2ObjectMap<AvatarSkillData> avatarSkillDataMap =
+            new Int2ObjectOpenHashMap<>();
+
+    @Getter
+    private static final Int2ObjectMap<AvatarCurveData> avatarCurveDataMap =
+            new Int2ObjectOpenHashMap<>();
+
+    @Getter
+    private static final Int2ObjectMap<AvatarTalentData> avatarTalentDataMap =
+            new Int2ObjectOpenHashMap<>();
+
+    @Getter
+    private static final Int2ObjectMap<AvatarPromoteData> avatarPromoteDataMap =
+            new Int2ObjectOpenHashMap<>();
+
+    @Getter
+    private static final Int2ObjectMap<AvatarSkillDepotData> avatarSkillDepotDataMap =
+            new Int2ObjectOpenHashMap<>();
+
+    @Getter
+    private static final Int2ObjectMap<SceneData> sceneDataMap = new Int2ObjectOpenHashMap<>();
 
     @Getter private static final Int2ObjectMap<ItemData> itemDataMap = new Int2ObjectOpenHashMap<>();
-    @Getter private static final Int2ObjectMap<ReliquaryLevelData> reliquaryLevelDataMap = new Int2ObjectOpenHashMap<>();
-    @Getter private static final Int2ObjectMap<ReliquaryMainPropData> reliquaryMainPropDataMap = new Int2ObjectOpenHashMap<>();
+
+    @Getter
+    private static final Int2ObjectMap<ReliquaryLevelData> reliquaryLevelDataMap =
+            new Int2ObjectOpenHashMap<>();
+
+    @Getter
+    private static final Int2ObjectMap<ReliquaryMainPropData> reliquaryMainPropDataMap =
+            new Int2ObjectOpenHashMap<>();
 
     /*
      * Depots
      */
 
-    private static final Int2ObjectMap<WeightedList<ReliquaryMainPropData>> artifactProperties = new Int2ObjectOpenHashMap<>();
+    private static final Int2ObjectMap<WeightedList<ReliquaryMainPropData>> artifactProperties =
+            new Int2ObjectOpenHashMap<>();
 
     /*
      * Data generators.

@@ -100,17 +100,11 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
     public final byte[] encode(NetworkSession session) {
         // Encode data into buffers.
         var packet = this.preparePacket();
-        var data = packet == null ?
-                new byte[0] :
-                packet.toByteArray();
-        var header = this.packetHeader == null ?
-                new byte[0] :
-                this.packetHeader.toByteArray();
+        var data = packet == null ? new byte[0] : packet.toByteArray();
+        var header = this.packetHeader == null ? new byte[0] : this.packetHeader.toByteArray();
 
         // Get the packet's ID.
-        var packetId = this.otherPacketId == -1 ?
-                NetworkUtils.getIdOf(this) :
-                this.otherPacketId;
+        var packetId = this.otherPacketId == -1 ? NetworkUtils.getIdOf(this) : this.otherPacketId;
 
         // Construct packet.
         var buffer =
@@ -127,10 +121,10 @@ public abstract class BasePacket<I extends GeneratedMessageV3, O extends Generat
         // Encrypt packet with XOR if needed.
         if (this.shouldEncrypt) {
             // Get the key type.
-            var key = this.keyType == null ?
-                    session.isEncrypted() ?
-                            KeyType.ENCRYPT : KeyType.DISPATCH :
-                    this.keyType;
+            var key =
+                    this.keyType == null
+                            ? session.isEncrypted() ? KeyType.ENCRYPT : KeyType.DISPATCH
+                            : this.keyType;
             CryptoUtils.performXor(buffer, key);
         }
 

@@ -17,18 +17,19 @@ import io.grasscutter.proto.SceneWeaponInfoOuterClass.SceneWeaponInfo;
 import io.grasscutter.proto.WeaponOuterClass.Weapon;
 import io.grasscutter.utils.enums.game.ItemType;
 import io.grasscutter.utils.interfaces.DatabaseObject;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /* Item instance. */
 @DataSerializable(table = "items")
 public final class Item implements DatabaseObject {
     @Special(FieldType.ID)
-    @Getter private ObjectId id = new ObjectId(); // The item object's unique identifier.
+    @Getter
+    private ObjectId id = new ObjectId(); // The item object's unique identifier.
+
     @Getter private int ownerId = Integer.MAX_VALUE; // The item's owner's user ID.
 
     @Getter private transient Player owner = null; // The item's owner.
@@ -43,9 +44,15 @@ public final class Item implements DatabaseObject {
      */
     @Getter @Setter private int level = 0; // The item's level.
     @Getter @Setter private int experience = 0; // The item's experience. This is sent to the game.
-    @Getter @Setter private int allocatedExperience = 0; // The item's allocated experience. This is used internally.
+
+    @Getter @Setter
+    private int allocatedExperience = 0; // The item's allocated experience. This is used internally.
+
     @Getter @Setter private int ascensionLevel = 0; // The item's ascension level.
-    @Getter @Setter private boolean locked = false; // Whether the item is locked. This prevents it from being deleted/used.
+
+    @Getter @Setter
+    private boolean locked =
+            false; // Whether the item is locked. This prevents it from being deleted/used.
 
     @Getter @Setter private int equippedAvatar; // The avatar ID the item is equipped to.
     @Getter @Setter private transient int entityId; // The entity ID for this item.
@@ -62,17 +69,13 @@ public final class Item implements DatabaseObject {
     @Getter @Setter private int mainPropertyId; // The artifact's main property ID.
     @Getter private List<Integer> otherProperties; // The artifact's other property IDs.
 
-    /**
-     * Constructor for de-serialization.
-     */
+    /** Constructor for de-serialization. */
     public Item() {
         // Empty constructor.
     }
 
     /**
-     * Constructor for creating a new item.
-     * Fetches the item's data by the ID.
-     * Sets the count to 1.
+     * Constructor for creating a new item. Fetches the item's data by the ID. Sets the count to 1.
      *
      * @param itemId The item's ID.
      */
@@ -81,8 +84,7 @@ public final class Item implements DatabaseObject {
     }
 
     /**
-     * Constructor for creating a new item.
-     * Fetches the item's data by the ID.
+     * Constructor for creating a new item. Fetches the item's data by the ID.
      *
      * @param itemId The item's ID.
      * @param count The item's count.
@@ -92,8 +94,7 @@ public final class Item implements DatabaseObject {
     }
 
     /**
-     * Constructor for creating a new item.
-     * Sets the count to 1.
+     * Constructor for creating a new item. Sets the count to 1.
      *
      * @param itemData The item's data.
      */
@@ -119,10 +120,8 @@ public final class Item implements DatabaseObject {
                 this.otherProperties = new ArrayList<>();
 
                 // Set the item's main property.
-                var mainPropData = GameData.getRandomProp(
-                        itemData.getMainProperty());
-                if (mainPropData != null)
-                    this.setMainPropertyId(mainPropData.getId());
+                var mainPropData = GameData.getRandomProp(itemData.getMainProperty());
+                if (mainPropData != null) this.setMainPropertyId(mainPropData.getId());
 
                 // Create the item's other properties.
                 this.addProperties(itemData.getOtherProperties());
@@ -144,8 +143,7 @@ public final class Item implements DatabaseObject {
     }
 
     /**
-     * Sets the item's owner.
-     * Also sets the item's GUID.
+     * Sets the item's owner. Also sets the item's GUID.
      *
      * @param player The player to set as the owner.
      */
@@ -174,39 +172,29 @@ public final class Item implements DatabaseObject {
      */
 
     /**
-     * Adds properties to the item.
-     * This is used for artifacts.
+     * Adds properties to the item. This is used for artifacts.
      *
      * @param count The amount of properties to add.
      */
     public void addProperties(int count) {
-        for (var i = 0; i < Math.max(count, 0); i++)
-            this.addProperty();
+        for (var i = 0; i < Math.max(count, 0); i++) this.addProperty();
     }
 
-    /**
-     * Adds or upgrades an existing property.
-     */
+    /** Adds or upgrades an existing property. */
     public void addProperty() {
         // Check if the properties list exists.
-        if (this.getOtherProperties() == null)
-            this.otherProperties = new ArrayList<>();
+        if (this.getOtherProperties() == null) this.otherProperties = new ArrayList<>();
 
-        if (this.getOtherProperties().size() < 4)
-            this.addNewProperty();
+        if (this.getOtherProperties().size() < 4) this.addNewProperty();
         else this.upgradeProperty();
     }
 
-    /**
-     * Adds a new random property to the artifact.
-     */
+    /** Adds a new random property to the artifact. */
     public void addNewProperty() {
         // TODO: Add a new property to the artifact.
     }
 
-    /**
-     * Upgrades an existing property's stats.
-     */
+    /** Upgrades an existing property's stats. */
     public void upgradeProperty() {
         // TODO: Upgrade an existing property.
     }
@@ -217,10 +205,8 @@ public final class Item implements DatabaseObject {
 
     @Override
     public void save() {
-        if (this.getCount() > 0 && this.getOwner() != null)
-            DatabaseObject.super.save();
-        else if (this.getId() != null)
-            DatabaseObject.super.delete();
+        if (this.getCount() > 0 && this.getOwner() != null) DatabaseObject.super.save();
+        else if (this.getId() != null) DatabaseObject.super.delete();
     }
 
     /**
@@ -232,19 +218,18 @@ public final class Item implements DatabaseObject {
         var skills = this.getSkills();
         var hasSkills = skills != null && skills.size() > 0;
 
-        var info = SceneWeaponInfo.newBuilder()
-                .setEntityId(this.getEntityId())
-                .setItemId(this.getItemId())
-                .setGuid(this.getItemGuid())
-                .setLevel(this.getLevel())
-                .setGadgetId(this.getItemData().getGadgetId())
-                .setAbilityInfo(AbilitySyncStateInfo.newBuilder()
-                        .setIsInited(hasSkills));
+        var info =
+                SceneWeaponInfo.newBuilder()
+                        .setEntityId(this.getEntityId())
+                        .setItemId(this.getItemId())
+                        .setGuid(this.getItemGuid())
+                        .setLevel(this.getLevel())
+                        .setGadgetId(this.getItemData().getGadgetId())
+                        .setAbilityInfo(AbilitySyncStateInfo.newBuilder().setIsInited(hasSkills));
 
         // Add the item's skills.
         if (hasSkills) {
-            for (var skillId : skills)
-                info.putAffixMap(skillId, this.getRefinementLevel());
+            for (var skillId : skills) info.putAffixMap(skillId, this.getRefinementLevel());
         }
 
         return info.build();
@@ -256,15 +241,15 @@ public final class Item implements DatabaseObject {
      * @return The {@link Weapon} object.
      */
     public Weapon toWeapon() {
-        var weapon = Weapon.newBuilder()
-                .setLevel(this.getLevel())
-                .setExp(this.getExperience())
-                .setPromoteLevel(this.getAscensionLevel());
+        var weapon =
+                Weapon.newBuilder()
+                        .setLevel(this.getLevel())
+                        .setExp(this.getExperience())
+                        .setPromoteLevel(this.getAscensionLevel());
 
         // Add the item's skills.
         if (this.getSkills() != null) {
-            for (var skillId : this.getSkills())
-                weapon.putAffixMap(skillId, this.getRefinementLevel());
+            for (var skillId : this.getSkills()) weapon.putAffixMap(skillId, this.getRefinementLevel());
         }
 
         return weapon.build();
@@ -276,30 +261,27 @@ public final class Item implements DatabaseObject {
      * @return The {@link ItemOuterClass.Item} object.
      */
     public ItemOuterClass.Item toGameObject() {
-        var item = ItemOuterClass.Item.newBuilder()
-                .setGuid(this.getItemGuid())
-                .setItemId(this.getItemId());
+        var item =
+                ItemOuterClass.Item.newBuilder().setGuid(this.getItemGuid()).setItemId(this.getItemId());
 
         // Add the item-specific data.
         switch (this.getItemType()) {
-            case ITEM_WEAPON -> item.setEquip(Equip.newBuilder()
-                    .setWeapon(this.toWeapon())
-                    .setIsLocked(this.isLocked()));
-            case ITEM_RELIQUARY -> item.setEquip(Equip.newBuilder()
-                    // .setReliquary(this.toReliquary())
-                    .setIsLocked(this.isLocked()));
-            case ITEM_FURNITURE -> item.setFurniture(Furniture.newBuilder()
-                    .setCount(this.getCount()));
-            default -> item.setMaterial(Material.newBuilder()
-                    .setCount(this.getCount()));
+            case ITEM_WEAPON -> item.setEquip(
+                    Equip.newBuilder().setWeapon(this.toWeapon()).setIsLocked(this.isLocked()));
+            case ITEM_RELIQUARY -> item.setEquip(
+                    Equip.newBuilder()
+                            // .setReliquary(this.toReliquary())
+                            .setIsLocked(this.isLocked()));
+            case ITEM_FURNITURE -> item.setFurniture(Furniture.newBuilder().setCount(this.getCount()));
+            default -> item.setMaterial(Material.newBuilder().setCount(this.getCount()));
         }
 
         return item.build();
     }
 
     /**
-     * Converts this item into an {@link ItemHint} object.
-     * This is used in the HUD for receiving a new item.
+     * Converts this item into an {@link ItemHint} object. This is used in the HUD for receiving a new
+     * item.
      *
      * @return The {@link ItemHint} object.
      */
@@ -317,9 +299,6 @@ public final class Item implements DatabaseObject {
      * @return The {@link ItemParam} object.
      */
     public ItemParam toParam() {
-        return ItemParam.newBuilder()
-                .setItemId(this.getItemId())
-                .setCount(this.getCount())
-                .build();
+        return ItemParam.newBuilder().setItemId(this.getItemId()).setCount(this.getCount()).build();
     }
 }

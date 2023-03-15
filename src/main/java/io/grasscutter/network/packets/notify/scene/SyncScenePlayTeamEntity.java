@@ -9,13 +9,12 @@ import lombok.AllArgsConstructor;
 
 /** Sync team data for the player. {@link PacketIds#SyncScenePlayTeamEntityNotify}. */
 @AllArgsConstructor
-public final class SyncScenePlayTeamEntity extends BasePacket<Empty, SyncScenePlayTeamEntityNotify> {
+public final class SyncScenePlayTeamEntity
+        extends BasePacket<Empty, SyncScenePlayTeamEntityNotify> {
     private final Player player;
 
     @Override
     public SyncScenePlayTeamEntityNotify preparePacket() {
-        return SyncScenePlayTeamEntityNotify.newBuilder()
-                .setSceneId(this.player.getSceneId())
-                .build();
+        return SyncScenePlayTeamEntityNotify.newBuilder().setSceneId(this.player.getSceneId()).build();
     }
 }

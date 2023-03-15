@@ -4,12 +4,11 @@ import io.grasscutter.utils.constants.CombatProperties;
 import io.grasscutter.utils.definitions.game.CompoundProperty;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /* Game combat properties. */
 @AllArgsConstructor
@@ -115,56 +114,58 @@ public enum FightProperty {
     private static final Map<String, FightProperty> stringMap = new HashMap<>();
 
     /* Bindings from shorthands -> fight properties. */
-    private static final Map<String, FightProperty> SHORT = Map.ofEntries(
-            // Normal relic stats
-            Map.entry("hp", FIGHT_PROP_HP),
-            Map.entry("atk", FIGHT_PROP_ATTACK),
-            Map.entry("def", FIGHT_PROP_DEFENSE),
-            Map.entry("hp%", FIGHT_PROP_HP_PERCENT),
-            Map.entry("atk%", FIGHT_PROP_ATTACK_PERCENT),
-            Map.entry("def%", FIGHT_PROP_DEFENSE_PERCENT),
-            Map.entry("em", FIGHT_PROP_ELEMENT_MASTERY),
-            Map.entry("er", FIGHT_PROP_CHARGE_EFFICIENCY),
-            Map.entry("hb", FIGHT_PROP_HEAL_ADD),
-            Map.entry("heal", FIGHT_PROP_HEAL_ADD),
-            Map.entry("cd", FIGHT_PROP_CRITICAL_HURT),
-            Map.entry("cdmg", FIGHT_PROP_CRITICAL_HURT),
-            Map.entry("cr", FIGHT_PROP_CRITICAL),
-            Map.entry("crate", FIGHT_PROP_CRITICAL),
-            Map.entry("phys%", FIGHT_PROP_PHYSICAL_ADD_HURT),
-            Map.entry("dendro%", FIGHT_PROP_GRASS_ADD_HURT),
-            Map.entry("geo%", FIGHT_PROP_ROCK_ADD_HURT),
-            Map.entry("anemo%", FIGHT_PROP_WIND_ADD_HURT),
-            Map.entry("hydro%", FIGHT_PROP_WATER_ADD_HURT),
-            Map.entry("cryo%", FIGHT_PROP_ICE_ADD_HURT),
-            Map.entry("electro%", FIGHT_PROP_ELEC_ADD_HURT),
-            Map.entry("pyro%", FIGHT_PROP_FIRE_ADD_HURT),
-            // Other stats
-            Map.entry("maxhp", FIGHT_PROP_MAX_HP),
-            Map.entry("dmg", FIGHT_PROP_ADD_HURT),  // This seems to get reset after attacks
-            Map.entry("cdr", FIGHT_PROP_SKILL_CD_MINUS_RATIO),
-            Map.entry("heali", FIGHT_PROP_HEALED_ADD),
-            Map.entry("shield", FIGHT_PROP_SHIELD_COST_MINUS_RATIO),
-            Map.entry("defi", FIGHT_PROP_DEFENCE_IGNORE_RATIO),
-            Map.entry("resall", FIGHT_PROP_SUB_HURT),  // This seems to get reset after attacks
-            Map.entry("resanemo", FIGHT_PROP_WIND_SUB_HURT),
-            Map.entry("rescryo", FIGHT_PROP_ICE_SUB_HURT),
-            Map.entry("resdendro", FIGHT_PROP_GRASS_SUB_HURT),
-            Map.entry("reselectro", FIGHT_PROP_ELEC_SUB_HURT),
-            Map.entry("resgeo", FIGHT_PROP_ROCK_SUB_HURT),
-            Map.entry("reshydro", FIGHT_PROP_WATER_SUB_HURT),
-            Map.entry("respyro", FIGHT_PROP_FIRE_SUB_HURT),
-            Map.entry("resphys", FIGHT_PROP_PHYSICAL_SUB_HURT)
-    );
+    private static final Map<String, FightProperty> SHORT =
+            Map.ofEntries(
+                    // Normal relic stats
+                    Map.entry("hp", FIGHT_PROP_HP),
+                    Map.entry("atk", FIGHT_PROP_ATTACK),
+                    Map.entry("def", FIGHT_PROP_DEFENSE),
+                    Map.entry("hp%", FIGHT_PROP_HP_PERCENT),
+                    Map.entry("atk%", FIGHT_PROP_ATTACK_PERCENT),
+                    Map.entry("def%", FIGHT_PROP_DEFENSE_PERCENT),
+                    Map.entry("em", FIGHT_PROP_ELEMENT_MASTERY),
+                    Map.entry("er", FIGHT_PROP_CHARGE_EFFICIENCY),
+                    Map.entry("hb", FIGHT_PROP_HEAL_ADD),
+                    Map.entry("heal", FIGHT_PROP_HEAL_ADD),
+                    Map.entry("cd", FIGHT_PROP_CRITICAL_HURT),
+                    Map.entry("cdmg", FIGHT_PROP_CRITICAL_HURT),
+                    Map.entry("cr", FIGHT_PROP_CRITICAL),
+                    Map.entry("crate", FIGHT_PROP_CRITICAL),
+                    Map.entry("phys%", FIGHT_PROP_PHYSICAL_ADD_HURT),
+                    Map.entry("dendro%", FIGHT_PROP_GRASS_ADD_HURT),
+                    Map.entry("geo%", FIGHT_PROP_ROCK_ADD_HURT),
+                    Map.entry("anemo%", FIGHT_PROP_WIND_ADD_HURT),
+                    Map.entry("hydro%", FIGHT_PROP_WATER_ADD_HURT),
+                    Map.entry("cryo%", FIGHT_PROP_ICE_ADD_HURT),
+                    Map.entry("electro%", FIGHT_PROP_ELEC_ADD_HURT),
+                    Map.entry("pyro%", FIGHT_PROP_FIRE_ADD_HURT),
+                    // Other stats
+                    Map.entry("maxhp", FIGHT_PROP_MAX_HP),
+                    Map.entry("dmg", FIGHT_PROP_ADD_HURT), // This seems to get reset after attacks
+                    Map.entry("cdr", FIGHT_PROP_SKILL_CD_MINUS_RATIO),
+                    Map.entry("heali", FIGHT_PROP_HEALED_ADD),
+                    Map.entry("shield", FIGHT_PROP_SHIELD_COST_MINUS_RATIO),
+                    Map.entry("defi", FIGHT_PROP_DEFENCE_IGNORE_RATIO),
+                    Map.entry("resall", FIGHT_PROP_SUB_HURT), // This seems to get reset after attacks
+                    Map.entry("resanemo", FIGHT_PROP_WIND_SUB_HURT),
+                    Map.entry("rescryo", FIGHT_PROP_ICE_SUB_HURT),
+                    Map.entry("resdendro", FIGHT_PROP_GRASS_SUB_HURT),
+                    Map.entry("reselectro", FIGHT_PROP_ELEC_SUB_HURT),
+                    Map.entry("resgeo", FIGHT_PROP_ROCK_SUB_HURT),
+                    Map.entry("reshydro", FIGHT_PROP_WATER_SUB_HURT),
+                    Map.entry("respyro", FIGHT_PROP_FIRE_SUB_HURT),
+                    Map.entry("resphys", FIGHT_PROP_PHYSICAL_SUB_HURT));
 
     @Getter private final int id;
 
     static {
         // Cache the values.
-        Stream.of(FightProperty.values()).forEach(element -> {
-            map.put(element.getId(), element);
-            stringMap.put(element.name(), element);
-        });
+        Stream.of(FightProperty.values())
+                .forEach(
+                        element -> {
+                            map.put(element.getId(), element);
+                            stringMap.put(element.name(), element);
+                        });
     }
 
     /**

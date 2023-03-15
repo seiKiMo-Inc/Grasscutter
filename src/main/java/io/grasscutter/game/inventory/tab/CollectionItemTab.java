@@ -1,17 +1,15 @@
 package io.grasscutter.game.inventory.tab;
 
 import io.grasscutter.game.inventory.Item;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /* An inventory tab implementation for un-stackable items. */
 @RequiredArgsConstructor
 public final class CollectionItemTab implements InventoryTab {
-    private final Set<Item> items
-            = new HashSet<>();
+    private final Set<Item> items = new HashSet<>();
     @Getter private final int maxCapacity;
 
     @Override

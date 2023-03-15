@@ -1,7 +1,7 @@
 package io.grasscutter.game.inventory.tab;
 
-import io.grasscutter.game.inventory.PlayerInventory;
 import io.grasscutter.game.inventory.Item;
+import io.grasscutter.game.inventory.PlayerInventory;
 
 /* Categorize items. */
 public interface InventoryTab {
@@ -14,8 +14,8 @@ public interface InventoryTab {
     Item getItemById(int itemId);
 
     /**
-     * Event handler for an item being added to this tab.
-     * Note: The item's instance is still held in {@link PlayerInventory}.
+     * Event handler for an item being added to this tab. Note: The item's instance is still held in
+     * {@link PlayerInventory}.
      *
      * @param item The item that was added.
      */

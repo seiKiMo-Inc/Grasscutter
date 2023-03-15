@@ -18,13 +18,13 @@ public final class PlayerStore extends BasePacket<Empty, PlayerStoreNotify> {
     public PlayerStoreNotify preparePacket() {
         this.buildHeaderWith(2);
 
-        var packet = PlayerStoreNotify.newBuilder()
-                .setStoreType(StoreType.STORE_TYPE_PACK)
-                .setWeightLimit(Properties.LIMITS().all);
+        var packet =
+                PlayerStoreNotify.newBuilder()
+                        .setStoreType(StoreType.STORE_TYPE_PACK)
+                        .setWeightLimit(Properties.LIMITS().all);
 
         // Add the player's items.
-        for (var item : this.player.getInventory())
-            packet.addItemList(item.toGameObject());
+        for (var item : this.player.getInventory()) packet.addItemList(item.toGameObject());
 
         return packet.build();
     }

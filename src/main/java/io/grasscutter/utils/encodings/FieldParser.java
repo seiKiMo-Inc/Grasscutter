@@ -1,7 +1,6 @@
 package io.grasscutter.utils.encodings;
 
 import io.grasscutter.utils.PrimitiveUtils;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.function.Function;

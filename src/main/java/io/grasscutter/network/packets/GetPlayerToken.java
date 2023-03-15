@@ -16,11 +16,12 @@ import io.grasscutter.utils.constants.CryptoConstants;
 import io.grasscutter.utils.constants.GameConstants;
 import io.grasscutter.utils.enums.KeyType;
 import io.grasscutter.utils.enums.game.PlayerState;
-
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-/** Player token packet. {@link PacketIds#GetPlayerTokenReq} and {@link PacketIds#GetPlayerTokenRsp}. */
+/**
+ * Player token packet. {@link PacketIds#GetPlayerTokenReq} and {@link PacketIds#GetPlayerTokenRsp}.
+ */
 public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlayerTokenRsp> {
     private NetworkSession session;
 
@@ -38,7 +39,8 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
     }
 
     @Override
-    protected void handlePacket(NetworkSession session, PacketHead header, GetPlayerTokenReq message) {
+    protected void handlePacket(
+            NetworkSession session, PacketHead header, GetPlayerTokenReq message) {
         // Fetch the account by the account ID and token.
         var account = DatabaseUtils.fetchAccount(Long.parseLong(message.getAccountUid()));
         if (account == null || !account.loginToken.equals(message.getAccountToken())) return;
@@ -51,9 +53,7 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
         var player = DatabaseUtils.fetchPlayer(account);
         if (player == null) {
             // Create a new player.
-            player = new Player(
-                    account.gameUserId,
-                    account.id);
+            player = new Player(account.gameUserId, account.id);
             player.save(); // Save the player.
         }
         Preconditions.validPlayer(player);
@@ -69,37 +69,38 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
 
         // Check if the seed is encrypted.
         this.encrypted = message.getKeyId() > 0;
-        if (this.encrypted) try {
-            var cipher = KeyType.SIGNING.decrypt(CryptoConstants.ENCRYPTION_TYPE);
+        if (this.encrypted)
+            try {
+                var cipher = KeyType.SIGNING.decrypt(CryptoConstants.ENCRYPTION_TYPE);
 
-            // Get the client seed.
-            var clientSeed = EncodingUtils.fromSBase64(message.getClientRandKey());
-            var clientSeedDecrypted = ByteBuffer.wrap(cipher.doFinal(clientSeed)).getLong();
+                // Get the client seed.
+                var clientSeed = EncodingUtils.fromSBase64(message.getClientRandKey());
+                var clientSeedDecrypted = ByteBuffer.wrap(cipher.doFinal(clientSeed)).getLong();
 
-            // Get the server seed.
-            var serverSeed = ByteBuffer.wrap(new byte[8])
-                    .putLong(CryptoConstants.ENCRYPT_SEED ^ clientSeedDecrypted)
-                    .array();
-            cipher = KeyType.valueOf("PUBLIC_" + message.getKeyId())
-                    .encrypt(CryptoConstants.ENCRYPTION_TYPE);
-            var serverSeedEncrypted = cipher.doFinal(serverSeed);
+                // Get the server seed.
+                var serverSeed =
+                        ByteBuffer.wrap(new byte[8])
+                                .putLong(CryptoConstants.ENCRYPT_SEED ^ clientSeedDecrypted)
+                                .array();
+                cipher =
+                        KeyType.valueOf("PUBLIC_" + message.getKeyId())
+                                .encrypt(CryptoConstants.ENCRYPTION_TYPE);
+                var serverSeedEncrypted = cipher.doFinal(serverSeed);
 
-            // Create a signature for the server seed.
-            var signature = KeyType.SIGNING
-                    .signature(CryptoConstants.SIGNATURE_TYPE);
-            Objects.requireNonNull(signature)
-                    .update(serverSeed);
+                // Create a signature for the server seed.
+                var signature = KeyType.SIGNING.signature(CryptoConstants.SIGNATURE_TYPE);
+                Objects.requireNonNull(signature).update(serverSeed);
 
-            this.seed = new String(EncodingUtils.toBase64(serverSeedEncrypted));
-            this.seedSignature = new String(EncodingUtils.toBase64(signature.sign()));
-        } catch (Exception ignored) { // Backwards compatability with the UserAssembly.dll patch.
-            var clientSeed = EncodingUtils.fromBase64(message.getClientRandKey().getBytes());
-            var serverSeed = EncodingUtils.toBytes(CryptoConstants.ENCRYPT_SEED);
-            CryptoUtils.performXor(clientSeed, serverSeed);
+                this.seed = new String(EncodingUtils.toBase64(serverSeedEncrypted));
+                this.seedSignature = new String(EncodingUtils.toBase64(signature.sign()));
+            } catch (Exception ignored) { // Backwards compatability with the UserAssembly.dll patch.
+                var clientSeed = EncodingUtils.fromBase64(message.getClientRandKey().getBytes());
+                var serverSeed = EncodingUtils.toBytes(CryptoConstants.ENCRYPT_SEED);
+                CryptoUtils.performXor(clientSeed, serverSeed);
 
-            this.seed = new String(EncodingUtils.toBase64(clientSeed));
-            this.seedSignature = CryptoConstants.LEGACY_SEED_SIGNATURE;
-        }
+                this.seed = new String(EncodingUtils.toBase64(clientSeed));
+                this.seedSignature = CryptoConstants.LEGACY_SEED_SIGNATURE;
+            }
 
         // Send the response.
         this.session = session;
@@ -113,14 +114,15 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
 
         var player = this.session.getPlayer();
         var account = this.session.getAccount();
-        var baseResponse = GetPlayerTokenRsp.newBuilder()
-                .setUid(player.getUserId())
-                .setAccountType(1)
-                .setIsProficientPlayer(false) // TODO: Check if the player is proficient.
-                .setPlatformType(3)
-                .setRegPlatform(3)
-                .setCountryCode("US")
-                .setClientIpStr(this.session.getPrettyAddress(false));
+        var baseResponse =
+                GetPlayerTokenRsp.newBuilder()
+                        .setUid(player.getUserId())
+                        .setAccountType(1)
+                        .setIsProficientPlayer(false) // TODO: Check if the player is proficient.
+                        .setPlatformType(3)
+                        .setRegPlatform(3)
+                        .setCountryCode("US")
+                        .setClientIpStr(this.session.getPrettyAddress(false));
 
         if (this.banExpires > 0) {
             // Send the response associated with a ban.
@@ -132,17 +134,16 @@ public final class GetPlayerToken extends BasePacket<GetPlayerTokenReq, GetPlaye
         }
 
         // Set headers for a successful login.
-        baseResponse = baseResponse
-                .setChannelId(1)
-                .setToken(account.loginToken)
-                .setSecretKeySeed(CryptoConstants.ENCRYPT_SEED)
-                .setSecurityCmdBuffer(CryptoConstants.ENCRYPT_SEED_BUFFER.get())
-                .setClientVersionRandomKey(GameConstants.VERSION_KEY);
+        baseResponse =
+                baseResponse
+                        .setChannelId(1)
+                        .setToken(account.loginToken)
+                        .setSecretKeySeed(CryptoConstants.ENCRYPT_SEED)
+                        .setSecurityCmdBuffer(CryptoConstants.ENCRYPT_SEED_BUFFER.get())
+                        .setClientVersionRandomKey(GameConstants.VERSION_KEY);
         // Set the headers for an encrypted login.
         if (this.encrypted) {
-            baseResponse = baseResponse
-                    .setServerRandKey(this.seed)
-                    .setSign(this.seedSignature);
+            baseResponse = baseResponse.setServerRandKey(this.seed).setSign(this.seedSignature);
         }
 
         return baseResponse.build();

@@ -18,8 +18,7 @@ public interface Preconditions {
      * @throws NullPointerException If the object is null.
      */
     static void notNull(@Nullable Object object) throws NullPointerException {
-        if (object == null)
-            throw new NullPointerException();
+        if (object == null) throw new NullPointerException();
     }
 
     /**
@@ -30,9 +29,7 @@ public interface Preconditions {
      */
     static void validPacket(ByteBuf packet) throws InvalidException {
         var part = (int) packet.readShort();
-        if (part == NetworkConstants.MAGIC_1 ||
-                part == NetworkConstants.MAGIC_2)
-            return;
+        if (part == NetworkConstants.MAGIC_1 || part == NetworkConstants.MAGIC_2) return;
 
         throw new InvalidException("exception.packet");
     }
@@ -49,45 +46,36 @@ public interface Preconditions {
     }
 
     /**
-     * Validates a player.
-     * The player should not be null.
+     * Validates a player. The player should not be null.
      *
      * @param player The player to validate.
      * @throws InvalidException If the player is invalid.
      */
     static void validPlayer(@Nullable Player player) throws InvalidException {
-        if (player == null)
-            throw new InvalidException("exception.player");
+        if (player == null) throw new InvalidException("exception.player");
     }
 
     /**
-     * Validates a session.
-     * The session should be logged in with a player and an account.
+     * Validates a session. The session should be logged in with a player and an account.
      *
      * @param session The session to validate.
      * @throws InvalidException If the session is invalid.
      */
     static void loggedIn(NetworkSession session) throws InvalidException {
-        if (session == null || session.getPlayer() == null ||
-                session.getAccount() == null)
+        if (session == null || session.getPlayer() == null || session.getAccount() == null)
             throw new InvalidException("exception.player");
     }
 
     /**
-     * Validates an avatar.
-     * The avatar should have data.
-     * The player should not have the avatar.
+     * Validates an avatar. The avatar should have data. The player should not have the avatar.
      *
      * @param avatar The avatar to validate.
      * @param player The player to validate.
      * @throws InvalidException If the avatar is invalid.
      */
     static void addAvatar(Avatar avatar, Player player) throws InvalidException {
-        if (avatar == null || player == null)
-            throw new InvalidException("exception.avatar");
-        if (avatar.getData() == null)
-            throw new InvalidException("exception.avatar");
-        if (player.getAvatars().contains(avatar))
-            throw new InvalidException("exception.avatar");
+        if (avatar == null || player == null) throw new InvalidException("exception.avatar");
+        if (avatar.getData() == null) throw new InvalidException("exception.avatar");
+        if (player.getAvatars().contains(avatar)) throw new InvalidException("exception.avatar");
     }
 }

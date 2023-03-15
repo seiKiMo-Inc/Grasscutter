@@ -5,17 +5,17 @@ import io.grasscutter.game.data.GameResource;
 import io.grasscutter.game.data.Resource;
 import io.grasscutter.game.data.common.FightPropertyData;
 import io.grasscutter.utils.enums.Priority;
+import java.util.ArrayList;
 import lombok.Getter;
 
-import java.util.ArrayList;
-
 /* Avatar talent details. */
-@Resource(name = "AvatarTalentExcelConfigData.json",
-        priority = Priority.HIGHEST)
-@Getter public final class AvatarTalentData implements GameResource {
+@Resource(name = "AvatarTalentExcelConfigData.json", priority = Priority.HIGHEST)
+@Getter
+public final class AvatarTalentData implements GameResource {
     @Getter(onMethod = @__(@Override))
     @SerializedName("talentId")
     private int id;
+
     private int prevTalent;
     private long nameTextMapHash;
     private String icon;
@@ -30,7 +30,8 @@ import java.util.ArrayList;
         var parsed = new ArrayList<FightPropertyData>(this.getAddProps().length);
         for (var prop : this.getAddProps()) {
             if (prop.getPropType() != null || prop.getValue() == 0f) {
-                prop.onLoad(); parsed.add(prop);
+                prop.onLoad();
+                parsed.add(prop);
             }
         }
 

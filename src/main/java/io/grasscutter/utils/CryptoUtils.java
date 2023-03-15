@@ -1,13 +1,12 @@
 package io.grasscutter.utils;
 
 import io.grasscutter.utils.enums.KeyType;
-import org.jetbrains.annotations.Nullable;
-
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Random;
+import org.jetbrains.annotations.Nullable;
 
 /* Utility methods for cryptography. */
 public interface CryptoUtils {
@@ -53,7 +52,8 @@ public interface CryptoUtils {
             }
 
             return sb.toString();
-        } catch (NoSuchAlgorithmException ignored) { }
+        } catch (NoSuchAlgorithmException ignored) {
+        }
 
         return null;
     }
@@ -111,8 +111,7 @@ public interface CryptoUtils {
      */
     @Nullable static PublicKey generatePublicKey(byte[] keyBytes, String type) {
         try {
-            return KeyFactory.getInstance(type)
-                    .generatePublic(new X509EncodedKeySpec(keyBytes));
+            return KeyFactory.getInstance(type).generatePublic(new X509EncodedKeySpec(keyBytes));
         } catch (NoSuchAlgorithmException | InvalidKeySpecException ignored) {
             return null;
         }
@@ -126,8 +125,7 @@ public interface CryptoUtils {
      */
     @Nullable static PrivateKey generatePrivateKey(byte[] keyBytes, String type) {
         try {
-            return KeyFactory.getInstance(type)
-                    .generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
+            return KeyFactory.getInstance(type).generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
         } catch (NoSuchAlgorithmException | InvalidKeySpecException ignored) {
             return null;
         }

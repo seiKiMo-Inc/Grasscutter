@@ -8,13 +8,12 @@ import io.grasscutter.utils.enums.game.EntityIdType;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 /* A container of players. */
 public final class World implements Iterable<Player> {
@@ -22,10 +21,11 @@ public final class World implements Iterable<Player> {
     @Getter private final Player owner;
     @Getter private final boolean multiplayer;
 
-    @Getter private final List<Player> players
-            = Collections.synchronizedList(new ArrayList<>());
-    @Getter private final Int2ObjectMap<Scene> scenes
-            = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
+    @Getter private final List<Player> players = Collections.synchronizedList(new ArrayList<>());
+
+    @Getter
+    private final Int2ObjectMap<Scene> scenes =
+            Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 
     private int peerId = 0;
     private int entityId = 0;
@@ -146,8 +146,7 @@ public final class World implements Iterable<Player> {
 
         // Update the player.
         player.setPeerId(this.nextPeerId());
-        player.getTeams().setEntityId(
-                this.nextEntityId(EntityIdType.TEAM));
+        player.getTeams().setEntityId(this.nextEntityId(EntityIdType.TEAM));
 
         // Set the player's scene.
         var scene = this.getScene(player.getSceneId());
@@ -166,9 +165,9 @@ public final class World implements Iterable<Player> {
         this.getPlayers().remove(player);
         player.setWorld(null);
 
-//        // Remove the player from their scene.
-//        var scene = this.getScene(player.getScene());
-//        scene.removePlayer(player);
+        //        // Remove the player from their scene.
+        //        var scene = this.getScene(player.getScene());
+        //        scene.removePlayer(player);
     }
 
     /**
@@ -176,8 +175,8 @@ public final class World implements Iterable<Player> {
      *
      * @return The iterator.
      */
-    @NotNull
-    @Override public Iterator<Player> iterator() {
+    @NotNull @Override
+    public Iterator<Player> iterator() {
         return this.getPlayers().iterator();
     }
 }

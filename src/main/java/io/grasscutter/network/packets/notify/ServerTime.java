@@ -9,8 +9,6 @@ import io.grasscutter.proto.ServerTimeNotifyOuterClass.ServerTimeNotify;
 public final class ServerTime extends BasePacket<Empty, ServerTimeNotify> {
     @Override
     public ServerTimeNotify preparePacket() {
-        return ServerTimeNotify.newBuilder()
-                .setServerTime(System.currentTimeMillis())
-                .build();
+        return ServerTimeNotify.newBuilder().setServerTime(System.currentTimeMillis()).build();
     }
 }

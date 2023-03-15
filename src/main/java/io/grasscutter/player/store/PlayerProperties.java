@@ -3,7 +3,6 @@ package io.grasscutter.player.store;
 import io.grasscutter.utils.enums.game.PlayerProperty;
 import io.grasscutter.utils.interfaces.Serializable;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,8 +12,7 @@ public final class PlayerProperties extends Int2IntOpenHashMap implements Serial
     public Map<String, Object> serialize() {
         // Serialize the map.
         var map = new HashMap<String, Object>();
-        this.forEach((key, value) ->
-                map.put(String.valueOf(key), value));
+        this.forEach((key, value) -> map.put(String.valueOf(key), value));
 
         return map;
     }
@@ -22,8 +20,7 @@ public final class PlayerProperties extends Int2IntOpenHashMap implements Serial
     @Override
     public void deserialize(Map<String, Object> data) {
         // De-serialize the map.
-        data.forEach((key, value) ->
-                this.put(Integer.parseInt(key), (int) value));
+        data.forEach((key, value) -> this.put(Integer.parseInt(key), (int) value));
     }
 
     /**

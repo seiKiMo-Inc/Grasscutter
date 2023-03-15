@@ -7,9 +7,11 @@ import io.grasscutter.utils.enums.game.FightProperty;
 import lombok.Getter;
 
 @Resource(name = "ReliquaryMainPropExcelConfigData.json")
-@Getter public final class ReliquaryMainPropData implements GameResource {
+@Getter
+public final class ReliquaryMainPropData implements GameResource {
     @Getter(onMethod = @__(@Override))
     private int id;
+
     private int propDepotId;
 
     @SerializedName("propType")

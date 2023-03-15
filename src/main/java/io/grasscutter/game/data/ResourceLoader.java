@@ -9,42 +9,43 @@ import io.grasscutter.utils.encodings.TabSeparatedJson;
 import io.grasscutter.utils.enums.Priority;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-
 import java.util.*;
 
 /* Loads game resources. */
 @SuppressWarnings("unchecked")
 public final class ResourceLoader {
-    /**
-     * Loads all resources.
-     */
+    /** Loads all resources. */
     public static void loadResources() {
         var startTime = System.nanoTime();
 
         // Get the resources to load.
         var loadingExceptions = new ArrayList<Throwable>();
         for (var resource : ResourceLoader.sortResources()) {
-            resource.stream().parallel().unordered().forEach(toLoad -> {
-                try {
-                    var data = toLoad.getAnnotation(Resource.class); // Get the resource data.
-                    var map = GameData.getTargetMap(toLoad); // Get the output map.
+            resource.stream()
+                    .parallel()
+                    .unordered()
+                    .forEach(
+                            toLoad -> {
+                                try {
+                                    var data = toLoad.getAnnotation(Resource.class); // Get the resource data.
+                                    var map = GameData.getTargetMap(toLoad); // Get the output map.
 
-                    // Validate the data.
-                    Preconditions.notNull(data);
-                    Preconditions.notNull(map);
+                                    // Validate the data.
+                                    Preconditions.notNull(data);
+                                    Preconditions.notNull(map);
 
-                    // Load the resource.
-                    ResourceLoader.loadResource(toLoad, data, map);
-                } catch (Exception exception) {
-                    loadingExceptions.add(exception);
-                }
-            });
+                                    // Load the resource.
+                                    ResourceLoader.loadResource(toLoad, data, map);
+                                } catch (Exception exception) {
+                                    loadingExceptions.add(exception);
+                                }
+                            });
         }
 
         // Print the loading exceptions.
         if (!loadingExceptions.isEmpty()) {
-            loadingExceptions.forEach(exception ->
-                    Log.debug(new TextContainer("exception.error"), exception));
+            loadingExceptions.forEach(
+                    exception -> Log.debug(new TextContainer("exception.error"), exception));
         }
 
         var endTime = System.nanoTime();
@@ -54,6 +55,7 @@ public final class ResourceLoader {
 
     /**
      * Sorts the list of resources from highest to lowest priority.
+     *
      * @return A sorted set of resources.
      */
     private static List<Set<Class<? extends GameResource>>> sortResources() {
@@ -79,24 +81,24 @@ public final class ResourceLoader {
      * @param map The map to add the resource content to.
      */
     private static void loadResource(
-            Class<? extends GameResource> resource,
-            Resource data, Int2ObjectMap map
-    ) throws Exception {
+            Class<? extends GameResource> resource, Resource data, Int2ObjectMap map) throws Exception {
         for (var name : data.name()) {
             // Load the resource's data.
             var path = GameResource.getExcelPath(name);
-            var results = switch (FileUtils.extension(path)) {
-                case "json" -> Json.toList(path, resource);
-                case "tsj" -> TabSeparatedJson.toList(path, resource);
-                default -> null;
-            };
+            var results =
+                    switch (FileUtils.extension(path)) {
+                        case "json" -> Json.toList(path, resource);
+                        case "tsj" -> TabSeparatedJson.toList(path, resource);
+                        default -> null;
+                    };
             if (results == null) return;
 
             // Add the resource to the map.
-            results.forEach(result -> {
-                result.onLoad();
-                map.put(result.getId(), result);
-            });
+            results.forEach(
+                    result -> {
+                        result.onLoad();
+                        map.put(result.getId(), result);
+                    });
         }
     }
 }

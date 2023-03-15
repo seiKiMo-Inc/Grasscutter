@@ -10,16 +10,13 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import lombok.Getter;
-
 import java.util.function.Consumer;
+import lombok.Getter;
 
 /* Storage container for player avatars. */
 public final class AvatarStorage extends PlayerManager {
-    @Getter private final Int2ObjectMap<Avatar> avatars
-            = new Int2ObjectOpenHashMap<>();
-    private final Long2ObjectMap<Avatar> avatarsGuid
-            = new Long2ObjectOpenHashMap<>();
+    @Getter private final Int2ObjectMap<Avatar> avatars = new Int2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<Avatar> avatarsGuid = new Long2ObjectOpenHashMap<>();
 
     /**
      * Creates a new avatar storage container.
@@ -59,8 +56,7 @@ public final class AvatarStorage extends PlayerManager {
     }
 
     /**
-     * Adds the avatar to the player's storage.
-     * Does not automatically add to the player's team.
+     * Adds the avatar to the player's storage. Does not automatically add to the player's team.
      *
      * @param avatar The avatar to add.
      */
@@ -95,8 +91,7 @@ public final class AvatarStorage extends PlayerManager {
             avatar.recalculate();
 
             // Send the notification.
-            this.getPlayer().getSession().send(
-                    new AvatarAdd(avatar, addToTeam));
+            this.getPlayer().getSession().send(new AvatarAdd(avatar, addToTeam));
         }
     }
 
@@ -121,12 +116,10 @@ public final class AvatarStorage extends PlayerManager {
      */
     private void addStartingWeapon(Avatar avatar) {
         // Check if the avatar is owned by the player.
-        if (avatar.getOwner() != this.getPlayer())
-            return;
+        if (avatar.getOwner() != this.getPlayer()) return;
 
         // Create the item.
-        var weapon = new Item(avatar
-                .getData().getInitialWeapon());
+        var weapon = new Item(avatar.getData().getInitialWeapon());
         if (weapon.getItemData() != null) {
             this.getPlayer().getInventory().addItem(weapon);
             avatar.equipItem(weapon, true);

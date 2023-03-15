@@ -9,26 +9,30 @@ import io.grasscutter.world.World;
 import io.grasscutter.world.entity.EntityAvatar;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import java.util.*;
+import java.util.function.BiConsumer;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-
 /* Manages the player's team(s). */
 public final class TeamManager extends PlayerManager implements Serializable {
-    @Getter private final Map<Integer, TeamInfo> teams
-            = new LinkedHashMap<>(); // A collection of teams.
-    @Getter @Setter private transient TeamInfo multiplayerTeam
-            = new TeamInfo(); // Default multiplayer team.
+    @Getter
+    private final Map<Integer, TeamInfo> teams = new LinkedHashMap<>(); // A collection of teams.
+
+    @Getter @Setter
+    private transient TeamInfo multiplayerTeam = new TeamInfo(); // Default multiplayer team.
+
     @Getter private transient List<TeamInfo> temporaryTeam;
 
-    @Getter private final transient IntSet resonances
-            = new IntOpenHashSet(); // Team resonances.
-    @Getter private final transient IntSet resonancesConfig
-            = new IntOpenHashSet(); // Configs for team resonances.
-    @Getter private final transient List<EntityAvatar> activeAvatars
-            = new ArrayList<>(); // The player's avatars.
+    @Getter private final transient IntSet resonances = new IntOpenHashSet(); // Team resonances.
+
+    @Getter
+    private final transient IntSet resonancesConfig =
+            new IntOpenHashSet(); // Configs for team resonances.
+
+    @Getter
+    private final transient List<EntityAvatar> activeAvatars =
+            new ArrayList<>(); // The player's avatars.
 
     @Getter @Setter private int selectedTeam = 0;
     @Getter @Setter private int selectedAvatar = 0;
@@ -36,9 +40,7 @@ public final class TeamManager extends PlayerManager implements Serializable {
 
     @Getter @Setter private transient int entityId = 0;
 
-    /**
-     * Constructor for a blank team manager.
-     */
+    /** Constructor for a blank team manager. */
     public TeamManager() {
         super(null);
     }
@@ -53,8 +55,7 @@ public final class TeamManager extends PlayerManager implements Serializable {
 
         this.selectedTeam = 1;
         // Add teams to the collection.
-        for (var i = 1; i <= GameConstants.TEAM_COUNT; i++)
-            this.teams.put(i, new TeamInfo());
+        for (var i = 1; i <= GameConstants.TEAM_COUNT; i++) this.teams.put(i, new TeamInfo());
     }
 
     /**
@@ -84,8 +85,9 @@ public final class TeamManager extends PlayerManager implements Serializable {
     public int getTeamId(TeamInfo team) {
         return this.teams.entrySet().stream()
                 .filter(entry -> entry.getValue() == team)
-                .findFirst().orElse(Map.entry(
-                        -1, new TeamInfo())).getKey();
+                .findFirst()
+                .orElse(Map.entry(-1, new TeamInfo()))
+                .getKey();
     }
 
     /**
@@ -107,38 +109,36 @@ public final class TeamManager extends PlayerManager implements Serializable {
     }
 
     /**
-     * Fetches the currently selected avatar.
-     * This returns the avatar as an entity.
+     * Fetches the currently selected avatar. This returns the avatar as an entity.
      *
      * @return The currently selected avatar.
      */
     public EntityAvatar getCurrentAvatar() {
-        return this.getActiveAvatars().get(
-                this.getSelectedAvatar());
+        return this.getActiveAvatars().get(this.getSelectedAvatar());
     }
 
     /*
      * Serialization.
      */
 
-//    @Override
-//    public Map<String, Object> serialize() {
-//        // Serialize the map.
-//        var map = new HashMap<String, Object>();
-//        this.teams.forEach((key, value) ->
-//                map.put(String.valueOf(key), value.serialize()));
-//
-//        return map;
-//    }
-//
-//    @Override
-//    @SuppressWarnings("unchecked")
-//    public void deserialize(Map<String, Object> data) {
-//        // De-serialize the map.
-//        data.forEach((key, value) -> {
-//            var team = new TeamInfo();
-//            team.deserialize((Map<String, Object>) value);
-//            this.teams.put(Integer.parseInt(key), team);
-//        });
-//    }
+    //    @Override
+    //    public Map<String, Object> serialize() {
+    //        // Serialize the map.
+    //        var map = new HashMap<String, Object>();
+    //        this.teams.forEach((key, value) ->
+    //                map.put(String.valueOf(key), value.serialize()));
+    //
+    //        return map;
+    //    }
+    //
+    //    @Override
+    //    @SuppressWarnings("unchecked")
+    //    public void deserialize(Map<String, Object> data) {
+    //        // De-serialize the map.
+    //        data.forEach((key, value) -> {
+    //            var team = new TeamInfo();
+    //            team.deserialize((Map<String, Object>) value);
+    //            this.teams.put(Integer.parseInt(key), team);
+    //        });
+    //    }
 }

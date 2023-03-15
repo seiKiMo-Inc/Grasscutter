@@ -5,7 +5,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import io.grasscutter.Grasscutter;
 import io.grasscutter.utils.constants.Properties;
-
 import java.util.Arrays;
 
 /**
@@ -19,8 +18,7 @@ public final class JLineLogbackAppender extends ConsoleAppender<ILoggingEvent> {
         if (!started) return;
 
         // Check if the logger is running in debug mode.
-        if (eventObject.getLevel() == Level.DEBUG &&
-                !Properties.DEBUG) return;
+        if (eventObject.getLevel() == Level.DEBUG && !Properties.DEBUG) return;
 
         Arrays.stream(new String(encoder.encode(eventObject)).split(System.lineSeparator()))
                 .forEach(Grasscutter.getConsole()::printAbove);

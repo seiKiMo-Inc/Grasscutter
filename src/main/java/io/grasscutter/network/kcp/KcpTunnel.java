@@ -2,11 +2,10 @@ package io.grasscutter.network.kcp;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import java.net.InetSocketAddress;
 import kcp.highway.Ukcp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.net.InetSocketAddress;
 
 /** Wrapper for {@link Ukcp}. */
 @AllArgsConstructor
@@ -34,8 +33,7 @@ public abstract class KcpTunnel {
     }
 
     /**
-     * Unsafe method to write bytes to the client.
-     * Requires manual {@link ByteBuf#release()}.
+     * Unsafe method to write bytes to the client. Requires manual {@link ByteBuf#release()}.
      *
      * @param buffer The buffer to write.
      */
@@ -43,9 +41,7 @@ public abstract class KcpTunnel {
         this.handle.write(buffer);
     }
 
-    /**
-     * Closes the tunnel for this client.
-     */
+    /** Closes the tunnel for this client. */
     public void close() {
         this.handle.close();
     }

@@ -17,8 +17,7 @@ public final class EnterScenePeer extends BasePacket<Empty, EnterScenePeerNotify
         return EnterScenePeerNotify.newBuilder()
                 .setDestSceneId(this.player.getSceneId())
                 .setPeerId(this.player.getPeerId())
-                .setHostPeerId(this.player.getWorld()
-                        .getOwner().getPeerId())
+                .setHostPeerId(this.player.getWorld().getOwner().getPeerId())
                 .setEnterSceneToken(this.player.getSceneToken())
                 .build();
     }

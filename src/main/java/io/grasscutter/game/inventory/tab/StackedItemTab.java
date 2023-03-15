@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 /* An inventory tab implementation for stacked items. */
 @RequiredArgsConstructor
 public final class StackedItemTab implements InventoryTab {
-    private final Int2ObjectMap<Item> items
-            = new Int2ObjectOpenHashMap<>();
+    private final Int2ObjectMap<Item> items = new Int2ObjectOpenHashMap<>();
     @Getter private final int maxCapacity;
 
     @Override

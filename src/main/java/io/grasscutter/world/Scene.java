@@ -10,15 +10,14 @@ import io.grasscutter.utils.enums.game.FightProperty;
 import io.grasscutter.utils.enums.game.SceneType;
 import io.grasscutter.world.entity.Entity;
 import io.grasscutter.world.entity.EntityAvatar;
-import lombok.Getter;
-import lombok.Setter;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.Getter;
+import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 
 /* A container of world data. */
 public final class Scene {
@@ -26,10 +25,8 @@ public final class Scene {
     @Getter private final World world;
     @Getter private final SceneData data;
 
-    @Getter private final List<Player> players
-            = new CopyOnWriteArrayList<>();
-    @Getter private final Map<Integer, Entity> entities
-            = new ConcurrentHashMap<>();
+    @Getter private final List<Player> players = new CopyOnWriteArrayList<>();
+    @Getter private final Map<Integer, Entity> entities = new ConcurrentHashMap<>();
 
     @Getter private long creationTime;
     @Getter @Setter private int time;
@@ -128,12 +125,12 @@ public final class Scene {
     @Nullable public Entity getEntityByConfig(int configId) {
         return this.getEntities().values().stream()
                 .filter(entity -> entity.getConfigId() == configId)
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElse(null);
     }
 
     /**
-     * Adds an entity to the scene.
-     * This method sends the entity to all players.
+     * Adds an entity to the scene. This method sends the entity to all players.
      *
      * @param entity The entity to add.
      */
@@ -142,8 +139,7 @@ public final class Scene {
     }
 
     /**
-     * Adds an entity to the scene.
-     * This method can send the entity to all players.
+     * Adds an entity to the scene. This method can send the entity to all players.
      *
      * @param entity The entity to add.
      * @param appear Whether the entity should appear.
@@ -157,8 +153,7 @@ public final class Scene {
     }
 
     /**
-     * Adds an entity to the scene.
-     * This method only sends the entity to one player.
+     * Adds an entity to the scene. This method only sends the entity to one player.
      *
      * @param entity The entity to add.
      * @param player The player to send the entity appearance to.
@@ -183,8 +178,7 @@ public final class Scene {
     }
 
     /**
-     * Removes an entity from the scene.
-     * This method sends the entity disappearance to all players.
+     * Removes an entity from the scene. This method sends the entity disappearance to all players.
      *
      * @param entity The entity to remove.
      */
@@ -193,8 +187,7 @@ public final class Scene {
     }
 
     /**
-     * Removes an entity from the scene.
-     * This method can send the entity disappearance to all players.
+     * Removes an entity from the scene. This method can send the entity disappearance to all players.
      *
      * @param entity The entity to remove.
      * @param disappear Whether the entity should disappear.
@@ -212,17 +205,15 @@ public final class Scene {
     }
 
     /**
-     * Removes a group of entities from the scene.
-     * This method sends the entity disappearance to all players.
+     * Removes a group of entities from the scene. This method sends the entity disappearance to all
+     * players.
      *
      * @param entities The entities to remove.
      * @param type The vision type.
      */
     public synchronized void removeEntities(Collection<? extends Entity> entities, VisionType type) {
         // Remove all entities from the scene.
-        var removed = entities.stream().map(entity ->
-                        this.removeEntity(entity, false))
-                .toList();
+        var removed = entities.stream().map(entity -> this.removeEntity(entity, false)).toList();
         if (removed.isEmpty()) return;
 
         // Broadcast the entity disappearance.
@@ -255,17 +246,14 @@ public final class Scene {
     public void showEntities(Player player) {
         // Get the other entities in the scene.
         var current = player.getTeams().getCurrentAvatar();
-        var others = this.getEntities().values().stream()
-                .filter(entity -> entity != current)
-                .toList();
+        var others = this.getEntities().values().stream().filter(entity -> entity != current).toList();
 
         // Send the entity appearance.
         player.getSession().send(new SceneEntityAppear(others, VisionType.VISION_TYPE_MEET));
     }
 
     /**
-     * Spawns a player into the world.
-     * This should be called only during login.
+     * Spawns a player into the world. This should be called only during login.
      *
      * @param player The player to spawn.
      */
@@ -346,8 +334,7 @@ public final class Scene {
         var team = teams.getCurrentTeam();
         for (var avatarId : team.getAvatars()) {
             // Create the avatar entity.
-            var avatar = new EntityAvatar(player.getScene(),
-                    player.getAvatars().get(avatarId));
+            var avatar = new EntityAvatar(player.getScene(), player.getAvatars().get(avatarId));
             // Add the avatar to the team.
             teams.getActiveAvatars().add(avatar);
         }
@@ -363,7 +350,6 @@ public final class Scene {
      * @param packet The packet to broadcast.
      */
     public void broadcastPacket(BasePacket<?, ?> packet) {
-        this.getPlayers().forEach(player ->
-                player.getSession().send(packet));
+        this.getPlayers().forEach(player -> player.getSession().send(packet));
     }
 }

@@ -1,6 +1,5 @@
 package io.grasscutter.auth;
 
-import io.grasscutter.proto.RetcodeOuterClass.Retcode;
 import io.grasscutter.utils.DatabaseUtils;
 import io.grasscutter.utils.EncodingUtils;
 import io.grasscutter.utils.constants.CryptoConstants;
@@ -32,8 +31,7 @@ public class DefaultLoginAuthenticator implements Authenticator<ShieldLoginReque
                     password = null;
                 }
         } else {
-            password = new String(EncodingUtils.fromBase64(
-                    password.getBytes()), StandardCharsets.UTF_8);
+            password = new String(EncodingUtils.fromBase64(password.getBytes()), StandardCharsets.UTF_8);
         }
 
         // Check the password.

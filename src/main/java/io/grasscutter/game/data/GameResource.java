@@ -1,20 +1,18 @@
 package io.grasscutter.game.data;
 
 import io.grasscutter.utils.FileUtils;
-
 import java.nio.file.Path;
 
 /* Defines a class as a game resource. */
 public interface GameResource {
     /**
      * The resource ID.
+     *
      * @return A unique ID for the resource.
      */
     int getId();
 
-    /**
-     * Invoked when this resource loads.
-     */
+    /** Invoked when this resource loads. */
     default void onLoad() {}
 
     /**
@@ -34,7 +32,7 @@ public interface GameResource {
      * @return The path to the excel data.
      */
     static Path getExcelPath(String file) {
-        return FileUtils.getResourceFile(FileUtils.GAME_RESOURCES
-                .get().resolve("ExcelBinOutput"), file);
+        return FileUtils.getResourceFile(
+                FileUtils.GAME_RESOURCES.get().resolve("ExcelBinOutput"), file);
     }
 }

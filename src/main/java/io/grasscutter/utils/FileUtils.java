@@ -5,6 +5,7 @@ import io.grasscutter.utils.constants.FileConstants;
 import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.interfaces.Serializable;
+import io.grasscutter.utils.objects.lang.TextContainer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -13,17 +14,13 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
-
-import io.grasscutter.utils.objects.lang.TextContainer;
 import lombok.SneakyThrows;
 
 /* Utility methods for accessing the file system. */
 public interface FileUtils {
     AtomicReference<Path> GAME_RESOURCES = new AtomicReference<>();
 
-    /**
-     * Sets the references for the constants in this file.
-     */
+    /** Sets the references for the constants in this file. */
     static void setReferences() {
         GAME_RESOURCES.set(FileUtils.getGameResourcesPath());
     }
@@ -33,8 +30,7 @@ public interface FileUtils {
      */
 
     /**
-     * Gets the path to the game resources location.
-     * Loads the resources from a ZIP file.
+     * Gets the path to the game resources location. Loads the resources from a ZIP file.
      *
      * @return The path to the game resources location.
      */
@@ -44,19 +40,24 @@ public interface FileUtils {
         // Check if the path exists.
         if (!Files.exists(resourcesPath)) {
             Log.error(new TextContainer("server.dedicated.resources.no_file"));
-            Log.info(new TextContainer("server.dedicated.resources.add_resources",
-                    resourcesPath.getFileName()));
+            Log.info(
+                    new TextContainer(
+                            "server.dedicated.resources.add_resources", resourcesPath.getFileName()));
             System.exit(1);
         }
 
         var fileSystem = FileSystems.newFileSystem(resourcesPath);
         var root = fileSystem.getPath("");
 
-        try (var path = Files.find(root, 3, (p, a) -> {
-            var file = p.getFileName();
-            if (file == null) return false;
-            return file.toString().equals("ExcelBinOutput");
-        })) {
+        try (var path =
+                Files.find(
+                        root,
+                        3,
+                        (p, a) -> {
+                            var file = p.getFileName();
+                            if (file == null) return false;
+                            return file.toString().equals("ExcelBinOutput");
+                        })) {
             var outputPath = path.findFirst().orElseThrow();
             resourcesPath = outputPath.getParent();
             if (resourcesPath == null) resourcesPath = root;
@@ -119,8 +120,7 @@ public interface FileUtils {
     }
 
     /**
-     * Returns the path to a resource file.
-     * Loads the resource from a TSJ, JSON, or TSV file.
+     * Returns the path to a resource file. Loads the resource from a TSJ, JSON, or TSV file.
      *
      * @param root The root path to the resource.
      * @param file The file name of the resource.
@@ -136,7 +136,6 @@ public interface FileUtils {
         // Fallback for file creation.
         return root.resolve(name + ".tsj");
     }
-
 
     /**
      * Returns the extension of a file.

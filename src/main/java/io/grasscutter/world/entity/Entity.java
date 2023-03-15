@@ -28,7 +28,9 @@ public abstract class Entity {
     @Getter private final Scene scene;
     @Getter @Setter private SpawnDataEntry spawnData;
 
-    @Getter @Setter private MotionState motion = MotionState.MOTION_STATE_NONE; // The entity's motion state.
+    @Getter @Setter
+    private MotionState motion = MotionState.MOTION_STATE_NONE; // The entity's motion state.
+
     @Getter @Setter private int sceneLastMove; // In scene time milliseconds.
     @Getter @Setter private int reliableLastMove; // In reliable sequence.
 
@@ -98,7 +100,7 @@ public abstract class Entity {
      * Sets a combat property.
      *
      * @param id The property ID.
-     * @param value  The property value.
+     * @param value The property value.
      */
     public final void set(int id, float value) {
         this.getCombatProperties().put(id, value);
@@ -108,7 +110,7 @@ public abstract class Entity {
      * Sets a combat property.
      *
      * @param property The property.
-     * @param value  The property value.
+     * @param value The property value.
      */
     public final void set(FightProperty property, float value) {
         this.set(property.getId(), value);
@@ -118,7 +120,7 @@ public abstract class Entity {
      * Adds to a combat property.
      *
      * @param id The property ID.
-     * @param value  The value to add.
+     * @param value The value to add.
      */
     public final void add(int id, float value) {
         this.set(id, this.get(id) + value);
@@ -128,7 +130,7 @@ public abstract class Entity {
      * Adds to a combat property.
      *
      * @param property The property.
-     * @param value  The value to add.
+     * @param value The value to add.
      */
     public final void add(FightProperty property, float value) {
         this.add(property.getId(), value);
@@ -180,8 +182,8 @@ public abstract class Entity {
      * @param builder The builder.
      */
     public final void propsToBuilder(SceneEntityInfo.Builder builder) {
-        this.getCombatProperties().forEach((id, value) ->
-                builder.addFightPropList(ServerUtils.combatProperty(id, value)));
+        this.getCombatProperties()
+                .forEach((id, value) -> builder.addFightPropList(ServerUtils.combatProperty(id, value)));
     }
 
     /*
@@ -206,13 +208,9 @@ public abstract class Entity {
      * Entity events.
      */
 
-    /**
-     * Invoked when the entity is added to a scene.
-     */
+    /** Invoked when the entity is added to a scene. */
     public void onCreate() {}
 
-    /**
-     * Invoked when the entity is removed from a scene.
-     */
+    /** Invoked when the entity is removed from a scene. */
     public void onDestroy() {}
 }

@@ -6,7 +6,6 @@ import io.grasscutter.network.protocol.PacketIds;
 import io.grasscutter.proto.SceneEntityDisappearNotifyOuterClass.SceneEntityDisappearNotify;
 import io.grasscutter.proto.VisionTypeOuterClass.VisionType;
 import io.grasscutter.world.entity.Entity;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -46,12 +45,10 @@ public final class SceneEntityDisappear extends BasePacket<Empty, SceneEntityDis
 
     @Override
     public SceneEntityDisappearNotify preparePacket() {
-        var packet = SceneEntityDisappearNotify.newBuilder()
-                .setDisappearType(this.vision);
+        var packet = SceneEntityDisappearNotify.newBuilder().setDisappearType(this.vision);
 
         // Add entities.
-        this.entities.forEach(entity ->
-                packet.addEntityList(entity.getId()));
+        this.entities.forEach(entity -> packet.addEntityList(entity.getId()));
 
         return packet.build();
     }

@@ -23,20 +23,23 @@ public final class PlayerEnterSceneInfo extends BasePacket<Empty, PlayerEnterSce
         var world = this.player.getWorld();
 
         var empty = AbilitySyncStateInfo.newBuilder().build();
-        var packet = PlayerEnterSceneInfoNotify.newBuilder()
-                .setCurAvatarEntityId(teams.getCurrentAvatar().getId())
-                .setEnterSceneToken(player.getSceneToken());
+        var packet =
+                PlayerEnterSceneInfoNotify.newBuilder()
+                        .setCurAvatarEntityId(teams.getCurrentAvatar().getId())
+                        .setEnterSceneToken(player.getSceneToken());
 
         // Set the team info.
-        packet.setTeamEnterInfo(TeamEnterSceneInfo.newBuilder()
-                .setTeamEntityId(teams.getEntityId())
-                .setTeamAbilityInfo(empty)
-                .setAbilityControlBlock(AbilityControlBlock.newBuilder().build()));
+        packet.setTeamEnterInfo(
+                TeamEnterSceneInfo.newBuilder()
+                        .setTeamEntityId(teams.getEntityId())
+                        .setTeamAbilityInfo(empty)
+                        .setAbilityControlBlock(AbilityControlBlock.newBuilder().build()));
         // Set the multiplayer info.
-        packet.setMpLevelEntityInfo(MPLevelEntityInfo.newBuilder()
-                .setEntityId(world.getLevelId())
-                .setAuthorityPeerId(world.getAuthority())
-                .setAbilityInfo(empty));
+        packet.setMpLevelEntityInfo(
+                MPLevelEntityInfo.newBuilder()
+                        .setEntityId(world.getLevelId())
+                        .setAuthorityPeerId(world.getAuthority())
+                        .setAbilityInfo(empty));
 
         // Add the player's avatars.
         for (var entity : player.getTeams().getActiveAvatars()) {
@@ -44,13 +47,14 @@ public final class PlayerEnterSceneInfo extends BasePacket<Empty, PlayerEnterSce
             var weapon = avatar.getWeapon();
 
             // Create the avatar info.
-            packet.addAvatarEnterInfo(AvatarEnterSceneInfo.newBuilder()
-                    .setAvatarGuid(entity.getAvatar().getGuid())
-                    .setAvatarEntityId(entity.getId())
-                    .setWeaponGuid(weapon.getItemGuid())
-                    .setWeaponEntityId(weapon.getEntityId())
-                    .setAvatarAbilityInfo(empty)
-                    .setWeaponAbilityInfo(empty));
+            packet.addAvatarEnterInfo(
+                    AvatarEnterSceneInfo.newBuilder()
+                            .setAvatarGuid(entity.getAvatar().getGuid())
+                            .setAvatarEntityId(entity.getId())
+                            .setWeaponGuid(weapon.getItemGuid())
+                            .setWeaponEntityId(weapon.getEntityId())
+                            .setAvatarAbilityInfo(empty)
+                            .setWeaponAbilityInfo(empty));
         }
 
         return packet.build();

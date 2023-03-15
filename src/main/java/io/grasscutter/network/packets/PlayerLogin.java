@@ -25,9 +25,9 @@ public final class PlayerLogin extends BasePacket<PlayerLoginReq, PlayerLoginRsp
         Preconditions.loggedIn(session);
 
         // Check for a valid authentication token.
-        if (!message.getToken().equals(
-                session.getAccount().loginToken)) {
-            session.close(); return;
+        if (!message.getToken().equals(session.getAccount().loginToken)) {
+            session.close();
+            return;
         }
 
         // Load the player from the database.
@@ -49,8 +49,7 @@ public final class PlayerLogin extends BasePacket<PlayerLoginReq, PlayerLoginRsp
         this.setKeyType(KeyType.DISPATCH);
 
         // Get the region data for this server.
-        var regionData = ServerUtils.CURRENT_REGION
-                .get().getRegionInfo();
+        var regionData = ServerUtils.CURRENT_REGION.get().getRegionInfo();
 
         return PlayerLoginRsp.newBuilder()
                 .setIsScOpen(false)

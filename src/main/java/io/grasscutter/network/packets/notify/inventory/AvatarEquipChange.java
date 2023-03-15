@@ -17,11 +17,12 @@ public final class AvatarEquipChange extends BasePacket<Empty, AvatarEquipChange
 
     @Override
     public AvatarEquipChangeNotify preparePacket() {
-        var packet = AvatarEquipChangeNotify.newBuilder()
-                .setAvatarGuid(this.avatar.getGuid())
-                .setEquipType(this.item.getSlot())
-                .setItemId(this.item.getItemId())
-                .setEquipGuid(this.item.getItemGuid());
+        var packet =
+                AvatarEquipChangeNotify.newBuilder()
+                        .setAvatarGuid(this.avatar.getGuid())
+                        .setEquipType(this.item.getSlot())
+                        .setItemId(this.item.getItemId())
+                        .setEquipGuid(this.item.getItemGuid());
 
         // Set the packet's extra data.
         if (this.item.getItemData().getEquipType() == EquipType.EQUIP_WEAPON)

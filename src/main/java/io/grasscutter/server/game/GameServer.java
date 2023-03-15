@@ -7,12 +7,11 @@ import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.constants.Properties;
 import io.grasscutter.utils.objects.lang.TextContainer;
+import io.netty.channel.DefaultEventLoop;
+import io.netty.channel.EventLoop;
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import io.netty.channel.DefaultEventLoop;
-import io.netty.channel.EventLoop;
 import kcp.highway.KcpServer;
 import kcp.highway.Ukcp;
 import lombok.Getter;
@@ -26,12 +25,11 @@ public final class GameServer extends KcpServer {
     static {
         // Set the KCP channel config.
         var config = NetworkConstants.KCP_CONFIG;
-        config.nodelay(true, Properties.SERVER()
-                .gameServer.updateInterval, 2, true);
+        config.nodelay(true, Properties.SERVER().gameServer.updateInterval, 2, true);
         config.setMtu(1400);
         config.setSndwnd(256);
         config.setRcvwnd(256);
-        config.setTimeoutMillis(30 * 1000);//30s
+        config.setTimeoutMillis(30 * 1000); // 30s
         config.setUseConvChannel(true);
         config.setAckNoDelay(false);
     }
@@ -59,13 +57,13 @@ public final class GameServer extends KcpServer {
         this.address = address;
     }
 
-    /**
-     * Invoked when the server starts.
-     */
+    /** Invoked when the server starts. */
     public synchronized void start() {
         // Start the KCP server.
-        super.init(new KcpListener(this.eventLoop, this.clients),
-                NetworkConstants.KCP_CONFIG, this.getAddress());
+        super.init(
+                new KcpListener(this.eventLoop, this.clients),
+                NetworkConstants.KCP_CONFIG,
+                this.getAddress());
 
         // Get the network properties.
         var port = this.getAddress().getPort();

@@ -7,10 +7,9 @@ import io.grasscutter.utils.constants.Log;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.EventLoop;
+import java.util.Map;
 import kcp.highway.Ukcp;
 import lombok.AllArgsConstructor;
-
-import java.util.Map;
 
 /* KCP traffic listener & handler. */
 @AllArgsConstructor
@@ -22,16 +21,19 @@ public final class KcpListener implements kcp.highway.KcpListener {
     public void onConnected(Ukcp ukcp) {
         // Perform offline server check.
         var server = DedicatedServer.getGameServer();
-        var i = 0; while (server == null) {
+        var i = 0;
+        while (server == null) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ignored) {
-                ukcp.close(); return;
+                ukcp.close();
+                return;
             }
 
             if (i++ > 5) {
                 Log.error(new TextContainer("server.game.unavailable"));
-                ukcp.close(); return;
+                ukcp.close();
+                return;
             }
 
             server = DedicatedServer.getGameServer();
@@ -48,17 +50,18 @@ public final class KcpListener implements kcp.highway.KcpListener {
     @Override
     public void handleReceive(ByteBuf byteBuf, Ukcp ukcp) {
         var bytes = EncodingUtils.toByteArray(byteBuf);
-        this.logicThread.execute(() -> {
-            try {
-                // Fetch the session for the client.
-                var session = this.clients.get(ukcp);
-                if (session == null) return;
-                // Handle the message.
-                session.onMessage(bytes);
-            } catch (Exception exception) {
-                this.handleException(exception, ukcp);
-            }
-        });
+        this.logicThread.execute(
+                () -> {
+                    try {
+                        // Fetch the session for the client.
+                        var session = this.clients.get(ukcp);
+                        if (session == null) return;
+                        // Handle the message.
+                        session.onMessage(bytes);
+                    } catch (Exception exception) {
+                        this.handleException(exception, ukcp);
+                    }
+                });
     }
 
     @Override

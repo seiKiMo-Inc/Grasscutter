@@ -159,8 +159,7 @@ public interface Log {
      * @param throwable Throwable to log.
      */
     static void error(TextContainer container, Throwable throwable) {
-        if (Properties.DEBUG)
-            LOGGER.error(container.toString(), throwable);
+        if (Properties.DEBUG) LOGGER.error(container.toString(), throwable);
         else LOGGER.error(container.toString());
     }
 

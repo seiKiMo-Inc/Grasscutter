@@ -1,7 +1,6 @@
 package io.grasscutter.game.data;
 
 import io.grasscutter.utils.enums.Priority;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

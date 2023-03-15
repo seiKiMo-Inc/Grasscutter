@@ -14,18 +14,16 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import java.util.Iterator;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
-
 /* Holds items for a player. */
-@Getter public final class PlayerInventory extends PlayerManager implements Iterable<Item> {
-    private final Long2ObjectMap<Item> storage
-            = new Long2ObjectOpenHashMap<>();
-    private final Int2ObjectMap<InventoryTab> tabs
-            = new Int2ObjectOpenHashMap<>();
+@Getter
+public final class PlayerInventory extends PlayerManager implements Iterable<Item> {
+    private final Long2ObjectMap<Item> storage = new Long2ObjectOpenHashMap<>();
+    private final Int2ObjectMap<InventoryTab> tabs = new Int2ObjectOpenHashMap<>();
 
     public PlayerInventory(Player player) {
         super(player);
@@ -37,8 +35,7 @@ import java.util.Iterator;
         this.newTab(ItemType.ITEM_FURNITURE, new StackedItemTab(Properties.LIMITS().furniture));
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public Iterator<Item> iterator() {
         return this.getStorage().values().iterator();
     }
@@ -74,9 +71,7 @@ import java.util.Iterator;
     }
 
     /**
-     * Adds an item to the inventory.
-     * Uses the item's ID to get the item's data.
-     * Sets the count to 1.
+     * Adds an item to the inventory. Uses the item's ID to get the item's data. Sets the count to 1.
      *
      * @param itemId The ID of the item to add.
      */
@@ -85,8 +80,7 @@ import java.util.Iterator;
     }
 
     /**
-     * Adds an item to the inventory.
-     * Uses the item's ID to get the item's data.
+     * Adds an item to the inventory. Uses the item's ID to get the item's data.
      *
      * @param itemId The ID of the item to add.
      * @param count The amount of the item to add.
@@ -96,15 +90,13 @@ import java.util.Iterator;
     }
 
     /**
-     * Adds an item to the inventory.
-     * Uses the item's ID to get the item's data.
+     * Adds an item to the inventory. Uses the item's ID to get the item's data.
      *
      * @param itemId The ID of the item to add.
      * @param count The amount of the item to add.
      * @param reason The reason for adding the item.
      */
-    public boolean addItem(int itemId, int count,
-                        @Nullable ActionReason reason) {
+    public boolean addItem(int itemId, int count, @Nullable ActionReason reason) {
         // Get the item's data.
         var itemData = GameData.getItemDataMap().get(itemId);
         if (itemData == null) return false;
@@ -136,8 +128,7 @@ import java.util.Iterator;
         // Attempt to add the item to the inventory.
         var result = this.addToInventory(item);
         if (result != null && reason != null)
-            this.getPlayer().getSession().send(
-                    new ItemAddHint(result, reason));
+            this.getPlayer().getSession().send(new ItemAddHint(result, reason));
 
         return true;
     }
@@ -154,8 +145,7 @@ import java.util.Iterator;
         // Attempt to add the item to the inventory.
         var result = this.addToInventory(item);
         if ((force || result != null) && reason != null)
-            this.getPlayer().getSession().send(
-                    new ItemAddHint(result, reason));
+            this.getPlayer().getSession().send(new ItemAddHint(result, reason));
 
         return true;
     }
@@ -175,15 +165,14 @@ import java.util.Iterator;
         var tab = this.getTab(type);
 
         // Check if the item can be added.
-        if (type != ItemType.ITEM_VIRTUAL &&
-                (tab.getCapacity() >= tab.getMaxCapacity()))
-            return null;
+        if (type != ItemType.ITEM_VIRTUAL && (tab.getCapacity() >= tab.getMaxCapacity())) return null;
 
         switch (type) {
             case ITEM_RELIQUARY, ITEM_WEAPON -> {
                 item.setCount(1); // Set the count to 1.
                 this.addToInventory(item, tab); // Add the item to the inventory.
-                item.save(); return item; // Save the item and return it.
+                item.save();
+                return item; // Save the item and return it.
             }
             default -> {
                 var existing = tab.getItemById(item.getItemId());
@@ -191,15 +180,14 @@ import java.util.Iterator;
                     // Add the item to the inventory.
                     this.addToInventory(item, tab);
                     // Save the item.
-                    item.save(); return item;
+                    item.save();
+                    return item;
                 } else {
                     // Increment the count of the existing item.
-                    existing.setCount(Math.min(
-                            existing.getCount() + item.getCount(),
-                            data.getMaxStack()
-                    ));
+                    existing.setCount(Math.min(existing.getCount() + item.getCount(), data.getMaxStack()));
                     // Save the existing item.
-                    existing.save(); return existing;
+                    existing.save();
+                    return existing;
                 }
             }
         }

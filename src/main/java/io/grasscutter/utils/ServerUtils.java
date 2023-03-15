@@ -8,7 +8,6 @@ import io.grasscutter.proto.PropPairOuterClass.PropPair;
 import io.grasscutter.proto.PropValueOuterClass.PropValue;
 import io.grasscutter.proto.QueryCurrRegionHttpRspOuterClass.QueryCurrRegionHttpRsp;
 import io.grasscutter.utils.enums.game.PlayerProperty;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 /* Utility methods for accessing server info. */
@@ -23,7 +22,8 @@ public interface ServerUtils {
      * @return The hash code.
      */
     static int hashAbility(String hash) {
-        var v7 = 0; var v8 = 0;
+        var v7 = 0;
+        var v8 = 0;
         while (v8 < hash.length()) {
             v7 = hash.charAt(v8++) + 131 * v7;
         }
@@ -39,11 +39,7 @@ public interface ServerUtils {
      * @return The property object.
      */
     static PropValue property(int type, int value) {
-        return PropValue.newBuilder()
-                .setType(type)
-                .setIval(value)
-                .setVal(value)
-                .build();
+        return PropValue.newBuilder().setType(type).setIval(value).setVal(value).build();
     }
 
     /**
@@ -54,11 +50,7 @@ public interface ServerUtils {
      * @return The property object.
      */
     static PropValue property(PlayerProperty type, int value) {
-        return PropValue.newBuilder()
-                .setType(type.getId())
-                .setIval(value)
-                .setVal(value)
-                .build();
+        return PropValue.newBuilder().setType(type.getId()).setIval(value).setVal(value).build();
     }
 
     /**
@@ -79,10 +71,7 @@ public interface ServerUtils {
      * @param value The property value.
      */
     static FightPropPair combatProperty(int id, float value) {
-        return FightPropPair.newBuilder()
-                .setPropType(id)
-                .setPropValue(value)
-                .build();
+        return FightPropPair.newBuilder().setPropType(id).setPropValue(value).build();
     }
 
     /**
@@ -106,21 +95,21 @@ public interface ServerUtils {
      * @return The scene transaction ID.
      */
     static String sceneTransaction(Player player) {
-        return "3-" + player.getUserId() + "-" +
-                (int) (System.currentTimeMillis() / 1000) +
-                "-" + 18402;
+        return "3-"
+                + player.getUserId()
+                + "-"
+                + (int) (System.currentTimeMillis() / 1000)
+                + "-"
+                + 18402;
     }
 
     /**
-     * Creates a profile picture object.
-     * Uses an avatar ID for the profile picture.
+     * Creates a profile picture object. Uses an avatar ID for the profile picture.
      *
      * @param avatarId The avatar ID.
      * @return The profile picture object.
      */
     static ProfilePicture profilePicture(int avatarId) {
-        return ProfilePicture.newBuilder()
-                .setAvatarId(avatarId)
-                .build();
+        return ProfilePicture.newBuilder().setAvatarId(avatarId).build();
     }
 }

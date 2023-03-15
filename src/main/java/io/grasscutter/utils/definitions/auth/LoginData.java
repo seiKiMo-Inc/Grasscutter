@@ -7,7 +7,8 @@ import lombok.Builder;
 @Builder
 public final class LoginData {
     @SerializedName("account_type")
-    @Builder.Default public int type = 1;
+    @Builder.Default
+    public int type = 1;
 
     @Builder.Default public boolean heartbeat = false;
 
@@ -23,5 +24,6 @@ public final class LoginData {
     @Builder.Default public Object data = JObject.c().add("guest", false);
 
     @SerializedName("fatigue_remind")
-    @Builder.Default public String timeRemind = null;
+    @Builder.Default
+    public String timeRemind = null;
 }

@@ -22,10 +22,9 @@ import io.grasscutter.utils.enums.game.PlayerProperty;
 import io.grasscutter.world.Position;
 import io.grasscutter.world.Scene;
 import it.unimi.dsi.fastutil.ints.Int2FloatMap;
-import lombok.Getter;
-
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 
 /** An entity instance of an {@link Avatar}. */
 public final class EntityAvatar extends Entity {
@@ -52,8 +51,7 @@ public final class EntityAvatar extends Entity {
 
         if (scene == null) return;
         // Update the entity IDs.
-        this.id = scene.getWorld()
-                .nextEntityId(EntityIdType.AVATAR);
+        this.id = scene.getWorld().nextEntityId(EntityIdType.AVATAR);
     }
 
     /**
@@ -66,8 +64,8 @@ public final class EntityAvatar extends Entity {
     }
 
     /**
-     * Collects the info of the avatar into a {@link SceneAvatarInfo}.
-     * This is used to send the avatar's info to the client.
+     * Collects the info of the avatar into a {@link SceneAvatarInfo}. This is used to send the
+     * avatar's info to the client.
      *
      * @return The avatar info object.
      */
@@ -76,31 +74,33 @@ public final class EntityAvatar extends Entity {
         var avatar = this.getAvatar();
         var weapon = avatar.getWeapon();
 
-        var info = SceneAvatarInfo.newBuilder()
-                .setUid(player.getUserId())
-                .setPeerId(player.getPeerId())
-                .setAvatarId(avatar.getAvatarId())
-                .setGuid(avatar.getGuid())
-                .addAllTalentIdList(avatar.getTalents())
-                .setCoreProudSkillLevel(0) // avatar.getSkillLevels())
-                .setSkillDepotId(avatar.getSkillDepotId())
-                .addAllInherentProudSkillList(List.of()) // avatar.getSkillList()
-                .putAllProudSkillExtraLevelMap(Map.of()) // avatar.getExtraSkills()
-                .addAllTeamResonanceList(player.getTeams().getResonances())
-                .setWearingFlycloakId(avatar.getWings())
-                .setCostumeId(avatar.getCostume())
-                .setBornTime(avatar.getCreationTime());
+        var info =
+                SceneAvatarInfo.newBuilder()
+                        .setUid(player.getUserId())
+                        .setPeerId(player.getPeerId())
+                        .setAvatarId(avatar.getAvatarId())
+                        .setGuid(avatar.getGuid())
+                        .addAllTalentIdList(avatar.getTalents())
+                        .setCoreProudSkillLevel(0) // avatar.getSkillLevels())
+                        .setSkillDepotId(avatar.getSkillDepotId())
+                        .addAllInherentProudSkillList(List.of()) // avatar.getSkillList()
+                        .putAllProudSkillExtraLevelMap(Map.of()) // avatar.getExtraSkills()
+                        .addAllTeamResonanceList(player.getTeams().getResonances())
+                        .setWearingFlycloakId(avatar.getWings())
+                        .setCostumeId(avatar.getCostume())
+                        .setBornTime(avatar.getCreationTime());
 
         // Add the avatar's weapon.
-        info.setWeapon(SceneWeaponInfo.newBuilder()
-                .setEntityId(weapon.getEntityId())
-                .setGuid(weapon.getItemGuid())
-                .setLevel(weapon.getLevel())
-                .setItemId(weapon.getItemId())
-                .setPromoteLevel(weapon.getAscensionLevel())
-                .setGadgetId(weapon.getItemData().getGadgetId()));
-//         info.setReliquaryList();
-//         info.setEquipIdList();
+        info.setWeapon(
+                SceneWeaponInfo.newBuilder()
+                        .setEntityId(weapon.getEntityId())
+                        .setGuid(weapon.getItemGuid())
+                        .setLevel(weapon.getLevel())
+                        .setItemId(weapon.getItemId())
+                        .setPromoteLevel(weapon.getAscensionLevel())
+                        .setGadgetId(weapon.getItemData().getGadgetId()));
+        //         info.setReliquaryList();
+        //         info.setEquipIdList();
 
         return info.build();
     }
@@ -119,35 +119,38 @@ public final class EntityAvatar extends Entity {
         // Add avatar abilities.
         if (data.getAbilities() != null) {
             for (var id : data.getAbilities())
-                abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
-                        .setAbilityId(++embryoId)
-                        .setAbilityNameHash(id)
-                        .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+                abilities.addAbilityEmbryoList(
+                        AbilityEmbryo.newBuilder()
+                                .setAbilityId(++embryoId)
+                                .setAbilityNameHash(id)
+                                .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
         }
 
         // Add default abilities.
         for (var id : GameConstants.DEFAULT_ABILITIES)
-            abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
-                    .setAbilityId(++embryoId)
-                    .setAbilityNameHash(id)
-                    .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+            abilities.addAbilityEmbryoList(
+                    AbilityEmbryo.newBuilder()
+                            .setAbilityId(++embryoId)
+                            .setAbilityNameHash(id)
+                            .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
 
         // Add team resonance abilities.
         for (var id : this.getPlayer().getTeams().getResonancesConfig())
-            abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
-                    .setAbilityId(++embryoId)
-                    .setAbilityNameHash(id)
-                    .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+            abilities.addAbilityEmbryoList(
+                    AbilityEmbryo.newBuilder()
+                            .setAbilityId(++embryoId)
+                            .setAbilityNameHash(id)
+                            .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
 
         // Add skill depot abilities.
-        var skillDepot = GameData.getAvatarSkillDepotDataMap().get(
-                avatar.getSkillDepotId());
+        var skillDepot = GameData.getAvatarSkillDepotDataMap().get(avatar.getSkillDepotId());
         if (skillDepot != null && skillDepot.getAbilities() != null)
             for (var id : skillDepot.getAbilities())
-                abilities.addAbilityEmbryoList(AbilityEmbryo.newBuilder()
-                        .setAbilityId(++embryoId)
-                        .setAbilityNameHash(id)
-                        .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
+                abilities.addAbilityEmbryoList(
+                        AbilityEmbryo.newBuilder()
+                                .setAbilityId(++embryoId)
+                                .setAbilityNameHash(id)
+                                .setAbilityOverrideNameHash(GameConstants.DEFAULT_ABILITY));
 
         // Add extra abilities.
         // TODO: Add extra abilities.
@@ -172,29 +175,30 @@ public final class EntityAvatar extends Entity {
     @Override
     public SceneEntityInfo toProto() {
         // Create an entity authority object.
-        var authority = EntityAuthorityInfo.newBuilder()
-                .setAbilityInfo(AbilitySyncStateInfo.newBuilder())
-                .setRendererChangedInfo(EntityRendererChangedInfo.newBuilder())
-                .setAiInfo(GameConstants.DEFAULT_AI);
+        var authority =
+                EntityAuthorityInfo.newBuilder()
+                        .setAbilityInfo(AbilitySyncStateInfo.newBuilder())
+                        .setRendererChangedInfo(EntityRendererChangedInfo.newBuilder())
+                        .setAiInfo(GameConstants.DEFAULT_AI);
 
         // Create the entity info object.
-        var info = SceneEntityInfo.newBuilder()
-                .setEntityId(this.getId())
-                .setEntityType(ProtEntityType.PROT_ENTITY_TYPE_AVATAR)
-                .addAnimatorParaList(AnimatorParameterValueInfoPair.newBuilder())
-                .setEntityClientData(EntityClientData.newBuilder())
-                .setEntityAuthorityInfo(authority)
-                .setLastMoveSceneTimeMs(this.getSceneLastMove())
-                .setLastMoveReliableSeq(this.getReliableLastMove())
-                .setLifeState(this.getLifeState().getValue());
+        var info =
+                SceneEntityInfo.newBuilder()
+                        .setEntityId(this.getId())
+                        .setEntityType(ProtEntityType.PROT_ENTITY_TYPE_AVATAR)
+                        .addAnimatorParaList(AnimatorParameterValueInfoPair.newBuilder())
+                        .setEntityClientData(EntityClientData.newBuilder())
+                        .setEntityAuthorityInfo(authority)
+                        .setLastMoveSceneTimeMs(this.getSceneLastMove())
+                        .setLastMoveReliableSeq(this.getReliableLastMove())
+                        .setLifeState(this.getLifeState().getValue());
 
         // Add the motion info.
-        if (this.getScene() != null)
-            info.setMotionInfo(this.toMotionInfo());
+        if (this.getScene() != null) info.setMotionInfo(this.toMotionInfo());
         // Add properties.
         this.propsToBuilder(info);
-        info.addPropList(ServerUtils.pairProperty(
-                PlayerProperty.PROP_LEVEL, this.getAvatar().getLevel()));
+        info.addPropList(
+                ServerUtils.pairProperty(PlayerProperty.PROP_LEVEL, this.getAvatar().getLevel()));
         // Set the avatar info.
         info.setAvatar(this.toSceneAvatarInfo());
 

@@ -18,10 +18,11 @@ import java.util.Map;
 
 /* Utility methods seen when converting data. */
 public interface EncodingUtils {
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(JObject.class, new JObject.Adapter())
-            .setPrettyPrinting()
-            .create();
+    Gson gson =
+            new GsonBuilder()
+                    .registerTypeAdapter(JObject.class, new JObject.Adapter())
+                    .setPrettyPrinting()
+                    .create();
 
     /**
      * Encodes the given string into a Base64 string.

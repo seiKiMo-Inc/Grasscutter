@@ -18,8 +18,7 @@ public class UseAction {
      * Invoked when the item is used.
      *
      * @param reason Data about the item's use.
-     * @return True if the item was successfully consumed.
-     *         False if the item was not consumed.
+     * @return True if the item was successfully consumed. False if the item was not consumed.
      */
     public boolean useItem(UseReason reason) {
         return false;

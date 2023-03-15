@@ -134,8 +134,7 @@ public final class DispatchRouter implements Router {
      */
     private void queryRegion(Context ctx) {
         var region = ctx.pathParam("region");
-        var version = lr(ctx.queryParam("version"),
-                "OSRELWin" + GameConstants.GAME_VERSION);
+        var version = lr(ctx.queryParam("version"), "OSRELWin" + GameConstants.GAME_VERSION);
 
         // Fetch region data.
         var regionData = this.regions.get(region);
@@ -164,8 +163,7 @@ public final class DispatchRouter implements Router {
                 }
 
                 // Encrypt the data.
-                var regionDataBytes = EncodingUtils.fromBase64(
-                        encodedData.getBytes());
+                var regionDataBytes = EncodingUtils.fromBase64(encodedData.getBytes());
                 var encrypted = new ByteArrayOutputStream();
 
                 var chunkSize = 256 - 11;
@@ -190,8 +188,8 @@ public final class DispatchRouter implements Router {
                 var signatureData = new String(EncodingUtils.toBase64(signature.sign()));
                 ctx.json(new QueryRegionResponse(content, signatureData));
             } catch (IllegalArgumentException ignored) {
-                Log.error(new TextContainer("system.dispatch.invalid_key",
-                        lr(ctx.queryParam("key_id"), "None")));
+                Log.error(
+                        new TextContainer("system.dispatch.invalid_key", lr(ctx.queryParam("key_id"), "None")));
             } catch (Exception exception) {
                 Log.warn(new TextContainer("exception.error"), exception);
             }

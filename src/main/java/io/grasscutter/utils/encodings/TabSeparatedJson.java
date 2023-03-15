@@ -2,7 +2,6 @@ package io.grasscutter.utils.encodings;
 
 import com.google.gson.annotations.SerializedName;
 import io.grasscutter.utils.PrimitiveUtils;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,32 +73,35 @@ public interface TabSeparatedJson {
             var columns = headerNames.size();
             var fieldParsers = headerNames.stream().map(fieldMap::get).toList();
 
-            return fileReader.lines().parallel().map(line -> {
-                var tokens = PrimitiveUtils.split(line, '\t');
-                var min = Math.min(tokens.size(), columns);
+            return fileReader
+                    .lines()
+                    .parallel()
+                    .map(
+                            line -> {
+                                var tokens = PrimitiveUtils.split(line, '\t');
+                                var min = Math.min(tokens.size(), columns);
 
-                try {
-                    var obj = constructor.newInstance();
+                                try {
+                                    var obj = constructor.newInstance();
 
-                    // Attempt to parse each JSON object.
-                    for (var t = 0; t < min; t++) {
-                        var fieldParser = fieldParsers.get(t);
-                        if (fieldParser == null) continue;
+                                    // Attempt to parse each JSON object.
+                                    for (var t = 0; t < min; t++) {
+                                        var fieldParser = fieldParsers.get(t);
+                                        if (fieldParser == null) continue;
 
-                        var token = tokens.get(t);
-                        if (!token.isEmpty()) {
-                            fieldParser.parse(obj, token);
-                        }
-                    }
+                                        var token = tokens.get(t);
+                                        if (!token.isEmpty()) {
+                                            fieldParser.parse(obj, token);
+                                        }
+                                    }
 
-                    return obj;
-                } catch (Exception ignored) {
-                    ignored.printStackTrace();
-                    return null;
-                }
-            }).toList();
+                                    return obj;
+                                } catch (Exception ignored) {
+                                    return null;
+                                }
+                            })
+                    .toList();
         } catch (Exception ignored) {
-            ignored.printStackTrace();
             return null;
         }
     }

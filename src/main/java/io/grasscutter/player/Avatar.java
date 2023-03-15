@@ -20,19 +20,20 @@ import it.unimi.dsi.fastutil.ints.Int2FloatMap;
 import it.unimi.dsi.fastutil.ints.Int2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /* An instance of an avatar. */
 @DataSerializable(table = "avatars")
 public final class Avatar implements DatabaseObject {
     @Special(FieldType.ID)
-    @Getter private ObjectId id = new ObjectId(); // The avatar object's unique identifier.
+    @Getter
+    private ObjectId id = new ObjectId(); // The avatar object's unique identifier.
+
     @Getter private int avatarId = Integer.MAX_VALUE; // The avatar's ID.
     @Getter private int ownerUserId = Integer.MAX_VALUE; // The avatar's owner's game user ID (UID).
 
@@ -57,12 +58,17 @@ public final class Avatar implements DatabaseObject {
     @Getter @Setter private int costume = 0; // The avatar's costume.
     @Getter private int creationTime = 0; // The avatar's creation time.
 
-    @Getter private final transient Int2ObjectMap<Item> equipment
-            = new Int2ObjectOpenHashMap<>(); // The avatar's equipment.
-    @Getter private final transient Int2FloatMap combatProperties
-            = new Int2FloatOpenHashMap(); // The avatar's combat properties.
-    @Getter private final transient Int2FloatMap fightOverrides
-            = new Int2FloatOpenHashMap(); // The avatar's combat property overrides.
+    @Getter
+    private final transient Int2ObjectMap<Item> equipment =
+            new Int2ObjectOpenHashMap<>(); // The avatar's equipment.
+
+    @Getter
+    private final transient Int2FloatMap combatProperties =
+            new Int2FloatOpenHashMap(); // The avatar's combat properties.
+
+    @Getter
+    private final transient Int2FloatMap fightOverrides =
+            new Int2FloatOpenHashMap(); // The avatar's combat property overrides.
 
     @ApiStatus.Internal
     public Avatar() {
@@ -70,8 +76,7 @@ public final class Avatar implements DatabaseObject {
     }
 
     /**
-     * Constructor for newly created avatars.
-     * Uses an avatar ID to fetch the avatar data.
+     * Constructor for newly created avatars. Uses an avatar ID to fetch the avatar data.
      *
      * @param avatarId The avatar's ID.
      */
@@ -91,7 +96,8 @@ public final class Avatar implements DatabaseObject {
 
         this.recalculate(); // Set the avatar's properties.
         this.currentEnergy = 0f; // Set the avatar's current energy.
-        this.currentHealth = this.getProperty(FightProperty.FIGHT_PROP_MAX_HP); // Set the avatar's current health.
+        this.currentHealth =
+                this.getProperty(FightProperty.FIGHT_PROP_MAX_HP); // Set the avatar's current health.
 
         // Set the avatar's current health.
         this.setProperty(FightProperty.FIGHT_PROP_CUR_HP, this.getCurrentHealth());
@@ -124,8 +130,7 @@ public final class Avatar implements DatabaseObject {
      */
 
     /**
-     * Fetches the avatar's combat property.
-     * If the property is not found, 0 is returned.
+     * Fetches the avatar's combat property. If the property is not found, 0 is returned.
      *
      * @param property The property to fetch.
      * @return The property's value.
@@ -155,8 +160,7 @@ public final class Avatar implements DatabaseObject {
     }
 
     /**
-     * Fetches the avatar's combat property.
-     * If the property is not found, 0 is returned.
+     * Fetches the avatar's combat property. If the property is not found, 0 is returned.
      *
      * @param property The property to fetch.
      * @return The property's value.
@@ -201,8 +205,7 @@ public final class Avatar implements DatabaseObject {
         if (type == EquipType.EQUIP_NONE) return false;
 
         // Check if other avatars are using the item.
-        var avatar = this.getOwner().getAvatars()
-                .get(item.getEquippedAvatar());
+        var avatar = this.getOwner().getAvatars().get(item.getEquippedAvatar());
         if (avatar != null) {
             // Un-equip the item from the avatar.
             // TODO: Un-equip the item from the avatar.
@@ -211,10 +214,8 @@ public final class Avatar implements DatabaseObject {
         // Add the item to the avatar's equipment.
         this.getEquipment().put(type.getValue(), item);
         // Add an entity ID if required.
-        if (type == EquipType.EQUIP_WEAPON &&
-                this.getOwner().getWorld() != null) {
-            item.setEntityId(this.getOwner().getWorld()
-                    .nextEntityId(EntityIdType.WEAPON));
+        if (type == EquipType.EQUIP_WEAPON && this.getOwner().getWorld() != null) {
+            item.setEntityId(this.getOwner().getWorld().nextEntityId(EntityIdType.WEAPON));
         }
 
         // Save the item.
@@ -223,8 +224,7 @@ public final class Avatar implements DatabaseObject {
 
         // Send the equipment change packet.
         if (this.getOwner().isLoggedIn())
-            this.getOwner().getSession().send(
-                    new AvatarEquipChange(this, item));
+            this.getOwner().getSession().send(new AvatarEquipChange(this, item));
 
         // Recalculate the avatar's combat properties.
         if (recalculate) this.recalculate();
@@ -280,10 +280,7 @@ public final class Avatar implements DatabaseObject {
         }
     }
 
-    /**
-     * Recalculates the avatar's combat stats.
-     * Does not send an ability change packet.
-     */
+    /** Recalculates the avatar's combat stats. Does not send an ability change packet. */
     public void recalculate() {
         this.recalculate(false);
     }
@@ -298,11 +295,16 @@ public final class Avatar implements DatabaseObject {
         var data = this.getData();
 
         // Calculate the current health.
-        var currentHealth = this.getProperty(FightProperty.FIGHT_PROP_MAX_HP) <= 0 ? 1f :
-                this.getProperty(FightProperty.FIGHT_PROP_CUR_HP) / this.getProperty(FightProperty.FIGHT_PROP_MAX_HP);
+        var currentHealth =
+                this.getProperty(FightProperty.FIGHT_PROP_MAX_HP) <= 0
+                        ? 1f
+                        : this.getProperty(FightProperty.FIGHT_PROP_CUR_HP)
+                                / this.getProperty(FightProperty.FIGHT_PROP_MAX_HP);
         // Get the current amount of energy.
-        var currentEnergy = this.getSkill() != null ? this.getProperty(
-                this.getSkill().getElementType().getCurEnergyProp()) : 0f;
+        var currentEnergy =
+                this.getSkill() != null
+                        ? this.getProperty(this.getSkill().getElementType().getCurEnergyProp())
+                        : 0f;
 
         // Recalculate properties.
         this.getCombatProperties().clear();
@@ -316,8 +318,7 @@ public final class Avatar implements DatabaseObject {
         this.setProperty(FightProperty.FIGHT_PROP_CHARGE_EFFICIENCY, 1f);
 
         // Add extra ascension statistics.
-        var ascensionData = GameData.getAscensionData(
-                data.getAvatarPromoteId(), this.getAscension());
+        var ascensionData = GameData.getAscensionData(data.getAvatarPromoteId(), this.getAscension());
         if (ascensionData != null)
             for (var property : ascensionData.getAddProps())
                 this.addProperty(property.getId(), property.getCount());
@@ -332,19 +333,18 @@ public final class Avatar implements DatabaseObject {
             if (artifact == null) continue;
 
             // Get the primary stat.
-            var mainProperty = GameData.getReliquaryMainPropDataMap()
-                    .get(artifact.getMainPropertyId());
+            var mainProperty = GameData.getReliquaryMainPropDataMap().get(artifact.getMainPropertyId());
             if (mainProperty != null) {
                 var property = mainProperty.getProperty();
-                var levelData = GameData.getArtifactLevelData(
-                        artifact.getItemData().getRarity(), artifact.getLevel());
-                if (levelData != null)
-                    this.addProperty(property, levelData.getPropValue(property.getId()));
+                var levelData =
+                        GameData.getArtifactLevelData(artifact.getItemData().getRarity(), artifact.getLevel());
+                if (levelData != null) this.addProperty(property, levelData.getPropValue(property.getId()));
             }
         }
 
         // Set the current health.
-        this.setProperty(FightProperty.FIGHT_PROP_CUR_HP,
+        this.setProperty(
+                FightProperty.FIGHT_PROP_CUR_HP,
                 this.getProperty(FightProperty.FIGHT_PROP_MAX_HP) * currentHealth);
 
         // Send change packets.
@@ -366,23 +366,25 @@ public final class Avatar implements DatabaseObject {
      * @return The converted object.
      */
     public AvatarInfo toProto() {
-        var avatarInfo = AvatarInfo.newBuilder()
-                .setAvatarId(this.getAvatarId())
-                .setGuid(this.getGuid())
-                .setLifeState(1)
-                .putAllFightPropMap(this.getCombatProperties())
-                .setSkillDepotId(this.getSkillDepotId())
-                .setAvatarType(1)
-                .setBornTime(this.getCreationTime())
-                .setWearingFlycloakId(this.getWings())
-                .setCostumeId(this.getCostume());
+        var avatarInfo =
+                AvatarInfo.newBuilder()
+                        .setAvatarId(this.getAvatarId())
+                        .setGuid(this.getGuid())
+                        .setLifeState(1)
+                        .putAllFightPropMap(this.getCombatProperties())
+                        .setSkillDepotId(this.getSkillDepotId())
+                        .setAvatarType(1)
+                        .setBornTime(this.getCreationTime())
+                        .setWearingFlycloakId(this.getWings())
+                        .setCostumeId(this.getCostume());
 
         // Add the other avatar properties.
         ServerUtils.property(avatarInfo, PlayerProperty.PROP_LEVEL, this.getLevel());
         ServerUtils.property(avatarInfo, PlayerProperty.PROP_EXP, this.getExperience());
         ServerUtils.property(avatarInfo, PlayerProperty.PROP_BREAK_LEVEL, this.getAscension());
         ServerUtils.property(avatarInfo, PlayerProperty.PROP_SATIATION_VAL, this.getSatiation());
-        ServerUtils.property(avatarInfo, PlayerProperty.PROP_SATIATION_PENALTY_TIME, this.getSatiationPenalty());
+        ServerUtils.property(
+                avatarInfo, PlayerProperty.PROP_SATIATION_PENALTY_TIME, this.getSatiationPenalty());
 
         return avatarInfo.build();
     }

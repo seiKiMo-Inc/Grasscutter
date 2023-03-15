@@ -8,7 +8,10 @@ import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.proto.PostEnterSceneReqOuterClass.PostEnterSceneReq;
 import io.grasscutter.proto.PostEnterSceneRspOuterClass.PostEnterSceneRsp;
 
-/** Client is ready to enter scene. {@link PacketIds#PostEnterSceneReq} and {@link PacketIds#PostEnterSceneRsp}. */
+/**
+ * Client is ready to enter scene. {@link PacketIds#PostEnterSceneReq} and {@link
+ * PacketIds#PostEnterSceneRsp}.
+ */
 public final class PostEnterScene extends BasePacket<PostEnterSceneReq, PostEnterSceneRsp> {
     private Player player;
 
@@ -26,14 +29,13 @@ public final class PostEnterScene extends BasePacket<PostEnterSceneReq, PostEnte
     }
 
     @Override
-    protected void handlePacket(NetworkSession session, PacketHead header, PostEnterSceneReq message) {
+    protected void handlePacket(
+            NetworkSession session, PacketHead header, PostEnterSceneReq message) {
         session.send(new PostEnterScene(session.getPlayer())); // Send response packet.
     }
 
     @Override
     public PostEnterSceneRsp preparePacket() {
-        return PostEnterSceneRsp.newBuilder()
-                .setEnterSceneToken(this.player.getSceneToken())
-                .build();
+        return PostEnterSceneRsp.newBuilder().setEnterSceneToken(this.player.getSceneToken()).build();
     }
 }

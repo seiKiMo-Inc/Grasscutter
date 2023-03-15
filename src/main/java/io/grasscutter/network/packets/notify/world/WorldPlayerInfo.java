@@ -17,10 +17,13 @@ public final class WorldPlayerInfo extends BasePacket<Empty, WorldPlayerInfoNoti
         var packet = WorldPlayerInfoNotify.newBuilder();
 
         // Add each player to the packet.
-        this.world.getPlayers().forEach(player -> {
-            packet.addPlayerUidList(player.getUserId());
-            packet.addPlayerInfoList(player.toOnlinePlayerInfo());
-        });
+        this.world
+                .getPlayers()
+                .forEach(
+                        player -> {
+                            packet.addPlayerUidList(player.getUserId());
+                            packet.addPlayerInfoList(player.toOnlinePlayerInfo());
+                        });
 
         return packet.build();
     }

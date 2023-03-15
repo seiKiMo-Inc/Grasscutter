@@ -7,7 +7,6 @@ import io.grasscutter.game.inventory.Item;
 import io.grasscutter.player.*;
 import io.grasscutter.utils.interfaces.Serializable;
 import io.grasscutter.utils.objects.Counter;
-
 import java.util.Set;
 
 /* Constants seen in data-scoped classes. */
@@ -29,7 +28,6 @@ public interface DataConstants {
                     AvatarSkillData.class, // Avatar skill data.
                     AvatarTalentData.class, // Avatar talent data.
                     AvatarSkillDepotData.class, // Avatar skill depot data.
-
                     SceneData.class, // Scene data.
                     ItemData.class // Item data.
                     );

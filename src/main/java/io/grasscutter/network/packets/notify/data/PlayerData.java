@@ -17,15 +17,19 @@ public final class PlayerData extends BasePacket<Empty, PlayerDataNotify> {
     public PlayerDataNotify preparePacket() {
         this.buildHeaderWith(2);
 
-        var packet = PlayerDataNotify.newBuilder()
-                .setNickName(this.player.getNickName())
-                .setServerTime(System.currentTimeMillis())
-                .setIsFirstLoginToday(true) // TODO: Add this property to the player.
-                .setRegionId(this.player.getRegionId());
+        var packet =
+                PlayerDataNotify.newBuilder()
+                        .setNickName(this.player.getNickName())
+                        .setServerTime(System.currentTimeMillis())
+                        .setIsFirstLoginToday(true) // TODO: Add this property to the player.
+                        .setRegionId(this.player.getRegionId());
 
         // Set the player properties.
-        this.player.getProperties().forEach((property, value) ->
-                packet.putPropMap(property, ServerUtils.property(property, value)));
+        this.player
+                .getProperties()
+                .forEach(
+                        (property, value) ->
+                                packet.putPropMap(property, ServerUtils.property(property, value)));
 
         return packet.build();
     }

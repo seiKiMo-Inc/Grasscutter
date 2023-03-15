@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-@Getter public final class RelicLevelProperty {
+@Getter
+public final class RelicLevelProperty {
     @SerializedName("propType")
     private final FightProperty property;
+
     private final float value;
 }

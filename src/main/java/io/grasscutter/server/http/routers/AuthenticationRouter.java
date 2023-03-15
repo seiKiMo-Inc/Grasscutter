@@ -70,8 +70,7 @@ public final class AuthenticationRouter implements Router {
         if (request == null) return;
 
         // De-serialize the login data.
-        request.loginData = EncodingUtils.fromJson(
-                request.rawLoginData, LoginTokenData.class);
+        request.loginData = EncodingUtils.fromJson(request.rawLoginData, LoginTokenData.class);
 
         // Perform a login.
         var response = DedicatedServer.getInstance().getAuthHolder().login(request);

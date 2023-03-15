@@ -1,7 +1,6 @@
 package io.grasscutter.utils.constants;
 
 import com.google.protobuf.ByteString;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 /* Constants seen in cryptography. */

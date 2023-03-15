@@ -5,24 +5,33 @@ import com.google.gson.annotations.SerializedName;
 import io.grasscutter.proto.VectorOuterClass.Vector;
 import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.interfaces.Serializable;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 public class Position implements Serializable, Cloneable {
-    @SerializedName(value = "x", alternate = {"_x", "X"})
-    @Getter @Setter private float x;
+    @SerializedName(
+            value = "x",
+            alternate = {"_x", "X"})
+    @Getter
+    @Setter
+    private float x;
 
-    @SerializedName(value = "y", alternate = {"_y", "Y"})
-    @Getter @Setter private float y;
+    @SerializedName(
+            value = "y",
+            alternate = {"_y", "Y"})
+    @Getter
+    @Setter
+    private float y;
 
-    @SerializedName(value = "z", alternate = {"_z", "Z"})
-    @Getter @Setter private float z;
+    @SerializedName(
+            value = "z",
+            alternate = {"_z", "Z"})
+    @Getter
+    @Setter
+    private float z;
 
-    public Position() {
-
-    }
+    public Position() {}
 
     /**
      * Creates a new position.
@@ -52,7 +61,8 @@ public class Position implements Serializable, Cloneable {
      */
     public Position(List<Float> xyz) {
         switch (xyz.size()) {
-            default: // Might want to error on excess elements, but maybe we want to extend to 3+3 representation later.
+            default: // Might want to error on excess elements, but maybe we want to extend to 3+3
+                // representation later.
             case 3:
                 this.z = xyz.get(2); // Fall-through
             case 2:
@@ -96,8 +106,7 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
-     * Sets the position to the provided position.
-     * Performs a deep copy.
+     * Sets the position to the provided position. Performs a deep copy.
      *
      * @param pos The position to copy.
      * @return The position.
@@ -161,8 +170,7 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
-     * Performs a translation on the position.
-     * The angle is in radians by default.
+     * Performs a translation on the position. The angle is in radians by default.
      *
      * @param convert Should the angle be converted to degrees?
      * @param dist The distance to translate.
@@ -184,19 +192,19 @@ public class Position implements Serializable, Cloneable {
      * @return True if the positions are equal.
      */
     public boolean equal2d(Position other) {
-        return this.getX() == other.getX() &&
-                this.getZ() == other.getZ();
+        return this.getX() == other.getX() && this.getZ() == other.getZ();
     }
 
     /**
      * Performs a 3D comparison.
+     *
      * @param other The position to compare to.
      * @return True if the positions are equal.
      */
     public boolean equal3d(Position other) {
-        return this.getX() == other.getX() &&
-               this.getY() == other.getY() &&
-               this.getZ() == other.getZ();
+        return this.getX() == other.getX()
+                && this.getY() == other.getY()
+                && this.getZ() == other.getZ();
     }
 
     /**
@@ -210,14 +218,11 @@ public class Position implements Serializable, Cloneable {
         var detY = this.getY() - other.getY();
         var detZ = this.getZ() - other.getZ();
 
-        return Math.sqrt(detX * detX +
-                detY * detY +
-                detZ * detZ);
+        return Math.sqrt(detX * detX + detY * detY + detZ * detZ);
     }
 
     /**
-     * Creates a new position of a nearby location.
-     * 2 dimensional.
+     * Creates a new position of a nearby location. 2 dimensional.
      *
      * @param range The range to generate a position in.
      * @return The position.
@@ -245,28 +250,20 @@ public class Position implements Serializable, Cloneable {
      * @return A game vector. (instance of {@link Vector})
      */
     public Vector toProto() {
-        return Vector.newBuilder()
-            .setX(this.getX())
-            .setY(this.getY())
-            .setZ(this.getZ())
-            .build();
+        return Vector.newBuilder().setX(this.getX()).setY(this.getY()).setZ(this.getZ()).build();
     }
 
     public Point toPoint() {
-        return Point.create(x,y,z);
+        return Point.create(x, y, z);
     }
 
-    /**
-     * To XYZ array for Spatial Index
-     */
+    /** To XYZ array for Spatial Index */
     public double[] toDoubleArray() {
-        return new double[] { x, y, z };
+        return new double[] {x, y, z};
     }
 
-    /**
-     * To XZ array for Spatial Index (Blocks)
-     */
+    /** To XZ array for Spatial Index (Blocks) */
     public double[] toXZDoubleArray() {
-        return new double[] { x, z };
+        return new double[] {x, z};
     }
 }

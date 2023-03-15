@@ -5,22 +5,16 @@ import io.grasscutter.game.data.GameData;
 import io.grasscutter.game.data.GameResource;
 import io.grasscutter.game.data.Resource;
 import io.grasscutter.game.data.common.ExponentialCurve;
-import io.grasscutter.utils.ServerUtils;
 import io.grasscutter.utils.enums.Priority;
 import io.grasscutter.utils.enums.game.FightProperty;
 import io.grasscutter.utils.enums.game.WeaponType;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import java.util.List;
 import lombok.Getter;
 
-import java.util.List;
-
-import static io.grasscutter.utils.enums.game.FightProperty.*;
-
 /* Game avatar data. */
-@Resource(name = "AvatarExcelConfigData.json",
-        priority = Priority.LOW)
+@Resource(name = "AvatarExcelConfigData.json", priority = Priority.LOW)
 public final class AvatarData implements GameResource {
     @Getter(onMethod = @__(@Override))
     private int id;
@@ -46,10 +40,14 @@ public final class AvatarData implements GameResource {
     private float hpBase;
     private float attackBase;
     private float defenseBase;
+
     @SerializedName("critical")
-    @Getter private float baseCritChance;
+    @Getter
+    private float baseCritChance;
+
     @SerializedName("criticalHurt")
-    @Getter private float baseCritDamage;
+    @Getter
+    private float baseCritDamage;
 
     private List<ExponentialCurve> propGrowCurves;
 
@@ -71,16 +69,18 @@ public final class AvatarData implements GameResource {
     public void onLoad() {
         this.skillDepot = GameData.getAvatarSkillDepotDataMap().get(this.skillDepotId);
 
-//         // Get fetters from GameData
-//         this.fetters = GameData.getFetterDataEntries().get(this.id);
-//
-//         if (GameData.getFetterCharacterCardDataMap().get(this.id) != null) {
-//             this.nameCardRewardId = GameData.getFetterCharacterCardDataMap().get(this.id).getRewardId();
-//         }
-//
-//         if (GameData.getRewardDataMap().get(this.nameCardRewardId) != null) {
-//             this.nameCardId = GameData.getRewardDataMap().get(this.nameCardRewardId).getRewardItemList().get(0).getItemId();
-//         }
+        //         // Get fetters from GameData
+        //         this.fetters = GameData.getFetterDataEntries().get(this.id);
+        //
+        //         if (GameData.getFetterCharacterCardDataMap().get(this.id) != null) {
+        //             this.nameCardRewardId =
+        // GameData.getFetterCharacterCardDataMap().get(this.id).getRewardId();
+        //         }
+        //
+        //         if (GameData.getRewardDataMap().get(this.nameCardRewardId) != null) {
+        //             this.nameCardId =
+        // GameData.getRewardDataMap().get(this.nameCardRewardId).getRewardItemList().get(0).getItemId();
+        //         }
 
         var size = GameData.getAvatarCurveDataMap().size();
         this.hpGrowthCurve = new float[size];
@@ -92,30 +92,30 @@ public final class AvatarData implements GameResource {
             for (var growCurve : this.propGrowCurves) {
                 var prop = FightProperty.fetch(growCurve.getType());
                 switch (prop) {
-                    case FIGHT_PROP_BASE_HP ->
-                            this.hpGrowthCurve[level] = curveData.getCurveInfo().get(growCurve.getGrowCurve());
-                    case FIGHT_PROP_BASE_ATTACK ->
-                            this.attackGrowthCurve[level] = curveData.getCurveInfo().get(growCurve.getGrowCurve());
-                    case FIGHT_PROP_BASE_DEFENSE ->
-                            this.defenseGrowthCurve[level] = curveData.getCurveInfo().get(growCurve.getGrowCurve());
+                    case FIGHT_PROP_BASE_HP -> this.hpGrowthCurve[level] =
+                            curveData.getCurveInfo().get(growCurve.getGrowCurve());
+                    case FIGHT_PROP_BASE_ATTACK -> this.attackGrowthCurve[level] =
+                            curveData.getCurveInfo().get(growCurve.getGrowCurve());
+                    case FIGHT_PROP_BASE_DEFENSE -> this.defenseGrowthCurve[level] =
+                            curveData.getCurveInfo().get(growCurve.getGrowCurve());
                     default -> {}
                 }
             }
         }
 
-//        // Cache the abilities.
-//        var split = this.iconName.split("_");
-//        if (split.length > 0) {
-//            this.name = split[split.length - 1];
-//
-//            var info = GameData.getAbilityEmbryoInfo().get(this.name);
-//            if (info != null) {
-//                this.abilities = new IntArrayList(info.getAbilities().length);
-//                for (var ability : info.getAbilities()) {
-//                    this.abilities.add(ServerUtils.hashAbility(ability));
-//                }
-//            }
-//        }
+        //        // Cache the abilities.
+        //        var split = this.iconName.split("_");
+        //        if (split.length > 0) {
+        //            this.name = split[split.length - 1];
+        //
+        //            var info = GameData.getAbilityEmbryoInfo().get(this.name);
+        //            if (info != null) {
+        //                this.abilities = new IntArrayList(info.getAbilities().length);
+        //                for (var ability : info.getAbilities()) {
+        //                    this.abilities.add(ServerUtils.hashAbility(ability));
+        //                }
+        //            }
+        //        }
     }
 
     /*

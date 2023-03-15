@@ -9,7 +9,10 @@ import io.grasscutter.proto.EnterSceneReadyReqOuterClass.EnterSceneReadyReq;
 import io.grasscutter.proto.EnterSceneReadyRspOuterClass.EnterSceneReadyRsp;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 
-/** Ready to enter the scene. {@link PacketIds#EnterSceneReadyReq} and {@link PacketIds#EnterSceneReadyRsp}. */
+/**
+ * Ready to enter the scene. {@link PacketIds#EnterSceneReadyReq} and {@link
+ * PacketIds#EnterSceneReadyRsp}.
+ */
 public final class EnterSceneReady extends BasePacket<EnterSceneReadyReq, EnterSceneReadyRsp> {
     private Player player;
 
@@ -22,7 +25,8 @@ public final class EnterSceneReady extends BasePacket<EnterSceneReadyReq, EnterS
     }
 
     @Override
-    protected void handlePacket(NetworkSession session, PacketHead header, EnterSceneReadyReq message) {
+    protected void handlePacket(
+            NetworkSession session, PacketHead header, EnterSceneReadyReq message) {
         session.send(new EnterScenePeer(session.getPlayer()));
         session.send(new EnterSceneReady(session.getPlayer()));
     }
@@ -31,8 +35,6 @@ public final class EnterSceneReady extends BasePacket<EnterSceneReadyReq, EnterS
     public EnterSceneReadyRsp preparePacket() {
         this.buildHeaderWith(11);
 
-        return EnterSceneReadyRsp.newBuilder()
-                .setEnterSceneToken(this.player.getSceneToken())
-                .build();
+        return EnterSceneReadyRsp.newBuilder().setEnterSceneToken(this.player.getSceneToken()).build();
     }
 }

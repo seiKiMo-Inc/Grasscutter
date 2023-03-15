@@ -29,12 +29,13 @@ public class DefaultComboAuthenticator implements Authenticator<GranterLoginRequ
                     .build();
         }
 
-        return SDKResponse.builder().data(
-                LoginData.builder()
-                        .comboId(String.valueOf(CryptoUtils
-                                .randomNumber(100000000, 900000000)))
-                        .id(String.valueOf(account.id))
-                        .token(account.generateLoginToken())
-                .build()).build();
+        return SDKResponse.builder()
+                .data(
+                        LoginData.builder()
+                                .comboId(String.valueOf(CryptoUtils.randomNumber(100000000, 900000000)))
+                                .id(String.valueOf(account.id))
+                                .token(account.generateLoginToken())
+                                .build())
+                .build();
     }
 }

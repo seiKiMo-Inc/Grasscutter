@@ -6,21 +6,18 @@ import io.grasscutter.proto.AvatarTeamOuterClass.AvatarTeam;
 import io.grasscutter.utils.interfaces.Serializable;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 
 /* A game team of avatars. */
 public final class TeamInfo implements Serializable {
     @Getter @Setter private String name;
     @Getter private IntList avatars;
 
-    /**
-     * Constructor for a blank team.
-     */
+    /** Constructor for a blank team. */
     public TeamInfo() {
         this.name = "";
         this.avatars = new IntArrayList();
@@ -71,8 +68,7 @@ public final class TeamInfo implements Serializable {
      * @return The protocol buffer.
      */
     public AvatarTeam toProto(Player player) {
-        var team = AvatarTeam.newBuilder()
-                .setTeamName(this.getName());
+        var team = AvatarTeam.newBuilder().setTeamName(this.getName());
 
         // Add the avatars to the team.
         for (var i = 0; i < this.size(); i++) {

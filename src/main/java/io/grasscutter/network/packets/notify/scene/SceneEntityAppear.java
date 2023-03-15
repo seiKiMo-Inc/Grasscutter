@@ -6,11 +6,10 @@ import io.grasscutter.network.protocol.PacketIds;
 import io.grasscutter.proto.SceneEntityAppearNotifyOuterClass.SceneEntityAppearNotify;
 import io.grasscutter.proto.VisionTypeOuterClass.VisionType;
 import io.grasscutter.world.entity.Entity;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import java.util.Collection;
 import java.util.List;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /** Entity appears in the scene. {@link PacketIds#SceneEntityAppearNotify}. */
 @Accessors(chain = true)
@@ -60,12 +59,10 @@ public final class SceneEntityAppear extends BasePacket<Empty, SceneEntityAppear
 
     @Override
     public SceneEntityAppearNotify preparePacket() {
-        var packet = SceneEntityAppearNotify.newBuilder()
-                .setAppearType(this.vision);
+        var packet = SceneEntityAppearNotify.newBuilder().setAppearType(this.vision);
 
         // Add entities.
-        this.entities.forEach(entity ->
-                packet.addEntityList(entity.toProto()));
+        this.entities.forEach(entity -> packet.addEntityList(entity.toProto()));
 
         // Add parameter.
         if (this.parameter != -1) {

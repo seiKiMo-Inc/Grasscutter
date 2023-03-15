@@ -105,10 +105,11 @@ public final class HttpServer {
      */
     private static void handleException(Exception exception, Context ctx) {
         exception.printStackTrace();
-        ctx.json(SDKResponse.builder()
-                .retcode(Retcode.RET_FAIL.getNumber())
-                .message(exception.getMessage())
-                .build());
+        ctx.json(
+                SDKResponse.builder()
+                        .retcode(Retcode.RET_FAIL.getNumber())
+                        .message(exception.getMessage())
+                        .build());
     }
 
     private Javalin javalin;

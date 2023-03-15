@@ -42,11 +42,11 @@ public interface DataUtils {
      * @return True if the object is a primitive.
      */
     static boolean isPrimitive(Object object) {
-        return object instanceof String ||
-                object instanceof Integer ||
-                object instanceof Long ||
-                object instanceof Double ||
-                object instanceof Float ||
-                object instanceof Boolean;
+        return object instanceof String
+                || object instanceof Integer
+                || object instanceof Long
+                || object instanceof Double
+                || object instanceof Float
+                || object instanceof Boolean;
     }
 }

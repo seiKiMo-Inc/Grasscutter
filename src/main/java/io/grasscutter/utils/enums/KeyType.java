@@ -3,11 +3,10 @@ package io.grasscutter.utils.enums;
 import com.google.protobuf.ByteString;
 import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.FileUtils;
+import io.grasscutter.utils.constants.CryptoConstants;
 import java.security.*;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
-
-import io.grasscutter.utils.constants.CryptoConstants;
 import lombok.Getter;
 
 /** Types of encryption keys. Varies in XOR, RSA, etc. */
@@ -42,9 +41,10 @@ public enum KeyType {
     }
 
     KeyType(byte[] key, boolean isPublic, String type) {
-        this.key = isPublic ?
-                CryptoUtils.generatePublicKey(key, type) :
-                CryptoUtils.generatePrivateKey(key, type);
+        this.key =
+                isPublic
+                        ? CryptoUtils.generatePublicKey(key, type)
+                        : CryptoUtils.generatePrivateKey(key, type);
         this.isByte = false;
         this.protoKey = ByteString.EMPTY;
     }

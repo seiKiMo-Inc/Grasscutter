@@ -18,6 +18,7 @@ public interface NetworkUtils {
 
     /**
      * Generates bindings from packet IDs -> packet names.
+     *
      * @return A map of packet IDs -> packet names.
      */
     static Map<Integer, String> loadPacketNames() {
@@ -31,7 +32,8 @@ public interface NetworkUtils {
                 var value = constant.getInt(null);
                 var name = constant.getName();
                 map.put(value, name);
-            } catch (IllegalAccessException ignored) { }
+            } catch (IllegalAccessException ignored) {
+            }
         }
 
         return map;
@@ -39,6 +41,7 @@ public interface NetworkUtils {
 
     /**
      * Generates bindings from packet classes -> packet IDs.
+     *
      * @return A map of packet classes -> packet IDs.
      */
     static Map<Class<? extends BasePacket<?, ?>>, Integer> loadPacketIds() {
@@ -53,12 +56,11 @@ public interface NetworkUtils {
                 var name = constant.getName();
 
                 // Clean the name.
-                name = name.replace("Req", "")
-                        .replace("Rsp", "")
-                        .replace("Notify", "");
+                name = name.replace("Req", "").replace("Rsp", "").replace("Notify", "");
                 var packet = Packet.fromPacketName(name).getPacket();
                 map.put(packet, value);
-            } catch (IllegalAccessException | IllegalArgumentException ignored) { }
+            } catch (IllegalAccessException | IllegalArgumentException ignored) {
+            }
         }
 
         return map;

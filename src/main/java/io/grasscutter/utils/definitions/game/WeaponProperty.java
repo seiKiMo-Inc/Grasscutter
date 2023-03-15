@@ -6,8 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-@Getter public final class WeaponProperty {
-    @SerializedName("propType") private final FightProperty property;
-    @SerializedName("initValue") private final float initial;
+@Getter
+public final class WeaponProperty {
+    @SerializedName("propType")
+    private final FightProperty property;
+
+    @SerializedName("initValue")
+    private final float initial;
+
     private final String type;
 }

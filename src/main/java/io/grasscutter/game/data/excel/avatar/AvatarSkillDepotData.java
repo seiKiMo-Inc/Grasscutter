@@ -9,23 +9,24 @@ import io.grasscutter.utils.enums.Priority;
 import io.grasscutter.utils.enums.game.ElementType;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import lombok.Getter;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import lombok.Getter;
 
 /* Game avatar depot data. */
-@Resource(name = "AvatarSkillDepotExcelConfigData.json",
-        priority = Priority.HIGH)
-@Getter public final class AvatarSkillDepotData implements GameResource {
-    @Getter public static class InherentProudSkillOpens {
+@Resource(name = "AvatarSkillDepotExcelConfigData.json", priority = Priority.HIGH)
+@Getter
+public final class AvatarSkillDepotData implements GameResource {
+    @Getter
+    public static class InherentProudSkillOpens {
         private int proudSkillGroupId;
         private int needAvatarPromoteLevel;
     }
 
     @Getter(onMethod = @__(@Override))
     private int id;
+
     private int energySkill;
     private int attackModeSkill;
 
@@ -64,8 +65,7 @@ import java.util.stream.IntStream;
      * @return The skill IDs.
      */
     public IntStream getSkills() {
-        return IntStream.concat(this.skills.stream().mapToInt(i -> i),
-                        IntStream.of(this.energySkill))
+        return IntStream.concat(this.skills.stream().mapToInt(i -> i), IntStream.of(this.energySkill))
                 .filter(skillId -> skillId > 0);
     }
 
@@ -83,8 +83,10 @@ import java.util.stream.IntStream;
             var config = GameData.getPlayerAbilities().get(this.getSkillDepotAbilityGroup());
 
             if (config != null) {
-                this.setAbilities(new AbilityEmbryoEntry(this.getSkillDepotAbilityGroup(),
-                        config.abilities.stream().map(Object::toString).toArray(String[]::new)));
+                this.setAbilities(
+                        new AbilityEmbryoEntry(
+                                this.getSkillDepotAbilityGroup(),
+                                config.abilities.stream().map(Object::toString).toArray(String[]::new)));
             }
         }
 

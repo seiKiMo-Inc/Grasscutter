@@ -1,19 +1,18 @@
 package io.grasscutter.utils.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /* Basic priorities. */
 @AllArgsConstructor
 public enum Priority {
-    LOWEST  (0),
-    LOW     (1),
-    NORMAL  (2),
-    HIGH    (3),
-    HIGHEST (4);
+    LOWEST(0),
+    LOW(1),
+    NORMAL(2),
+    HIGH(3),
+    HIGHEST(4);
 
     @Getter private final int value;
 
@@ -23,9 +22,6 @@ public enum Priority {
      * @return A list of priorities.
      */
     public static List<Priority> inOrder() {
-        return Stream.of(Priority.values())
-                .sorted((x, y) ->
-                        y.getValue() - x.getValue())
-                .toList();
+        return Stream.of(Priority.values()).sorted((x, y) -> y.getValue() - x.getValue()).toList();
     }
 }

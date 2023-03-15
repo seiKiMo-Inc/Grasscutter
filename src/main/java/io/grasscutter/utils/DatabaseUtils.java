@@ -1,14 +1,13 @@
 package io.grasscutter.utils;
 
-import io.grasscutter.player.Account;
 import io.grasscutter.data.DataInterface;
 import io.grasscutter.data.DataSerializable;
+import io.grasscutter.player.Account;
 import io.grasscutter.player.Player;
 import io.grasscutter.server.DedicatedServer;
-import java.util.Map;
-
 import io.grasscutter.utils.interfaces.Serializable;
 import io.grasscutter.utils.objects.Counter;
+import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
 /* Utility methods for interfacing with the database. */
@@ -33,8 +32,8 @@ public interface DatabaseUtils {
     }
 
     /**
-     * Shortcut method to save an object.
-     * The object should be annotated with {@link DataSerializable}.
+     * Shortcut method to save an object. The object should be annotated with {@link
+     * DataSerializable}.
      *
      * @param object The object to save.
      */
@@ -43,8 +42,8 @@ public interface DatabaseUtils {
     }
 
     /**
-     * Shortcut method to delete an object.
-     * The object should be annotated with {@link DataSerializable}.
+     * Shortcut method to delete an object. The object should be annotated with {@link
+     * DataSerializable}.
      *
      * @param object The object to delete.
      */
@@ -59,8 +58,7 @@ public interface DatabaseUtils {
      * @return The account, or null if the account does not exist.
      */
     @Nullable static Account fetchAccount(String username) {
-        return DatabaseUtils.getDataInterface().get(Account.class,
-                Map.of("username", username));
+        return DatabaseUtils.getDataInterface().get(Account.class, Map.of("username", username));
     }
 
     /**
@@ -70,8 +68,8 @@ public interface DatabaseUtils {
      * @return The account, or null if the account does not exist.
      */
     @Nullable static Account fetchAccount(long userId) {
-        return DatabaseUtils.getDataInterface().get(Account.class, Map.of(
-                DatabaseUtils.getIdFieldName("id"), userId));
+        return DatabaseUtils.getDataInterface()
+                .get(Account.class, Map.of(DatabaseUtils.getIdFieldName("id"), userId));
     }
 
     /**
@@ -81,8 +79,7 @@ public interface DatabaseUtils {
      * @return The account, or null if the account does not exist.
      */
     @Nullable static Account fetchAccountByUid(int uid) {
-        return DatabaseUtils.getDataInterface().get(Account.class,
-                Map.of("gameUserId", uid));
+        return DatabaseUtils.getDataInterface().get(Account.class, Map.of("gameUserId", uid));
     }
 
     /**
@@ -96,16 +93,15 @@ public interface DatabaseUtils {
     }
 
     /**
-     * Shortcut method to get a player by account.
-     * This method allows you to specify the player class to use.
+     * Shortcut method to get a player by account. This method allows you to specify the player class
+     * to use.
      *
      * @param account The account.
      * @param playerClass The player class to use.
      * @return The player, or null if the player does not exist.
      */
     @Nullable static <T extends Player> T fetchPlayer(Account account, Class<T> playerClass) {
-        return DatabaseUtils.getDataInterface().get(playerClass,
-                Map.of("accountId", account.id));
+        return DatabaseUtils.getDataInterface().get(playerClass, Map.of("accountId", account.id));
     }
 
     /**
@@ -116,8 +112,8 @@ public interface DatabaseUtils {
      */
     static long fetchAndIncrement(String counter) {
         var dataInterface = DatabaseUtils.getDataInterface();
-        var counterObject = dataInterface.get(Counter.class, Map.of(
-                DatabaseUtils.getIdFieldName("id"), counter));
+        var counterObject =
+                dataInterface.get(Counter.class, Map.of(DatabaseUtils.getIdFieldName("id"), counter));
 
         // If the counter does not exist, create it.
         if (counterObject == null) {

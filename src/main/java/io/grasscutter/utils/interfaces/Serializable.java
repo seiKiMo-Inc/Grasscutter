@@ -20,9 +20,7 @@ public interface Serializable {
     Type SERIALIZE_TYPE = new TypeToken<Map<String, Object>>() {}.getType();
 
     /**
-     * Serializes this object into a key-value map.
-     * Objects to be serialized must:
-     * - Not be transient.
+     * Serializes this object into a key-value map. Objects to be serialized must: - Not be transient.
      * - Not be static.
      *
      * @return The serialized object.
@@ -35,8 +33,7 @@ public interface Serializable {
         // Iterate through fields.
         for (var field : fields) {
             // Skip if transient or static.
-            if (Modifier.isTransient(field.getModifiers()) ||
-                    Modifier.isStatic(field.getModifiers())) {
+            if (Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers())) {
                 continue;
             }
 
@@ -93,8 +90,7 @@ public interface Serializable {
                 if (field.isAnnotationPresent(Special.class)) {
                     // Check if the field is an ID field.
                     var special = field.getAnnotation(Special.class);
-                    if (special.value() != FieldType.ID)
-                        continue; // Skip.
+                    if (special.value() != FieldType.ID) continue; // Skip.
 
                     // Update the name depending on the database.
                     name = DatabaseUtils.getIdFieldName(name);

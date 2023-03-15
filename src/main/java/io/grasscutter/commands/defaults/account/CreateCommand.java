@@ -1,16 +1,15 @@
 package io.grasscutter.commands.defaults.account;
 
-import io.grasscutter.player.Account;
 import io.grasscutter.commands.CommandData;
 import io.grasscutter.commands.SubCommand;
 import io.grasscutter.commands.args.Argument;
 import io.grasscutter.commands.args.Arguments;
 import io.grasscutter.commands.sender.CommandSender;
+import io.grasscutter.player.Account;
 import io.grasscutter.utils.CryptoUtils;
 import io.grasscutter.utils.DatabaseUtils;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import io.grasscutter.utils.objects.text.Text;
-
 import java.awt.*;
 import java.util.List;
 
@@ -38,13 +37,13 @@ public final class CreateCommand extends SubCommand {
 
         // Check if the account already exists.
         if (DatabaseUtils.fetchAccount(username) != null) {
-            sender.sendMessage(new Text(new TextContainer(
-                    "command.account.username_taken", username)).color(Color.RED));
+            sender.sendMessage(
+                    new Text(new TextContainer("command.account.username_taken", username)).color(Color.RED));
             return;
         }
         if (DatabaseUtils.fetchAccountByUid(userId) != null) {
-            sender.sendMessage(new Text(new TextContainer(
-                    "command.account.user_id_taken", userId)).color(Color.RED));
+            sender.sendMessage(
+                    new Text(new TextContainer("command.account.user_id_taken", userId)).color(Color.RED));
             return;
         }
 
@@ -63,8 +62,8 @@ public final class CreateCommand extends SubCommand {
         // Save the account.
         account.save();
 
-        sender.sendMessage(Text.of("Account %s with ID %s created."
-                .formatted(account.username, account.gameUserId))
-                .color(Color.GREEN));
+        sender.sendMessage(
+                Text.of("Account %s with ID %s created.".formatted(account.username, account.gameUserId))
+                        .color(Color.GREEN));
     }
 }

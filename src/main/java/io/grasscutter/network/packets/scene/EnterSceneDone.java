@@ -9,7 +9,10 @@ import io.grasscutter.proto.EnterSceneDoneRspOuterClass.EnterSceneDoneRsp;
 import io.grasscutter.proto.PacketHeadOuterClass.PacketHead;
 import io.grasscutter.utils.enums.game.SceneLoadState;
 
-/** Client has finished entering scene. {@link PacketIds#EnterSceneDoneReq} and {@link PacketIds#EnterSceneDoneRsp}. */
+/**
+ * Client has finished entering scene. {@link PacketIds#EnterSceneDoneReq} and {@link
+ * PacketIds#EnterSceneDoneRsp}.
+ */
 public final class EnterSceneDone extends BasePacket<EnterSceneDoneReq, EnterSceneDoneRsp> {
     private Player player;
 
@@ -27,7 +30,8 @@ public final class EnterSceneDone extends BasePacket<EnterSceneDoneReq, EnterSce
     }
 
     @Override
-    protected void handlePacket(NetworkSession session, PacketHead header, EnterSceneDoneReq message) {
+    protected void handlePacket(
+            NetworkSession session, PacketHead header, EnterSceneDoneReq message) {
         var player = session.getPlayer();
         // Set the scene state to loaded.
         player.setSceneState(SceneLoadState.LOADED);
@@ -45,8 +49,6 @@ public final class EnterSceneDone extends BasePacket<EnterSceneDoneReq, EnterSce
 
     @Override
     public EnterSceneDoneRsp preparePacket() {
-        return EnterSceneDoneRsp.newBuilder()
-                .setEnterSceneToken(this.player.getSceneToken())
-                .build();
+        return EnterSceneDoneRsp.newBuilder().setEnterSceneToken(this.player.getSceneToken()).build();
     }
 }

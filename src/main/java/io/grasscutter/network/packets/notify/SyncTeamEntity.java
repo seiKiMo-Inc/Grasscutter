@@ -16,21 +16,22 @@ public final class SyncTeamEntity extends BasePacket<Empty, SyncTeamEntityNotify
 
     @Override
     public SyncTeamEntityNotify preparePacket() {
-        var packet = SyncTeamEntityNotify.newBuilder()
-                .setSceneId(this.player.getSceneId());
+        var packet = SyncTeamEntityNotify.newBuilder().setSceneId(this.player.getSceneId());
 
         // Add multiplayer data.
         var world = this.player.getWorld();
-        if (world.isMultiplayer()) for (var player : world) {
-            // Skip if same player.
-            if (player == this.player) continue;
+        if (world.isMultiplayer())
+            for (var player : world) {
+                // Skip if same player.
+                if (player == this.player) continue;
 
-            // Set team info.
-            packet.addTeamEntityInfoList(TeamEntityInfo.newBuilder()
-                    .setTeamEntityId(player.getTeams().getEntityId())
-                    .setAuthorityPeerId(player.getPeerId())
-                    .setTeamAbilityInfo(AbilitySyncStateInfo.newBuilder()));
-        }
+                // Set team info.
+                packet.addTeamEntityInfoList(
+                        TeamEntityInfo.newBuilder()
+                                .setTeamEntityId(player.getTeams().getEntityId())
+                                .setAuthorityPeerId(player.getPeerId())
+                                .setTeamAbilityInfo(AbilitySyncStateInfo.newBuilder()));
+            }
 
         return packet.build();
     }

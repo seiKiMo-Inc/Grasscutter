@@ -4,8 +4,6 @@ import com.google.protobuf.Empty;
 import io.grasscutter.network.protocol.BasePacket;
 import io.grasscutter.network.protocol.PacketIds;
 import io.grasscutter.player.Avatar;
-import io.grasscutter.proto.AvatarAddNotifyOuterClass.AvatarAddNotify;
-import io.grasscutter.proto.AvatarFightPropNotifyOuterClass;
 import io.grasscutter.proto.AvatarFightPropNotifyOuterClass.AvatarFightPropNotify;
 import lombok.AllArgsConstructor;
 

@@ -5,7 +5,8 @@ import io.grasscutter.world.Position;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter public class SpawnDataEntry {
+@Getter
+public class SpawnDataEntry {
     @Setter private transient SpawnGroupEntry group;
     private int monsterId;
     private int gadgetId;
@@ -24,9 +25,10 @@ import lombok.Setter;
      */
     public GridBlock getBlockId() {
         var scale = GridBlock.getScale(gadgetId);
-        return new GridBlock(group.getSceneId(), scale,
-            (int) (pos.getX() / GameConstants.BLOCK_SIZE[scale]),
-            (int) (pos.getZ() / GameConstants.BLOCK_SIZE[scale])
-        );
+        return new GridBlock(
+                group.getSceneId(),
+                scale,
+                (int) (pos.getX() / GameConstants.BLOCK_SIZE[scale]),
+                (int) (pos.getZ() / GameConstants.BLOCK_SIZE[scale]));
     }
 }

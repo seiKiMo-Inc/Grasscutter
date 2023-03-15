@@ -9,7 +9,6 @@ import io.grasscutter.utils.constants.NetworkConstants;
 import io.grasscutter.utils.exceptions.InvalidException;
 import io.grasscutter.utils.objects.lang.TextContainer;
 import io.grasscutter.utils.objects.text.Text;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,17 +33,16 @@ public final class PacketHandler {
      * @param data The packet data.
      * @throws InvalidProtocolBufferException If the packet is invalid.
      */
-    public static void handlePacket(
-            NetworkSession client,
-            int packetId, byte[] head, byte[] data
-    ) throws InvalidProtocolBufferException {
+    public static void handlePacket(NetworkSession client, int packetId, byte[] head, byte[] data)
+            throws InvalidProtocolBufferException {
         // Check if the packet should be logged.
         if (!NetworkConstants.LOG_BLACKLIST.contains(packetId)) {
             // Log the inbound packet.
             var name = NetworkUtils.getNameOf(packetId);
-            Log.debug(new Text(new TextContainer(
-                    "network.packet.inbound", name, packetId,
-                    client.getPrettyAddress(true))));
+            Log.debug(
+                    new Text(
+                            new TextContainer(
+                                    "network.packet.inbound", name, packetId, client.getPrettyAddress(true))));
         }
 
         // Get the packet from the ID.
@@ -59,8 +57,6 @@ public final class PacketHandler {
         }
 
         // Parse & handle the packet.
-        instance.handlePacket(client,
-                PacketHead.parseFrom(head),
-                packet.fromData(data));
+        instance.handlePacket(client, PacketHead.parseFrom(head), packet.fromData(data));
     }
 }

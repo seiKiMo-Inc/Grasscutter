@@ -2,19 +2,19 @@ package io.grasscutter.utils.enums.game;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.stream.Stream;
-
 @AllArgsConstructor
-@Getter public enum ItemUseTarget {
-    ITEM_USE_TARGET_NONE                 (0),
-    ITEM_USE_TARGET_CUR_AVATAR           (1),
-    ITEM_USE_TARGET_CUR_TEAM             (2),
-    ITEM_USE_TARGET_SPECIFY_AVATAR       (3),
-    ITEM_USE_TARGET_SPECIFY_ALIVE_AVATAR (4),
-    ITEM_USE_TARGET_SPECIFY_DEAD_AVATAR  (5);
+@Getter
+public enum ItemUseTarget {
+    ITEM_USE_TARGET_NONE(0),
+    ITEM_USE_TARGET_CUR_AVATAR(1),
+    ITEM_USE_TARGET_CUR_TEAM(2),
+    ITEM_USE_TARGET_SPECIFY_AVATAR(3),
+    ITEM_USE_TARGET_SPECIFY_ALIVE_AVATAR(4),
+    ITEM_USE_TARGET_SPECIFY_DEAD_AVATAR(5);
 
     private static final Int2ObjectMap<ItemUseTarget> map = new Int2ObjectOpenHashMap<>();
 
@@ -22,8 +22,7 @@ import java.util.stream.Stream;
 
     static {
         // Cache the values.
-        Stream.of(ItemUseTarget.values()).forEach(entry ->
-                map.put(entry.getValue(), entry));
+        Stream.of(ItemUseTarget.values()).forEach(entry -> map.put(entry.getValue(), entry));
     }
 
     /**

@@ -29,15 +29,14 @@ public class WeightedList<E> extends ArrayList<E> {
     }
 
     /**
-     * Returns a random entry from the list.
-     * The probability of each entry is proportional to its weight.
+     * Returns a random entry from the list. The probability of each entry is proportional to its
+     * weight.
      *
      * @return The random entry.
      */
     public E random() {
         // Get a random value between 0 and the total weight.
-        var value = ThreadLocalRandom.current()
-                .nextFloat() * total;
+        var value = ThreadLocalRandom.current().nextFloat() * total;
         // Return the entry with the highest key that is less than the value.
         return this.map.higherEntry(value).getValue();
     }
@@ -45,7 +44,7 @@ public class WeightedList<E> extends ArrayList<E> {
     /**
      * @return The number of entries in the list.
      */
-	public int size() {
-		return this.map.size();
-	}
+    public int size() {
+        return this.map.size();
+    }
 }

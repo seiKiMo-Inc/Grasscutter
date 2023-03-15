@@ -5,7 +5,8 @@ import io.grasscutter.world.Position;
 import lombok.Data;
 
 /* A block of grids. */
-@Data public final class GridBlock {
+@Data
+public final class GridBlock {
     private final int sceneId, scale, x, z;
 
     /**
@@ -17,7 +18,8 @@ import lombok.Data;
      */
     public static GridBlock[] getAdjacentGridBlockIds(int sceneId, Position pos) {
         var results = new GridBlock[5 * 5 * GameConstants.BLOCK_SIZE.length];
-        var t = 0;for (var scale = 0; scale < GameConstants.BLOCK_SIZE.length; scale++) {
+        var t = 0;
+        for (var scale = 0; scale < GameConstants.BLOCK_SIZE.length; scale++) {
             var x = ((int) (pos.getX() / GameConstants.BLOCK_SIZE[scale]));
             var z = ((int) (pos.getZ() / GameConstants.BLOCK_SIZE[scale]));
             for (var i = x - 2; i < x + 3; i++) {

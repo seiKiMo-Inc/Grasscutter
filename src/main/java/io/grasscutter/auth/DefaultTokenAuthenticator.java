@@ -25,9 +25,6 @@ public class DefaultTokenAuthenticator implements Authenticator<ShieldVerifyRequ
                     .build();
         }
 
-        return SDKResponse.builder()
-                .data(account.generateLoginResult(
-                        account.sessionKey))
-                .build();
+        return SDKResponse.builder().data(account.generateLoginResult(account.sessionKey)).build();
     }
 }

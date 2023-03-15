@@ -18,8 +18,7 @@ public final class SceneTeamUpdate extends BasePacket<Empty, SceneTeamUpdateNoti
     public SceneTeamUpdateNotify preparePacket() {
         var world = this.player.getWorld();
 
-        var packet = SceneTeamUpdateNotify.newBuilder()
-                .setIsInMp(world.isMultiplayer());
+        var packet = SceneTeamUpdateNotify.newBuilder().setIsInMp(world.isMultiplayer());
 
         for (var player : world) {
             var teams = player.getTeams();
@@ -29,19 +28,20 @@ public final class SceneTeamUpdate extends BasePacket<Empty, SceneTeamUpdateNoti
                 var active = teams.getCurrentAvatar() == entity;
 
                 // Create the avatar info.
-                var avatarInfo = SceneTeamAvatar.newBuilder()
-                        .setPlayerUid(player.getUserId())
-                        .setAvatarGuid(avatar.getGuid())
-                        .setSceneId(player.getSceneId())
-                        .setEntityId(entity.getId())
-                        .setSceneEntityInfo(entity.toProto())
-                        .setWeaponGuid(weapon.getItemGuid())
-                        .setWeaponEntityId(weapon.getEntityId())
-                        .setIsPlayerCurAvatar(active)
-                        .setIsOnScene(active)
-                        .setAvatarAbilityInfo(AbilitySyncStateInfo.newBuilder())
-                        .setWeaponAbilityInfo(AbilitySyncStateInfo.newBuilder())
-                        .setAbilityControlBlock(entity.getAbilities());
+                var avatarInfo =
+                        SceneTeamAvatar.newBuilder()
+                                .setPlayerUid(player.getUserId())
+                                .setAvatarGuid(avatar.getGuid())
+                                .setSceneId(player.getSceneId())
+                                .setEntityId(entity.getId())
+                                .setSceneEntityInfo(entity.toProto())
+                                .setWeaponGuid(weapon.getItemGuid())
+                                .setWeaponEntityId(weapon.getEntityId())
+                                .setIsPlayerCurAvatar(active)
+                                .setIsOnScene(active)
+                                .setAvatarAbilityInfo(AbilitySyncStateInfo.newBuilder())
+                                .setWeaponAbilityInfo(AbilitySyncStateInfo.newBuilder())
+                                .setAbilityControlBlock(entity.getAbilities());
 
                 // Add additional data for multiplayer.
                 if (world.isMultiplayer()) {
