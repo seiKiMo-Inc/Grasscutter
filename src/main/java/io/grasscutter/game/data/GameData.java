@@ -4,6 +4,7 @@ import io.grasscutter.game.data.bin.AvatarConfig;
 import io.grasscutter.game.data.excel.ItemData;
 import io.grasscutter.game.data.excel.SceneData;
 import io.grasscutter.game.data.excel.avatar.*;
+import io.grasscutter.game.data.excel.item.ReliquaryLevelData;
 import io.grasscutter.game.data.excel.item.ReliquaryMainPropData;
 import io.grasscutter.utils.PrimitiveUtils;
 import io.grasscutter.utils.constants.Log;
@@ -77,11 +78,13 @@ public final class GameData {
     @Getter private static final Int2ObjectMap<AvatarSkillData> avatarSkillDataMap = new Int2ObjectOpenHashMap<>();
     @Getter private static final Int2ObjectMap<AvatarCurveData> avatarCurveDataMap = new Int2ObjectOpenHashMap<>();
     @Getter private static final Int2ObjectMap<AvatarTalentData> avatarTalentDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<AvatarPromoteData> avatarPromoteDataMap = new Int2ObjectOpenHashMap<>();
     @Getter private static final Int2ObjectMap<AvatarSkillDepotData> avatarSkillDepotDataMap = new Int2ObjectOpenHashMap<>();
 
     @Getter private static final Int2ObjectMap<SceneData> sceneDataMap = new Int2ObjectOpenHashMap<>();
 
     @Getter private static final Int2ObjectMap<ItemData> itemDataMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static final Int2ObjectMap<ReliquaryLevelData> reliquaryLevelDataMap = new Int2ObjectOpenHashMap<>();
     @Getter private static final Int2ObjectMap<ReliquaryMainPropData> reliquaryMainPropDataMap = new Int2ObjectOpenHashMap<>();
 
     /*
@@ -114,5 +117,31 @@ public final class GameData {
         // Get the depot's property list.
         var list = GameData.artifactProperties.get(depot);
         return list == null ? null : list.random();
+    }
+
+    /*
+     * Specialized getters.
+     */
+
+    /**
+     * Fetches the avatar data for the given ID.
+     *
+     * @param avatarId The avatar ID.
+     * @param level The avatar level.
+     * @return The avatar data.
+     */
+    public static AvatarPromoteData getAscensionData(int avatarId, int level) {
+        return GameData.avatarPromoteDataMap.get((avatarId << 8) + level);
+    }
+
+    /**
+     * Fetches the level data for the artifact based on level & rarity.
+     *
+     * @param rarity The rarity.
+     * @param level The level.
+     * @return The level data.
+     */
+    public static ReliquaryLevelData getArtifactLevelData(int rarity, int level) {
+        return GameData.reliquaryLevelDataMap.get((rarity << 8) + level);
     }
 }

@@ -121,24 +121,24 @@ public final class TeamManager extends PlayerManager implements Serializable {
      * Serialization.
      */
 
-    @Override
-    public Map<String, Object> serialize() {
-        // Serialize the map.
-        var map = new HashMap<String, Object>();
-        this.teams.forEach((key, value) ->
-                map.put(String.valueOf(key), value.serialize()));
-
-        return map;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void deserialize(Map<String, Object> data) {
-        // De-serialize the map.
-        data.forEach((key, value) -> {
-            var team = new TeamInfo();
-            team.deserialize((Map<String, Object>) value);
-            this.teams.put(Integer.parseInt(key), team);
-        });
-    }
+//    @Override
+//    public Map<String, Object> serialize() {
+//        // Serialize the map.
+//        var map = new HashMap<String, Object>();
+//        this.teams.forEach((key, value) ->
+//                map.put(String.valueOf(key), value.serialize()));
+//
+//        return map;
+//    }
+//
+//    @Override
+//    @SuppressWarnings("unchecked")
+//    public void deserialize(Map<String, Object> data) {
+//        // De-serialize the map.
+//        data.forEach((key, value) -> {
+//            var team = new TeamInfo();
+//            team.deserialize((Map<String, Object>) value);
+//            this.teams.put(Integer.parseInt(key), team);
+//        });
+//    }
 }

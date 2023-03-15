@@ -1,5 +1,6 @@
 package io.grasscutter.game.data.excel.avatar;
 
+import com.google.gson.annotations.SerializedName;
 import io.grasscutter.game.data.GameData;
 import io.grasscutter.game.data.GameResource;
 import io.grasscutter.game.data.Resource;
@@ -45,8 +46,10 @@ public final class AvatarData implements GameResource {
     private float hpBase;
     private float attackBase;
     private float defenseBase;
-    private float critical;
-    private float criticalHurt;
+    @SerializedName("critical")
+    @Getter private float baseCritChance;
+    @SerializedName("criticalHurt")
+    @Getter private float baseCritDamage;
 
     private List<ExponentialCurve> propGrowCurves;
 
@@ -113,5 +116,51 @@ public final class AvatarData implements GameResource {
 //                }
 //            }
 //        }
+    }
+
+    /*
+     * Calculate statistics.
+     */
+
+    /**
+     * Get the base health of the avatar.
+     *
+     * @param level The level of the avatar.
+     * @return The base health of the avatar.
+     */
+    public float getBaseHealth(int level) {
+        try {
+            return this.hpBase * this.hpGrowthCurve[level - 1];
+        } catch (Exception ignored) {
+            return this.hpBase;
+        }
+    }
+
+    /**
+     * Get the base attack of the avatar.
+     *
+     * @param level The level of the avatar.
+     * @return The base attack of the avatar.
+     */
+    public float getBaseAttack(int level) {
+        try {
+            return this.attackBase * this.attackGrowthCurve[level - 1];
+        } catch (Exception ignored) {
+            return this.attackBase;
+        }
+    }
+
+    /**
+     * Get the base defense of the avatar.
+     *
+     * @param level The level of the avatar.
+     * @return The base defense of the avatar.
+     */
+    public float getBaseDefense(int level) {
+        try {
+            return this.defenseBase * this.defenseGrowthCurve[level - 1];
+        } catch (Exception ignored) {
+            return this.defenseBase;
+        }
     }
 }

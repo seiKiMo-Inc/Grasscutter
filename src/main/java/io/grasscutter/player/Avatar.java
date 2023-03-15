@@ -8,10 +8,12 @@ import io.grasscutter.game.data.excel.avatar.AvatarData;
 import io.grasscutter.game.data.excel.avatar.AvatarSkillDepotData;
 import io.grasscutter.game.inventory.Item;
 import io.grasscutter.network.packets.notify.inventory.AvatarEquipChange;
+import io.grasscutter.network.packets.notify.inventory.AvatarFightProp;
 import io.grasscutter.proto.AvatarInfoOuterClass.AvatarInfo;
 import io.grasscutter.utils.ServerUtils;
 import io.grasscutter.utils.enums.game.EntityIdType;
 import io.grasscutter.utils.enums.game.EquipType;
+import io.grasscutter.utils.enums.game.FightProperty;
 import io.grasscutter.utils.enums.game.PlayerProperty;
 import io.grasscutter.utils.interfaces.DatabaseObject;
 import it.unimi.dsi.fastutil.ints.Int2FloatMap;
@@ -48,8 +50,8 @@ public final class Avatar implements DatabaseObject {
 
     @Getter @Setter private int satiation = 0; // The avatar's satiation (fullness).
     @Getter @Setter private int satiationPenalty = 0; // The avatar's satiation penalty.
-    @Getter @Setter private int currentHealth = 0; // The avatar's current health.
-    @Getter @Setter private int currentEnergy = 0; // The avatar's current energy.
+    @Getter private float currentHealth = 0; // The avatar's current health.
+    @Getter private float currentEnergy = 0; // The avatar's current energy.
 
     @Getter @Setter private int wings = 140001; // The avatar's wings.
     @Getter @Setter private int costume = 0; // The avatar's costume.
@@ -86,6 +88,13 @@ public final class Avatar implements DatabaseObject {
         this.data = avatarData;
         this.avatarId = avatarData.getId();
         this.creationTime = (int) (System.currentTimeMillis() / 1000L);
+
+        this.recalculate(); // Set the avatar's properties.
+        this.currentEnergy = 0f; // Set the avatar's current energy.
+        this.currentHealth = this.getProperty(FightProperty.FIGHT_PROP_MAX_HP); // Set the avatar's current health.
+
+        // Set the avatar's current health.
+        this.setProperty(FightProperty.FIGHT_PROP_CUR_HP, this.getCurrentHealth());
     }
 
     /**
@@ -109,6 +118,76 @@ public final class Avatar implements DatabaseObject {
         this.skill = GameData.getAvatarSkillDepotDataMap().get(depotId);
         this.skillDepotId = depotId;
     }
+
+    /*
+     * Combat properties.
+     */
+
+    /**
+     * Fetches the avatar's combat property.
+     * If the property is not found, 0 is returned.
+     *
+     * @param property The property to fetch.
+     * @return The property's value.
+     */
+    public float getProperty(FightProperty property) {
+        return this.getCombatProperties().getOrDefault(property.getId(), 0f);
+    }
+
+    /**
+     * Sets the avatar's combat property.
+     *
+     * @param property The property to set.
+     * @param value The property's value.
+     */
+    public void setProperty(FightProperty property, float value) {
+        this.getCombatProperties().put(property.getId(), value);
+    }
+
+    /**
+     * Adds a value to the avatar's combat property.
+     *
+     * @param property The property to add to.
+     * @param value The value to add.
+     */
+    public void addProperty(FightProperty property, float value) {
+        this.setProperty(property, this.getProperty(property) + value);
+    }
+
+    /**
+     * Fetches the avatar's combat property.
+     * If the property is not found, 0 is returned.
+     *
+     * @param property The property to fetch.
+     * @return The property's value.
+     */
+    public float getProperty(int property) {
+        return this.getCombatProperties().getOrDefault(property, 0f);
+    }
+
+    /**
+     * Sets the avatar's combat property.
+     *
+     * @param property The property to set.
+     * @param value The property's value.
+     */
+    public void setProperty(int property, float value) {
+        this.getCombatProperties().put(property, value);
+    }
+
+    /**
+     * Adds a value to the avatar's combat property.
+     *
+     * @param property The property to add to.
+     * @param value The value to add.
+     */
+    public void addProperty(int property, float value) {
+        this.setProperty(property, this.getProperty(property) + value);
+    }
+
+    /*
+     * Items.
+     */
 
     /**
      * Equips an item to the avatar.
@@ -147,7 +226,8 @@ public final class Avatar implements DatabaseObject {
             this.getOwner().getSession().send(
                     new AvatarEquipChange(this, item));
 
-        // TODO: Re-calculate the avatar's combat properties.
+        // Recalculate the avatar's combat properties.
+        if (recalculate) this.recalculate();
 
         return true;
     }
@@ -163,6 +243,16 @@ public final class Avatar implements DatabaseObject {
     }
 
     /**
+     * Fetches an item from the avatar's equipment.
+     *
+     * @param slotId The equipment slot ID.
+     * @return The item, or {@code null} if the avatar doesn't have an item equipped.
+     */
+    public Item getItem(int slotId) {
+        return this.getEquipment().get(slotId);
+    }
+
+    /**
      * Shortcut method for fetching the avatar's weapon.
      *
      * @return The avatar's weapon, or {@code null} if the avatar doesn't have a weapon equipped.
@@ -170,6 +260,105 @@ public final class Avatar implements DatabaseObject {
     public Item getWeapon() {
         return this.getItem(EquipType.EQUIP_WEAPON);
     }
+
+    /*
+     * Statistics.
+     */
+
+    /**
+     * Sets the avatar's energy.
+     *
+     * @param energy The energy to set.
+     */
+    public void setCurrentEnergy(float energy) {
+        var skill = this.getSkill();
+        if (skill != null && skill.getEnergySkillData() != null) {
+            var element = skill.getElementType();
+            this.setProperty(element.getCurEnergyProp(), energy);
+            var maxEnergy = skill.getEnergySkillData().getElementalCost();
+            this.setProperty(element.getMaxEnergyProp(), maxEnergy);
+        }
+    }
+
+    /**
+     * Recalculates the avatar's combat stats.
+     * Does not send an ability change packet.
+     */
+    public void recalculate() {
+        this.recalculate(false);
+    }
+
+    /**
+     * Recalculates the avatar's combat stats.
+     *
+     * @param change Whether to send an ability change packet.
+     */
+    public void recalculate(boolean change) {
+        // Fetch avatar data.
+        var data = this.getData();
+
+        // Calculate the current health.
+        var currentHealth = this.getProperty(FightProperty.FIGHT_PROP_MAX_HP) <= 0 ? 1f :
+                this.getProperty(FightProperty.FIGHT_PROP_CUR_HP) / this.getProperty(FightProperty.FIGHT_PROP_MAX_HP);
+        // Get the current amount of energy.
+        var currentEnergy = this.getSkill() != null ? this.getProperty(
+                this.getSkill().getElementType().getCurEnergyProp()) : 0f;
+
+        // Recalculate properties.
+        this.getCombatProperties().clear();
+        // Add the base properties.
+        var level = this.getLevel();
+        this.setProperty(FightProperty.FIGHT_PROP_BASE_HP, data.getBaseHealth(level));
+        this.setProperty(FightProperty.FIGHT_PROP_BASE_ATTACK, data.getBaseAttack(level));
+        this.setProperty(FightProperty.FIGHT_PROP_BASE_DEFENSE, data.getBaseDefense(level));
+        this.setProperty(FightProperty.FIGHT_PROP_CRITICAL, data.getBaseCritChance());
+        this.setProperty(FightProperty.FIGHT_PROP_CRITICAL_HURT, data.getBaseCritDamage());
+        this.setProperty(FightProperty.FIGHT_PROP_CHARGE_EFFICIENCY, 1f);
+
+        // Add extra ascension statistics.
+        var ascensionData = GameData.getAscensionData(
+                data.getAvatarPromoteId(), this.getAscension());
+        if (ascensionData != null)
+            for (var property : ascensionData.getAddProps())
+                this.addProperty(property.getId(), property.getCount());
+
+        // Set the energy.
+        this.setCurrentEnergy(currentEnergy);
+
+        // Calculate artifact properties.
+        for (var i = 1; i <= 5; i++) {
+            // Get the artifact.
+            var artifact = this.getItem(i);
+            if (artifact == null) continue;
+
+            // Get the primary stat.
+            var mainProperty = GameData.getReliquaryMainPropDataMap()
+                    .get(artifact.getMainPropertyId());
+            if (mainProperty != null) {
+                var property = mainProperty.getProperty();
+                var levelData = GameData.getArtifactLevelData(
+                        artifact.getItemData().getRarity(), artifact.getLevel());
+                if (levelData != null)
+                    this.addProperty(property, levelData.getPropValue(property.getId()));
+            }
+        }
+
+        // Set the current health.
+        this.setProperty(FightProperty.FIGHT_PROP_CUR_HP,
+                this.getProperty(FightProperty.FIGHT_PROP_MAX_HP) * currentHealth);
+
+        // Send change packets.
+        var player = this.getOwner();
+        if (player != null && player.isLoggedIn()) {
+            // Update properties.
+            player.getSession().send(new AvatarFightProp(this));
+            // TODO: Send packet to update abilities.
+        }
+    }
+
+    /*
+     * Conversions.
+     */
 
     /**
      * Converts this object into an {@link AvatarInfo} object.

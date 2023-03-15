@@ -92,6 +92,7 @@ public final class AvatarStorage extends PlayerManager {
         // Send the avatar add notification.
         if (this.getPlayer().isLoggedIn()) {
             // Re-calculate the avatar's stats.
+            avatar.recalculate();
 
             // Send the notification.
             this.getPlayer().getSession().send(

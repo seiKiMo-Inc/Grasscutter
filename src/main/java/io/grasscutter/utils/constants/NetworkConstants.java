@@ -14,7 +14,8 @@ public interface NetworkConstants {
 
     // Packets which shouldn't be logged.
     Set<Integer> LOG_BLACKLIST = Set.of(
-            PacketIds.PingReq, PacketIds.PingRsp
+            PacketIds.PingReq, PacketIds.PingRsp,
+            PacketIds.UnionCmdNotify
     );
 
     // Default & constant values for the dispatch server.
