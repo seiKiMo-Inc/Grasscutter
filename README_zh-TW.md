@@ -16,6 +16,6 @@ TODO: 編寫 `README.md`
 1. 將 [Protocol Buffer](https://developers.google.com/protocol-buffers) 文件放在 `src/main/proto` 中。
     1. 這些在構建過程中被編譯成 Java class。
 2. 使用 `./gradlew jar` 或 `.\gradlew.bat jar` 構建項目。
-    1、使用基於UNIX的系統（Linux、macOS等）時使用第一個命令。
+    1、使用基於UNIX的系統（GNU/Linux、macOS等）時使用第一個命令。
     2. 使用基於Windows 的系統時使用第二個命令。
 3. **TODO：繼續編寫本指南。**

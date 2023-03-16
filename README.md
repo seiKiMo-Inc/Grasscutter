@@ -16,6 +16,6 @@ TODO: Write `README.md`
 1. Place [Protocol Buffer](https://developers.google.com/protocol-buffers) files in `src/main/proto`. 
    1. These are compiled into Java classes during the build process.
 2. Build the project using `./gradlew jar` or `.\gradlew.bat jar`.
-   1. Use the first command when using a UNIX-based system (Linux, macOS, etc.).
+   1. Use the first command when using a UNIX-based system (GNU/Linux, macOS, etc.).
    2. Use the second command when using a Windows-based system.
 3. **TODO: Continue writing this guide.**
