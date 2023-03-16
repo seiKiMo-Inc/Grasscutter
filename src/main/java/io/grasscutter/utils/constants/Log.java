@@ -404,7 +404,8 @@ public interface Log {
      * @param throwable Throwable to log.
      */
     static void error(Logger logger, TextContainer container, Throwable throwable) {
-        logger.error(container.toString(), throwable);
+        if (Properties.DEBUG) logger.error(container.toString(), throwable);
+        else logger.error(container.toString());
     }
 
     /**
