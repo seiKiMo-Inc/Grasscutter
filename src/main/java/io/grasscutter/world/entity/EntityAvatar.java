@@ -13,7 +13,6 @@ import io.grasscutter.proto.EntityRendererChangedInfoOuterClass.EntityRendererCh
 import io.grasscutter.proto.ProtEntityTypeOuterClass.ProtEntityType;
 import io.grasscutter.proto.SceneAvatarInfoOuterClass.SceneAvatarInfo;
 import io.grasscutter.proto.SceneEntityInfoOuterClass.SceneEntityInfo;
-import io.grasscutter.proto.SceneWeaponInfoOuterClass.SceneWeaponInfo;
 import io.grasscutter.utils.ServerUtils;
 import io.grasscutter.utils.constants.GameConstants;
 import io.grasscutter.utils.enums.game.EntityIdType;
@@ -91,16 +90,7 @@ public final class EntityAvatar extends Entity {
                         .setBornTime(avatar.getCreationTime());
 
         // Add the avatar's weapon.
-        info.setWeapon(
-                SceneWeaponInfo.newBuilder()
-                        .setEntityId(weapon.getEntityId())
-                        .setGuid(weapon.getItemGuid())
-                        .setLevel(weapon.getLevel())
-                        .setItemId(weapon.getItemId())
-                        .setPromoteLevel(weapon.getAscensionLevel())
-                        .setGadgetId(weapon.getItemData().getGadgetId()));
-        //         info.setReliquaryList();
-        //         info.setEquipIdList();
+        info.setWeapon(weapon.toWeaponInfo());
 
         return info.build();
     }

@@ -123,10 +123,10 @@ public class Player implements DatabaseObject {
         // Send the scene load packet.
         this.session.send(new PlayerEnterScene(this));
 
-        // Set the player state.
-        this.setState(PlayerState.ACTIVE);
         // Set the log in flag.
         this.loggedIn = true;
+        // Set the player state.
+        this.setState(PlayerState.ACTIVE);
     }
 
     /*

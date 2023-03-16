@@ -183,7 +183,9 @@ public abstract class Entity {
      */
     public final void propsToBuilder(SceneEntityInfo.Builder builder) {
         this.getCombatProperties()
-                .forEach((id, value) -> builder.addFightPropList(ServerUtils.combatProperty(id, value)));
+                .forEach((id, value) -> {
+                    if (id != null) builder.addFightPropList(ServerUtils.combatProperty(id, value));
+                });
     }
 
     /*
